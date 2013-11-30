@@ -1,0 +1,47 @@
+
+@import "basscss";
+
+.square-small { width: 48px; height: 48px; }
+
+.square-big { width: 128px; height: 128px; }
+
+$gray: #666; 
+$blue: #0cf;
+$light-gray: #ccc;
+$gray-2: #aaa;
+
+body {
+  color: $gray;
+}
+a {
+  text-decoration: none;
+  color: darken($blue, 20%);
+  &:hover {
+    color: darken($blue, 10%);
+  }
+}
+
+.gray { color: $gray; }
+.blue { color: $blue; }
+.light-gray { color: $light-gray; }
+
+
+.bg-gray { background-color: $gray; }
+.bg-blue { background-color: $blue; }
+.bg-light-gray { background-color: $light-gray; }
+.bg-gray-2 { background-color: $gray-2; }
+
+.rounded { border-radius: .25rem; }
+.border { border: 2px solid $gray; }
+
+.table {
+  display: table;
+  width: 100%;
+}
+.table-fixed {
+  table-layout: fixed;
+}
+.table-cell {
+  display: table-cell;
+  vertical-align: middle;
+}

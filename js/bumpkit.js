@@ -10,6 +10,7 @@ console.log('Bumpkit');
   }
 
 var Bumpkit = function() {};
+//Bumpkit.self = this;
 
 // Initialize context
 Bumpkit.prototype.context = new(window.AudioContext || window.webkitAudioContext)();
@@ -53,7 +54,10 @@ Bumpkit.prototype.mixer.removeTrack = function(index) {
 
 // Scheduler / Clock
 Bumpkit.prototype.tempo = 120;
-Bumpkit.prototype.stepDuration = (60/120) / 4;
+//Bumpkit.prototype.stepDuration = (60/120) / 4;
+Bumpkit.prototype.stepDuration = function() {
+  return (60/this.tempo) / 4;
+};
 Bumpkit.prototype.nextStepTime = 0;
 Bumpkit.prototype.currentStep = 0;
 Bumpkit.prototype.isPlaying  = false;
@@ -71,6 +75,7 @@ Bumpkit.prototype.scheduleStep = function(when) {
     var dummySource = this.context.createBufferSource();
   }
   this.step.detail.step = this.currentStep;
+  this.step.detail.when = when;
   var self = this;
   window.dispatchEvent(self.step);
 };
@@ -82,8 +87,11 @@ Bumpkit.prototype.scheduler = function() {
 
   while (this.nextStepTime < this.context.currentTime + scheduleAhead) {
     this.scheduleStep(this.nextStepTime);
-    this.nextStepTime += this.stepDuration;
+    this.nextStepTime += this.stepDuration();
     this.currentStep++;
+    if (this.currentStep == this.loopLength) {
+      this.currentStep = 0;
+    }
   };
   this.timerID = setTimeout(function() { self.scheduler() }, lookahead);
 };
@@ -105,17 +113,49 @@ Bumpkit.prototype.playPause = function() {
   }
 };
 
-//
+
 // Trigger playback, pass source with buffer, and output node
 Bumpkit.prototype.trigger = function(source, when, output, options) {
+  var options = options || {};
   source.connect(output);
+  console.log(when, when + options.duration);
   source.start(when, options.offset || 0);
   if (options.duration) {
+    console.log(options.duration);
     source.stop(when + options.duration);
   }
 };
 
 
+// Beep Subclass
+// This might not be the right approach
+// Simple sine oscillator for metronome
+var Beep = function() {
+  Bumpkit.call(this);
+  var self = this;
+  window.addEventListener('step', function(e) {
+    var step = e.detail.step;
+    var when = e.detail.when;
+    if (self.pattern[step] == 1) {
+      console.log('BEEP', step);
+      self.play(when);
+    };
+  });
+};
+Beep.prototype = Object.create(Bumpkit.prototype);
+Beep.prototype.contructor = Bumpkit;
+Beep.prototype.output = 0;
+Beep.prototype.duration = .0625;
+Beep.prototype.pattern = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0];
+Beep.prototype.play = function(when) {
+  var osc = this.context.createOscillator();
+  osc.type = 0;
+  osc.frequency.value = 200;
+  this.trigger(osc, when, this.context.destination, { duration: this.duration });
+};
+// TO DO: Figure out how to share the same context
+  // TO DO: Check for latency problems with event listener //console.log(this.context.currentTime, when);
+// Beep.prototype.envelopeNode;
 
 // Sampler
   // loadSample
@@ -145,8 +185,23 @@ test.mixer.addTrack();
 console.log('master and tracks ', test.mixer.master, test.mixer.tracks);
 test.mixer.removeTrack(0);
 console.log('removed track 0', test.mixer.tracks);
-console.log('tempo and stepDuration:', test.tempo, test.stepDuration);
+console.log('tempo and stepDuration:', test.tempo, test.stepDuration());
+test.tempo = 144;
+console.log('change tempo and stepDuration:', test.tempo, test.stepDuration());
+
+// Set 16 step loop
+test.loopLength = 16;
+
+// Listen for step in metronome
 window.addEventListener('step', function(e) {
-  console.log('test step', e.detail.step);
+  //console.log('test step', e.detail.step);
 });
+
+// Beep
+var beep = new Beep();
+beep.output = test.mixer.tracks[0].input;
+beep.context = test.context;
+//console.log(beep);
+console.log(beep.output.context === test.context);
+//console.log(beep.output);
 

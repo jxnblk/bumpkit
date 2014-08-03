@@ -1,123 +1,68 @@
+
 'use strict';
 
-var bumpkit = angular.module('bumpkit', ['ngRoute']);
-
-bumpkit.config(['$routeProvider', function($routeProvider){
-  $routeProvider.when('/', { templateUrl: 'views/main.html', controller: 'MainCtrl'});
-}]);
-
-bumpkit.factory('audio', function($document){
-  var tracks = [];
-
-  for (var i = 0; i < 4; i++) {
-    var audio = $document[0].createElement('audio');
-    tracks[i] = audio;
-  };
-  return {
-    tracks: tracks,
-    load: function(src, i) {
-      tracks[i].src = src;
-    },
-    loadKit: function(kit) {
-      for (var i = 0; i < kit.length; i++) {
-        tracks[i].src = kit[i].src;
-      };
-    }
-  };
-});
-
-bumpkit.factory('player', function(audio){
-  return {
-    play: function(i){
-      audio.tracks[i].currentTime = 0
-      audio.tracks[i].play();
-    }
-  };
-});
-
-bumpkit.factory('metronome', function($timeout){
-  var tempo = 120,
-      currentStep = 0;
-
-  // var stop;
-  var counter = function(){
-    var stop = $timeout(function(){
-      if(currentStep < 16) currentStep++
-      else currentStep = 1;
-      console.log(currentStep);
-      counter();
-    }, tempo * 1000/240);
-  };
-  counter();
-  
-
-  return {
-    tempo: tempo,
-    currentStep: function(){
-      return currentStep;
-    },
-    setTempo: function(tempo){
-      metronome.tempo = tempo;
-    }
+console.log('Bumpkit');
+  try {
+    this.context = new (window.AudioContext || window.webkitAudioContext)();
   }
-});
+  catch(e) {
+    console.error('Web Audio API not supported in this browser.');
+  }
 
-bumpkit.controller('MainCtrl', ['$scope', 'audio', 'player', 'metronome', function($scope, audio, player, metronome){
-  $scope.herro = 'Bumpkit';
+var Bumpkit = function() {};
 
-  $scope.audio = audio;
-  $scope.player = player;
-  $scope.metronome = metronome;
-  $scope.currentStep = metronome.currentStep;
+// Initialize context
+Bumpkit.prototype.context = new(window.AudioContext || window.webkitAudioContext)();
 
-  $scope.kit = [
-    { src: 'audio/Bassdrum-15.wav', name: 'Kick' },
-    { src: 'audio/Clap03.wav', name: 'Clap' },
-    { src: 'audio/ClosedHat05.wav', name: 'Hat' },
-    { src: 'audio/Snare03.wav', name: 'Snare' }
-  ];
+// Speaker Destination
+Bumpkit.prototype.speaker = this.context.destination;
+// Add offline audio context for renderer
 
-  audio.loadKit($scope.kit);
 
-  $scope.tempo = 120;
-  $scope.steps = 16;
-  
-  $scope.pattern = [];
-  for (var i = 0; i < audio.tracks.length; i++){
-    var steps = [];
-    for (var j = 0; j < $scope.steps; j++){
-      steps[j] = false;
-    };
-    $scope.pattern.push({'steps': steps});
-  };
-  
-  // $scope.currentStep = 1;
+// Mixer
 
-  $scope.toggleStep = function(track, step){
-    console.log('toggle step');
-    console.log(track + ',' + step);
-    $scope.pattern[track].steps[step] = !$scope.pattern[track].steps[step];
-  };
+// Generic track object
+var Track = function() {
+  this.input = self.context.createGain();
+  this.mute = self.context.createGain();
+  this.volume = self.context.createGain();
+  // Add effects chain array and compressor node
+  this.input.connect(this.mute);
+  this.mute.connect(this.volume);
+};
 
-  Mousetrap.bind('a', function(){
-    $scope.$apply(function(){
-      player.play(0);
-    });
-  });
-  Mousetrap.bind('s', function(){
-    $scope.$apply(function(){
-      player.play(1);
-    });
-  });
-  Mousetrap.bind('d', function(){
-    $scope.$apply(function(){
-      player.play(2);
-    });
-  });
-  Mousetrap.bind('f', function(){
-    $scope.$apply(function(){
-      player.play(3);
-    });
-  });
+Bumpkit.prototype.mixer = function() {
+};
 
-}]);
+Bumpkit.prototype.mixer.tracks = [];
+Bumpkit.prototype.mixer.master = new Track();
+// Connect master to speaker
+//Bumpkit.prototype.mixer.master.volume.connect(this.speaker);
+
+Bumpkit.prototype.mixer.addTrack = function() {
+  var track = new Track();
+  track.volume.connect(this.master.input);
+  this.tracks.push(track);
+};
+
+Bumpkit.prototype.mixer.removeTrack = function(index) {
+  this.tracks.splice(index, 1);
+};
+
+
+// Bootstrap and connect the mixer
+Bumpkit.prototype.init = function() {
+  // Connect master channel to speaker
+  this.mixer.master.volume.connect(this.speaker);
+};
+
+
+
+////////////////////////////////
+// Debugging
+var test = new Bumpkit();
+test.init();
+test.mixer.addTrack();
+console.log(test.mixer.master);
+console.log(test.mixer.tracks);
+

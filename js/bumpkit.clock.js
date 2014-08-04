@@ -1,4 +1,6 @@
 // Bumpkit Clock
+//
+// - Consider making this its own class??
 
 'use strict';
 

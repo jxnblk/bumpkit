@@ -22,11 +22,9 @@
 
   <script src="js/bumpkit.js"></script>
   <script src="js/bumpkit.clock.js"></script>
-  <script src="js/bumpkit.beep.js"></script>
-  <!--
   <script src="js/bumpkit.mixer.js"></script>
-  <script src="js/bumpkit.scheduler.js"></script>
-  -->
+  <script src="js/bumpkit.beep.js"></script>
+  <script src="js/bumpkit.sampler.js"></script>
   <script>
     // Test
     // Debugging and testing
@@ -34,15 +32,21 @@
     test.loopLength = 16;
     var mixer = new Bumpkit.Mixer(test.speaker);
     mixer.addTrack();
-    var beep = new Beep(mixer.tracks[0].input);
+    var beep = new Bumpkit.Beep(mixer.tracks[0].input);
 
     mixer.addTrack(function(response){
-      // With callback
-      console.log(response);
+      console.log(response); // With callback
     });
-    var beep2 = new Beep(mixer.tracks[1].input);
+    mixer.tracks[0].volume.gain.value = .02;
+    mixer.tracks[1].volume.gain.value = .2;
+    console.log(mixer.master);
+    var beep2 = new Bumpkit.Beep(mixer.tracks[1].input);
     beep2.frequency = 500;
     beep2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
+
+    mixer.addTrack();
+    var sampler = new Bumpkit.Sampler(mixer.tracks[2].input);
+    sampler.loadSample('audio/pad.mp3');
   </script>
 
 </body>

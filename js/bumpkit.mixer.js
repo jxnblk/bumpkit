@@ -2,30 +2,38 @@
 
 'use strict';
 
-// Unsure of how to split this out
-Bumpkit.prototype.mixer = {
-  master: {},
-  master.input: this.context.createGain(),
-  master.mute: = this.context.createGain(),
-  master.volume: = this.context.createGain(),
-  master.input.connect(this.mixer.master.mute),
-  master.mute.connect(this.mixer.master.volume),
-  master.volume.connect(this.speaker),
-  tracks: [],
-};
+// Mixer
+Bumpkit.Mixer = function(output) {
+  //Bumpkit.call(this);
+  this.output = output || 0;
+  this.context = this.output.context;
 
-Bumpkit.prototype.addTrack = function() {
+  this.master = {};
+  this.master.input = this.context.createGain();
+  this.master.mute = this.context.createGain();
+  this.master.volume = this.context.createGain();
+  this.master.input.connect(this.master.mute);
+  this.master.mute.connect(this.master.volume);
+  this.master.volume.connect(this.output);
+
+  this.tracks = [];
+};
+// May not need this with current approach
+//Bumpkit.Mixer.prototype = Object.create(Bumpkit.prototype);
+//Bumpkit.Mixer.prototype.contructor = Bumpkit;
+
+Bumpkit.Mixer.prototype.addTrack = function(callback) {
   var track = {};
   track.input = this.context.createGain();
   track.mute = this.context.createGain();
   track.volume = this.context.createGain();
   track.input.connect(track.mute);
   track.mute.connect(track.volume);
-  console.log(this.mixer);
-  track.volume.connect(this.mixer.master.input);
-  this.mixer.tracks.push(track);
+  track.volume.connect(this.master.input);
+  this.tracks.push(track);
+  if (callback) callback({ track: track, index: this.tracks.length - 1 });
 };
 
-Bumpkit.prototype.removeTrack = function(index) {
-  this.mixer.tracks.splice(index, 1);
+Bumpkit.Mixer.prototype.removeTrack = function(index) {
+  this.tracks.splice(index, 1);
 };

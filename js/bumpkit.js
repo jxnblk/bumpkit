@@ -13,7 +13,7 @@ catch(e) { console.error('Web Audio API not supported in this browser.'); }
 
 var Bumpkit = function() {
   this.self = this;
-  this.context = new(window.AudioContext || window.webkitAudioContext)();
+  this.context = this.context || new (window.AudioContext || window.webkitAudioContext)();
   this.speaker = this.context.destination;
 
   // Mixer
@@ -63,7 +63,7 @@ Bumpkit.prototype.scheduleStep = function(when) {
   this.step.detail.step = this.currentStep;
   this.step.detail.when = when;
   var self = this;
-  console.log('step',this.currentStep);
+  //console.log('step',this.currentStep);
   window.dispatchEvent(self.step);
 };
 
@@ -105,7 +105,6 @@ Bumpkit.prototype.playPause = function() {
 Bumpkit.prototype.trigger = function(source, when, output, options) {
   var options = options || {};
   source.connect(output);
-  console.log(when, when + options.duration);
   source.start(when, options.offset || 0);
   if (options.duration) {
     source.stop(when + options.duration);
@@ -114,7 +113,8 @@ Bumpkit.prototype.trigger = function(source, when, output, options) {
 
 
 // Beep Subclass
-// This might not be the right approach // Simple sine oscillator for metronome
+// Simple sine oscillator for metronome
+  // This might not be the right approach
 var Beep = function() {
   Bumpkit.call(this);
   var self = this;
@@ -122,7 +122,7 @@ var Beep = function() {
     var step = e.detail.step;
     var when = e.detail.when;
     if (self.pattern[step] == 1) {
-      console.log('BEEP', step);
+      //console.log('BEEP', step);
       self.play(when);
     };
   });
@@ -130,12 +130,13 @@ var Beep = function() {
 Beep.prototype = Object.create(Bumpkit.prototype);
 Beep.prototype.contructor = Bumpkit;
 Beep.prototype.duration = .0625;
+Beep.prototype.frequency = 200;
 Beep.prototype.pattern = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0];
 Beep.prototype.output = 0;
 Beep.prototype.play = function(when) {
-  var osc = this.context.createOscillator();
+  var osc = this.output.context.createOscillator();
   osc.type = 0;
-  osc.frequency.value = 200;
+  osc.frequency.value = this.frequency;
   this.trigger(osc, when, this.output, { duration: this.duration });
 };
 // Beep.prototype.envelopeNode;
@@ -149,11 +150,8 @@ Beep.prototype.play = function(when) {
   // Pitch
 
 
-// Bootstrap and connect the mixer
+// Bootstrap
 Bumpkit.prototype.init = function() {
-  // TO DO: Figure out best implementation
-  // Connect master channel to speaker
-  //  this.mixer.master.volume.connect(this.speaker);
 };
 
 
@@ -161,13 +159,14 @@ Bumpkit.prototype.init = function() {
 ////////////////////////////////
 // Debugging and testing
 var test = new Bumpkit();
-console.log(test.context === test.mixer.master.volume.context);
 test.addTrack();
 test.addTrack();
 test.loopLength = 16;
-//console.log(test.context === test.mixer.tracks[0].volume.context);
 var beep = new Beep();
-beep.context = test.context; // Figure out how to negate the need for this
-//console.log(test.context === beep.context);
-beep.output = test.mixer.tracks[0].input;
+beep.output = test.mixer.tracks[0].input;      // Must connect to get the same audio context
+
+var beep2 = new Beep();
+beep2.output = test.mixer.tracks[1].input;
+beep2.frequency = 500;
+beep2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
 

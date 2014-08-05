@@ -3,7 +3,7 @@
 'use strict';
 
 // Mixer
-Bumpkit.Mixer = function(output) {
+var Mixer = function(output) {
   //Bumpkit.call(this);
   this.output = output || 0;
   this.context = this.output.context;
@@ -22,7 +22,7 @@ Bumpkit.Mixer = function(output) {
 //Bumpkit.Mixer.prototype = Object.create(Bumpkit.prototype);
 //Bumpkit.Mixer.prototype.contructor = Bumpkit;
 
-Bumpkit.Mixer.prototype.addTrack = function(callback) {
+Mixer.prototype.addTrack = function(callback) {
   var track = {};
   track.input = this.context.createGain();
   track.mute = this.context.createGain();
@@ -34,6 +34,10 @@ Bumpkit.Mixer.prototype.addTrack = function(callback) {
   if (callback) callback({ track: track, index: this.tracks.length - 1 });
 };
 
-Bumpkit.Mixer.prototype.removeTrack = function(index) {
+Mixer.prototype.removeTrack = function(index) {
   this.tracks.splice(index, 1);
 };
+
+Mixer.prototype.addEffect = function(target, effect) {
+};
+

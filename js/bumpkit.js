@@ -39,3 +39,23 @@ Bumpkit.prototype.get = function(url, callback) {
   };
 };
 
+Bumpkit.prototype.buffers = {};
+
+Bumpkit.prototype.loadBuffer = function(url, callback) {
+  var self = this;
+  if (self.buffers[url]) {
+    if (callback) callback(self.buffers[url]);
+  }
+  function decode(file) {
+    self.context.decodeAudioData(file, function(buffer) {
+      self.buffers[url] = buffer;
+      if(callback) callback(buffer);
+    });
+  };
+  this.get(url, function(response) {
+    decode(response);
+  });
+  // Maybe use promises?
+  // return self.buffers[url];
+};
+

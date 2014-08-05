@@ -27,7 +27,6 @@ Clip.prototype = Object.create(Bumpkit.prototype);
 Clip.prototype.constructor = Bumpkit;
 
 Clip.prototype.play = function(when) {
-  console.log('play');
   this.output.play(when);
 };
 

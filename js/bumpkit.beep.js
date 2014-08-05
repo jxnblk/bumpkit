@@ -7,7 +7,7 @@ var Beep = function(output) {
   this.output = output || 0;
   this.context = output.context;
   this.duration = .0625;
-  this.frequency = 200;
+  this.frequency = 256;
 
 };
 

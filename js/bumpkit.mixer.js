@@ -4,11 +4,14 @@
 
 // Mixer
 var Mixer = function(output) {
+ 
   //Bumpkit.call(this);
+ 
   this.output = output || 0;
   this.context = this.output.context;
 
   this.master = {};
+  this.master.effects = [];
   this.master.input = this.context.createGain();
   this.master.mute = this.context.createGain();
   this.master.volume = this.context.createGain();
@@ -24,6 +27,7 @@ var Mixer = function(output) {
 
 Mixer.prototype.addTrack = function(callback) {
   var track = {};
+  track.effects = [];
   track.input = this.context.createGain();
   track.mute = this.context.createGain();
   track.volume = this.context.createGain();
@@ -38,6 +42,19 @@ Mixer.prototype.removeTrack = function(index) {
   this.tracks.splice(index, 1);
 };
 
-Mixer.prototype.addEffect = function(target, effect) {
+Mixer.prototype.addEffect = function(track, effect) {
+  track.effects.push(effect);
+  track.input.disconnect(0);
+  track.input.connect(track.effects[0]);
+  for (var i = 0; i < track.effects.length - 1; i++) {
+    console.log('multiple effect', i);
+    var next = track.effects[i+1];
+    track.effects[i].disconnect(0);
+    track.effects[i].connect(next);
+  };
+  track.effects[track.effects.length - 1].connect(track.mute);
+};
+
+Mixer.prototype.removeEffect = function(track, index) {
 };
 

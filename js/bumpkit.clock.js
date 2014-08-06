@@ -17,8 +17,8 @@ Bumpkit.prototype.timerID = 0;
 Bumpkit.prototype.step = new CustomEvent('step', { detail: {} });
 
 Bumpkit.prototype.scheduleStep = function(when) {
-  if (!this.context.currentTime) { // Start the clock
-    var dummySource = this.context.createBufferSource();
+  if (!this.currentTime) { // Start the clock
+    var dummySource = this.createBufferSource();
   }
   this.step.detail.step = this.currentStep;
   this.step.detail.when = when;
@@ -32,7 +32,7 @@ Bumpkit.prototype.scheduler = function() {
       scheduleAhead = .1,
       lookahead = 25;
 
-  while (this.nextStepTime < this.context.currentTime + scheduleAhead) {
+  while (this.nextStepTime < this.currentTime + scheduleAhead) {
     this.scheduleStep(this.nextStepTime);
     this.nextStepTime += this.stepDuration();
     this.currentStep++;
@@ -52,7 +52,7 @@ Bumpkit.prototype.stop = function() {
 Bumpkit.prototype.playPause = function() {
   if (!this.isPlaying) {
     this.currentStep = 0;
-    this.nextStepTime = this.context.currentTime;
+    this.nextStepTime = this.currentTime;
     this.scheduler();
     this.isPlaying = !this.isPlaying;
   } else {

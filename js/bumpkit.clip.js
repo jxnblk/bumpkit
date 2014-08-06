@@ -9,6 +9,7 @@ var Clip = function(output) {
   var self = this;
 
   this.output = output || 0;
+  // Is this needed?
   this.context = output.context || this.context;
   this.active = true;
   this.pattern = [];

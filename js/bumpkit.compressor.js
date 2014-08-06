@@ -1,6 +1,7 @@
 // Compressor
 
 // This doesn't provide any extra utility
+// Ditch this
 
 var Compressor = function(output) {
 

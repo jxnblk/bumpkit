@@ -10,6 +10,7 @@ var Sampler = function(output) {
   this.context = this.output.context;
   this.offset = 0;
   this.duration = 0.6;
+  this.pitch = 0;
 
 };
 

@@ -3,12 +3,12 @@
 'use strict';
 
 // Mixer
-var Mixer = function(output) {
+var Mixer = function(context, output) {
  
   //Bumpkit.call(this);
  
+  this.context = context;
   this.output = output || 0;
-  this.context = this.output.context;
 
   this.master = {};
   this.master.effects = [];

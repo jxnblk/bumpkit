@@ -28,61 +28,14 @@
     console.log(b);
     console.log(b.currentTime);
     console.log(b.destination);
-    console.log(b.arm);
+    b.trigger();
     var gain = b.createGain();
     console.log(gain);
+    var beep = new b.Beep();
+    console.log(beep);
   </script>
 
 
-  <!--
-  <script>
-    // Test
-    // Debugging and testing
-    var test = new Bumpkit();
-    test.tempo = 96;
-    test.loopLength = 16;
-    var mixer = new Mixer(test.speaker);
-
-    mixer.addTrack();
-    mixer.tracks[0].volume.gain.value = .5;
-    var beep = new Beep(mixer.tracks[0].input);
-
-    var clip1 = new Clip(beep);
-    clip1.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
-
-
-    mixer.addTrack();
-    mixer.tracks[1].volume.gain.value = .8;
-    var beep2 = new Beep(mixer.tracks[1].input);
-    beep2.frequency = 128;
-    beep2.duration = .125;
-
-    var clip2 = new Clip(beep2);
-    clip2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
-
-
-    mixer.addTrack();
-    var sampler = new Sampler(mixer.tracks[2].input);
-    test.loadBuffer('audio/pad.mp3', function(buffer) {
-      sampler.buffer = buffer;
-    });
-    sampler.duration = 3;
-
-    var samplerclip = new Clip(sampler);
-    //samplerclip.pattern = [1,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0];
-
-    var shaper = test.context.createWaveShaper();
-    console.log(shaper);
-    shaper.curve = new Float32Array([-1,0,.5]);
-    mixer.addEffect(mixer.master, shaper);
-
-    var comp = test.context.createDynamicsCompressor();
-    comp.ratio.value = 20;
-    mixer.addEffect(mixer.master, comp);
-    console.log(comp);
-
-  </script>
-  -->
 
 </body>
 </html>

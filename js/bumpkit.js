@@ -1,14 +1,19 @@
 // Bumpkit
 // Main audio context with decorators
 
-var AC = window.AudioContext || window.webkitAudioContext;
 
-var Bumpkit = function() {};
-Bumpkit.prototype = new AC();
+var Bumpkit = window.AudioContext || window.webkitAudioContext;
 
-Bumpkit.prototype.arm = 'prop';
-console.log(AC);
-Bumpkit.prototype.createGain = AC.createGain();
+Bumpkit.prototype.trigger = function() {
+  console.log('hi', this.currentTime);
+  this.source = 0;
+};
+
+Bumpkit.prototype.Beep = function() {
+  console.log('Beep', this);
+  this.a = 'test';
+  this.context = Bumpkit;
+};
 
 
 

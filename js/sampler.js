@@ -1,21 +1,29 @@
 // Bumpkit Sampler
 
-'use strict';
+//var Sampler = function(output) {
+bumpkit.createSampler = function(options) {
 
-var Sampler = function(output) {
+  var self = this;
 
-  Bumpkit.call(this);
+  var Sampler = function() {
+    this.output = 0;
+    this.offset = 0;
+    this.duration = 0.6;
+    this.buffer = 0;
 
-  this.output = output || 0;
-  this.context = this.output.context;
-  this.offset = 0;
-  this.duration = 0.6;
+    this.connect = function(node) {
+    };
+
+    this.play = function(when) {
+    };
+
+  };
+
+  return new Sampler();
 
 };
 
-Sampler.prototype = Object.create(Bumpkit.prototype);
-Sampler.prototype.constructor = Bumpkit;
-
+/*
 Sampler.prototype.buffer;
 
 Sampler.prototype.play = function(when) {
@@ -23,6 +31,7 @@ Sampler.prototype.play = function(when) {
   source.buffer = this.buffer;
   this.trigger(source, when, this.output, { duration: this.duration });
 };
+*/
 
 // TO DO:
 // - envelopeNode

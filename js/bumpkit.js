@@ -1,12 +1,12 @@
 // Bumpkit
 // Main audio context with decorators
 
+var AC = window.AudioContext;
 
-var Bumpkit = function() {
-  this.a = 'prop';
-};
+var Bumpkit = function() {};
+Bumpkit.prototype = new AC();
 
-Bumpkit.prototype = new AudioContext();
+Bumpkit.prototype.arm = 'prop';
 
 
 

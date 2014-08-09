@@ -18,9 +18,19 @@
     <button onclick="test.playPause()">Play / Pause</button>
   </section>
 
+  <script src="js/bumpkit.js"></script>
+  <!--
+  <script src="js/clock.js"></script>
+  -->
 
+  <script>
+    var b = new Bumpkit();
+    console.log(b);
+    var gain = b.createGainNode();
+    console.log(gain);
+    console.log(b.arm);
+  </script>
 
-  <script data-main="js/main.js" src="js/require.js"></script>
 
   <!--
   <script>

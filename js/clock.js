@@ -1,9 +1,7 @@
 // Bumpkit Clock
-//
-// - Consider making this its own class??
 
-'use strict';
 
+console.log('clock');
 // Scheduler / Clock
 Bumpkit.prototype.tempo = 120;
 Bumpkit.prototype.stepDuration = function() {

@@ -1,61 +1,75 @@
 // Bumpkit
-//
-// TO DO:
-// - add offline audio context for rendering
-// - add return tracks to mixer
+// Main audio context with decorators
 
+define(['bumpkit'], function(bumpkit) {
 
-'use strict';
+  // Singleton Audio Context
+  var instance;
 
-console.log('Bumpkit');
-try { var testcontext = new (window.AudioContext || window.webkitAudioContext)(); }
-catch(e) { console.error('Web Audio API not supported in this browser.'); }
+  function init() {
 
-var Bumpkit = function() {
-  this.self = this;
-  this.context = this.context || new (window.AudioContext || window.webkitAudioContext)();
-  this.speaker = this.context.destination;
-};
+    console.log('init');
+    try {
+      var bumpkit = new AudioContext() || webkitAudioContext();
+    }
+    catch(e) {
+      console.error('Web Audio API not supported in this browser');
+    }
 
+    bumpkit.trigger = function(source, options) {
+      var defaults = {
+        when: 0,
+        offset: 0,
+        output: this.destination
+      }
+      var options = options || defaults;
+      source.connect(options.output);
+      source.start(options.when, options.offset);
+      if (options.duration) {
+        source.stop(options.when + options.duration);
+      }
+    };
 
-// Trigger playback, pass source with buffer, and output node
-Bumpkit.prototype.trigger = function(source, when, output, options) {
-  var options = options || {};
-  source.connect(output);
-  source.start(when, options.offset || 0);
-  if (options.duration) {
-    source.stop(when + options.duration);
-  }
-};
+    bumpkit.getArrayBuffer = function(url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'arraybuffer';
+      xhr.open('GET', url, true);
+      xhr.send();
+      xhr.onload = function () {
+        if (!xhr.response) console.error('Could not load');
+        callback(xhr.response);
+      };
+    };
 
-Bumpkit.prototype.get = function(url, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.responseType = 'arraybuffer';
-  xhr.open('GET', url, true);
-  xhr.send();
-  xhr.onload = function () {
-    if (!xhr.response) console.error('Could not load');
-    callback(xhr.response);
+    bumpkit.buffers = {};
+
+    bumpkit.loadBuffer = function(url, callback) {
+      var self = this;
+      if (self.buffers[url]) {
+        if (callback) callback(self.buffers[url]);
+      }
+      function decode(file) {
+        self.decodeAudioData(file, function(buffer) {
+          self.buffers[url] = buffer;
+          if(callback) callback(buffer);
+        });
+      };
+      this.getArrayBuffer(url, function(response) {
+        decode(response);
+      });
+    };
+
+    return bumpkit;
+
   };
-};
 
-Bumpkit.prototype.buffers = {};
 
-Bumpkit.prototype.loadBuffer = function(url, callback) {
-  var self = this;
-  if (self.buffers[url]) {
-    if (callback) callback(self.buffers[url]);
+  if (!instance) {
+    instance = init();
   }
-  function decode(file) {
-    self.context.decodeAudioData(file, function(buffer) {
-      self.buffers[url] = buffer;
-      if(callback) callback(buffer);
-    });
-  };
-  this.get(url, function(response) {
-    decode(response);
-  });
-  // Maybe use promises?
-  // return self.buffers[url];
-};
+
+  return instance;
+
+});
+
 

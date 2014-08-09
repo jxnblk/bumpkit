@@ -1,61 +1,66 @@
 // Bumpkit Clock
 
+bumpkit.initClock = function() {
 
-console.log('clock');
-// Scheduler / Clock
-Bumpkit.prototype.tempo = 120;
-Bumpkit.prototype.stepDuration = function() {
-  return (60/this.tempo) / 4;
-};
-Bumpkit.prototype.nextStepTime = 0;
-Bumpkit.prototype.currentStep = 0;
-Bumpkit.prototype.isPlaying  = false;
-Bumpkit.prototype.loopLength = null;
-Bumpkit.prototype.timerID = 0;
-Bumpkit.prototype.step = new CustomEvent('step', { detail: {} });
-
-Bumpkit.prototype.scheduleStep = function(when) {
-  if (!this.context.currentTime) { // Start the clock
-    var dummySource = this.context.createBufferSource();
-  }
-  this.step.detail.step = this.currentStep;
-  this.step.detail.when = when;
   var self = this;
-  //console.log('step',this.currentStep);
-  window.dispatchEvent(self.step);
-};
 
-Bumpkit.prototype.scheduler = function() {
-  var self = this,
-      scheduleAhead = .1,
-      lookahead = 25;
+  this.tempo = 120;
+  this.isPlaying  = false;
+  this.loopLength = null;
+  this.timeSignature = [4,4];
+  this.stepResolution = 16; // 16th note steps
 
-  while (this.nextStepTime < this.context.currentTime + scheduleAhead) {
-    this.scheduleStep(this.nextStepTime);
-    this.nextStepTime += this.stepDuration();
-    this.currentStep++;
-    if (this.currentStep == this.loopLength) {
-      this.currentStep = 0;
+  var stepDuration = function() {
+    return (60/self.tempo) / 4;
+  };
+  var nextStepTime = 0;
+  var currentStep = 0;
+  var timerID = 0;
+  var stepEvent = new CustomEvent('step', { detail: {} });
+
+  var scheduleStep = function(when) {
+    // Start the clock if it's not running
+    if (!self.currentTime) {
+      var dummySource = self.createBufferSource();
+    }
+    stepEvent.detail.step = currentStep;
+    stepEvent.detail.when = when;
+    window.dispatchEvent(stepEvent);
+  };
+
+  var scheduler = function() {
+    var scheduleAhead = .1,
+        lookahead = 25;
+
+    while (nextStepTime < self.currentTime + scheduleAhead) {
+      scheduleStep(nextStepTime);
+      nextStepTime += stepDuration();
+      currentStep++;
+      if (currentStep == self.loopLength) {
+        currentStep = 0;
+      }
+    };
+    timerID = setTimeout(function() { scheduler() }, lookahead);
+  };
+
+  var stop = function() {
+    self.isPlaying = false;
+    window.clearTimeout(timerID);
+  };
+
+  this.playPause = function() {
+    if (!self.isPlaying) {
+      currentStep = 0;
+      nextStepTime = self.currentTime;
+      scheduler();
+      self.isPlaying = !self.isPlaying;
+    } else {
+      stop();
     }
   };
-  this.timerID = setTimeout(function() { self.scheduler() }, lookahead);
-};
 
-Bumpkit.prototype.stop = function() {
-  var self = this;
-  this.isPlaying = false;
-  window.clearTimeout(self.timerID);
-};
+  return this;
 
-Bumpkit.prototype.playPause = function() {
-  if (!this.isPlaying) {
-    this.currentStep = 0;
-    this.nextStepTime = this.context.currentTime;
-    this.scheduler();
-    this.isPlaying = !this.isPlaying;
-  } else {
-    this.stop();
-  }
 };
 
 

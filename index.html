@@ -15,24 +15,41 @@
   </header>
 
   <section class="p2">
-    <button onclick="test.playPause()">Play / Pause</button>
+    <button onclick="bumpkit.playPause()">Play / Pause</button>
   </section>
 
   <script src="js/bumpkit.js"></script>
-  <!--
+  <script src="js/mixer.js"></script>
   <script src="js/clock.js"></script>
-  -->
+  <script src="js/beep.js"></script>
+  <script src="js/clip.js"></script>
+
 
   <script>
-    var b = new Bumpkit();
-    console.log(b);
-    console.log(b.currentTime);
-    console.log(b.destination);
-    b.trigger();
-    var gain = b.createGain();
-    console.log(gain);
-    var beep = new b.Beep();
-    console.log(beep);
+    var mixer = bumpkit.createMixer();
+    bumpkit.initClock();
+    bumpkit.loopLength = 16;
+
+    var beep = bumpkit.createBeep();
+    beep.connect(mixer.master);
+    beep.play(0);
+    beep.frequency = 384;
+    var clip = bumpkit.createClip();
+    clip.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
+    clip.connect(beep);
+
+    var beep2 = bumpkit.createBeep();
+    beep2.connect(mixer.master);
+    beep2.frequency = 512;
+    console.log(beep2);
+
+    beep2.play(.3);
+    beep.play(.5);
+
+    var clip2 = bumpkit.createClip();
+    clip2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
+    clip2.connect(beep2);
+
   </script>
 
 

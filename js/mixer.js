@@ -1,31 +1,38 @@
 // Bumpkit Mixer
 
-'use strict';
-
-// Mixer
-var Mixer = function(output) {
+bumpkit.createMixer = function() {
  
-  //Bumpkit.call(this);
- 
-  this.output = output || 0;
-  this.context = this.output.context;
+  var self = this;
+  var mixer = {};
 
-  this.master = {};
-  this.master.effects = [];
-  this.master.input = this.context.createGain();
-  this.master.mute = this.context.createGain();
-  this.master.volume = this.context.createGain();
-  this.master.input.connect(this.master.mute);
-  this.master.mute.connect(this.master.volume);
-  this.master.volume.connect(this.output);
+  var Track = function() {
+    var track = self.createGain();
+    track.mute = self.createGain();
+    track.volume = self.createGain();
+    track.effects = [];
+    track.connect(track.mute);
+    track.mute.connect(track.volume);
+    this.connect = function(node) {
+      track.volume.connect(node);
+    };
+    return track;
+  };
+  mixer.master = new Track();
+  mixer.master.connect(self.destination);
 
-  this.tracks = [];
+  mixer.tracks = [];
+
+  mixer.addTrack = function() {
+  };
+  mixer.removeTrack = function() {
+  };
+
+  return mixer;
+
 };
-// May not need this with current approach
-//Bumpkit.Mixer.prototype = Object.create(Bumpkit.prototype);
-//Bumpkit.Mixer.prototype.contructor = Bumpkit;
 
-Mixer.prototype.addTrack = function(callback) {
+/*
+Bumpkit.createMixer.prototype.addTrack = function(callback) {
   var track = {};
   track.effects = [];
   track.input = this.context.createGain();
@@ -38,11 +45,11 @@ Mixer.prototype.addTrack = function(callback) {
   if (callback) callback({ track: track, index: this.tracks.length - 1 });
 };
 
-Mixer.prototype.removeTrack = function(index) {
+Bumpkit.createMixer.prototype.removeTrack = function(index) {
   this.tracks.splice(index, 1);
 };
 
-Mixer.prototype.addEffect = function(track, effect) {
+Bumpkit.createMixer.prototype.addEffect = function(track, effect) {
   track.effects.push(effect);
   track.input.disconnect(0);
   track.input.connect(track.effects[0]);
@@ -55,6 +62,6 @@ Mixer.prototype.addEffect = function(track, effect) {
   track.effects[track.effects.length - 1].connect(track.mute);
 };
 
-Mixer.prototype.removeEffect = function(track, index) {
+Bumpkit.createMixer.prototype.removeEffect = function(track, index) {
 };
-
+*/

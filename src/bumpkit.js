@@ -29,6 +29,7 @@ var Bumpkit = function() {
     if (options.duration) {
       source.stop(options.when + options.duration);
     }
+    return this;
   };
 
 
@@ -58,6 +59,7 @@ var Bumpkit = function() {
     getArrayBuffer(url, function(response) {
       decode(response);
     });
+    return this;
   };
 
   bumpkit.initClock = clock;

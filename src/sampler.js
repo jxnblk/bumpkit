@@ -17,7 +17,6 @@ var createSampler = function(options) {
       return this;
     };
 
-
     this.connect = function(node) {
       this.output = node;
       return this;

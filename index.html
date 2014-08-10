@@ -15,71 +15,53 @@
   </header>
 
   <section class="p2">
-    <button onclick="test.playPause()">Play / Pause</button>
+    <button id="play-pause-button">Play / Pause</button>
+    <div>
+      <button id="toggle-track-0-button">Mute Track 0</button>
+      <button id="toggle-track-1-button">Mute Track 1</button>
+    </div>
   </section>
 
+  <script src="dist/bumpkit.min.js"></script>
 
-
-  <script src="js/bumpkit.js"></script>
-  <script src="js/bumpkit.clock.js"></script>
-  <script src="js/bumpkit.mixer.js"></script>
-  <script src="js/bumpkit.clip.js"></script>
-  <script src="js/bumpkit.beep.js"></script>
-  <script src="js/bumpkit.sampler.js"></script>
-
-  <!--
-  <script src="js/bumpkit.compressor.js"></script>
-  -->
   <script>
-    // Test
-    // Debugging and testing
-    var test = new Bumpkit();
-    test.tempo = 96;
-    test.loopLength = 16;
+      var bump = new Bumpkit();
 
-    var mixer = new Mixer(test, test.destination);
+      var mixer = bump.createMixer();
+      mixer.addTrack();
+      mixer.addTrack();
 
-    mixer.addTrack();
-    mixer.tracks[0].volume.gain.value = .5;
-    var beep = new Beep(mixer.tracks[0].input);
+      bump.loopLength = 16;
 
-    var clip1 = new Clip(beep);
-    clip1.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
+      var beep = bump.createBeep({ output: mixer.tracks[0] });
+      mixer.tracks[0].volume.gain.value = .1;
+      beep.play(0);
 
+      var sampler = bump.createSampler({ output: mixer.tracks[1] });
+      bump.loadBuffer('audio/pad.mp3', function(buffer) {
+        sampler.buffer = buffer;
+      });
 
-    mixer.addTrack();
-    mixer.tracks[1].volume.gain.value = .8;
-    var beep2 = new Beep(mixer.tracks[1].input);
-    beep2.frequency = 512;
-    //beep2.duration = .125;
+      c1 = bump.createClip();
+      c1.connect(beep);
+      c1.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
 
-    var clip2 = new Clip(beep2);
-    clip2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
+      c2 = bump.createClip();
+      c2.connect(sampler);
+      c2.pattern = [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,1];
 
-
-    /*
-    mixer.addTrack();
-    var sampler = new Sampler(mixer.tracks[2].input);
-    test.loadBuffer('audio/pad.mp3', function(buffer) {
-      sampler.buffer = buffer;
-    });
-    sampler.duration = 3;
-
-    var samplerclip = new Clip(sampler);
-    samplerclip.pattern = [1,0,0,0,0,0,0,0, 1,0,0,0,0,0,0,0];
-    */
-
-    var shaper = test.createWaveShaper();
-    console.log(shaper);
-    shaper.curve = new Float32Array([-1,0,.5]);
-    mixer.addEffect(mixer.master, shaper);
-
-    var comp = test.createDynamicsCompressor();
-    comp.ratio.value = 20;
-    mixer.addEffect(mixer.master, comp);
-    console.log(comp);
+      document.getElementById('play-pause-button').addEventListener('click', function() {
+        bump.playPause();
+      });
+      document.getElementById('toggle-track-0-button').addEventListener('click', function() {
+        mixer.tracks[0].toggleMute();
+      });
+      document.getElementById('toggle-track-1-button').addEventListener('click', function() {
+        mixer.tracks[1].toggleMute();
+      });
 
   </script>
+
 
 </body>
 </html>

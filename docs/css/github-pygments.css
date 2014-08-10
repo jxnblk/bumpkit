@@ -3,6 +3,10 @@
  * Courtesy of GitHub.com
  */
 
+code, pre {
+  font-family: 'Source Code Pro', Consolas, Menlo, monospace;
+}
+
 .hll { background-color: #f8f8f8; border: 1px solid #ccc; padding: 6px 10px; border-radius: 3px; }
 .c { color: #999988; font-style: italic; }
 .err { color: #a61717; background-color: #e3d2d2; }

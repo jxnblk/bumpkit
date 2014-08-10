@@ -3,20 +3,18 @@
 // Used for storing patterns, listening to the clock,
 // and triggering instruments
 
-bumpkit.createClip = function(options) {
+var createClip = function(options) {
 
-  // TO DO: handle options
- 
-  var self = this;
-
+  var options = options || {};
   var clip = {};
-  clip.output = 0;
-  clip.active = true;
-  clip.pattern = [];
+  clip.output = options.output || 0;
+  clip.active = options.active || true;
+  clip.pattern = options.pattern || [];
 
   clip.connect = function(node) {
     clip.output = node;
   };
+
   clip.play = function(when) {
     clip.output.play(when);
   };
@@ -32,4 +30,8 @@ bumpkit.createClip = function(options) {
   return clip;
 
 };
+
+module.exports = {
+  createClip: createClip
+}
 

@@ -1,0 +1,30 @@
+{
+  "name": "bumpkit",
+  "version": "0.0.0",
+  "description": "## Classes, properties and methods ### Bumpkit Provides audio context, speaker, trigger method, and get method - context - speaker - trigger(source, when, output, options) - get(url)",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "~3.8.7"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.3.4",
+    "browserify": "^5.9.1",
+    "gulp-browserify": "^0.5.0",
+    "gulp-watch": "^0.6.9",
+    "gulp-uglify": "^0.3.1",
+    "gulp-rename": "^1.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jxnblk/bumpkit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jxnblk/bumpkit/issues"
+  },
+  "homepage": "https://github.com/jxnblk/bumpkit"
+}

@@ -15,40 +15,50 @@
   </header>
 
   <section class="p2">
-    <button onclick="bumpkit.playPause()">Play / Pause</button>
+    <button id="play-pause-button">Play / Pause</button>
+    <div>
+      <button id="toggle-track-0-button">Mute Track 0</button>
+      <button id="toggle-track-1-button">Mute Track 1</button>
+    </div>
   </section>
 
-  <script src="js/bumpkit.js"></script>
-  <script src="js/mixer.js"></script>
-  <script src="js/clock.js"></script>
-  <script src="js/beep.js"></script>
-  <script src="js/clip.js"></script>
-
+  <script src="dist/bumpkit.min.js"></script>
 
   <script>
-    var mixer = bumpkit.createMixer();
-    bumpkit.initClock();
-    bumpkit.loopLength = 16;
+      var bump = new Bumpkit();
 
-    var beep = bumpkit.createBeep();
-    beep.connect(mixer.master);
-    beep.play(0);
-    beep.frequency = 384;
-    var clip = bumpkit.createClip();
-    clip.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
-    clip.connect(beep);
+      var mixer = bump.createMixer();
+      mixer.addTrack();
+      mixer.addTrack();
 
-    var beep2 = bumpkit.createBeep();
-    beep2.connect(mixer.master);
-    beep2.frequency = 512;
-    console.log(beep2);
+      bump.loopLength = 16;
 
-    beep2.play(.3);
-    beep.play(.5);
+      var beep = bump.createBeep({ output: mixer.tracks[0] });
+      mixer.tracks[0].volume.gain.value = .1;
+      beep.play(0);
 
-    var clip2 = bumpkit.createClip();
-    clip2.pattern = [0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0];
-    clip2.connect(beep2);
+      var sampler = bump.createSampler({ output: mixer.tracks[1] });
+      bump.loadBuffer('audio/pad.mp3', function(buffer) {
+        sampler.buffer = buffer;
+      });
+
+      c1 = bump.createClip();
+      c1.connect(beep);
+      c1.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
+
+      c2 = bump.createClip();
+      c2.connect(sampler);
+      c2.pattern = [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,1];
+
+      document.getElementById('play-pause-button').addEventListener('click', function() {
+        bump.playPause();
+      });
+      document.getElementById('toggle-track-0-button').addEventListener('click', function() {
+        mixer.tracks[0].toggleMute();
+      });
+      document.getElementById('toggle-track-1-button').addEventListener('click', function() {
+        mixer.tracks[1].toggleMute();
+      });
 
   </script>
 

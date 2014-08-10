@@ -1,7 +1,7 @@
 // Bumpkit Mixer
-
-bumpkit.createMixer = function() {
- 
+//
+var createMixer = function() {
+   
   var self = this;
   var mixer = {};
 
@@ -12,8 +12,11 @@ bumpkit.createMixer = function() {
     track.effects = [];
     track.connect(track.mute);
     track.mute.connect(track.volume);
-    this.connect = function(node) {
+    track.connect = function(node) {
       track.volume.connect(node);
+    };
+    track.toggleMute = function() {
+      track.mute.gain.value = 1 - track.mute.gain.value;
     };
     return track;
   };
@@ -23,32 +26,27 @@ bumpkit.createMixer = function() {
   mixer.tracks = [];
 
   mixer.addTrack = function() {
+    var track = new Track();
+    track.connect(mixer.master);
+    mixer.tracks.push(track);
+    // callback?
+    return this;
   };
-  mixer.removeTrack = function() {
+
+  mixer.removeTrack = function(index) {
+    self.tracks.splice(index, 1);
+  };
+
+  mixer.addEffect = function(track, node) {
   };
 
   return mixer;
 
 };
 
+module.exports = { createMixer: createMixer };
+
 /*
-Bumpkit.createMixer.prototype.addTrack = function(callback) {
-  var track = {};
-  track.effects = [];
-  track.input = this.context.createGain();
-  track.mute = this.context.createGain();
-  track.volume = this.context.createGain();
-  track.input.connect(track.mute);
-  track.mute.connect(track.volume);
-  track.volume.connect(this.master.input);
-  this.tracks.push(track);
-  if (callback) callback({ track: track, index: this.tracks.length - 1 });
-};
-
-Bumpkit.createMixer.prototype.removeTrack = function(index) {
-  this.tracks.splice(index, 1);
-};
-
 Bumpkit.createMixer.prototype.addEffect = function(track, effect) {
   track.effects.push(effect);
   track.input.disconnect(0);

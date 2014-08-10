@@ -13,10 +13,10 @@ A DAW-inpsired library for the Web Audio API
 Extends the AudioContext with additional properties and methods
 
 ### Custom Properties
-### `.buffers`
+#### `.buffers`
 An object for storing arrayBuffers. Keys are based on url. E.g. `{ /audio/sound.mp3: AudioBuffer }`
 
-`.isPlaying`
+##### `.isPlaying`
 Boolean value for is the step sequencer is running.
 
 `.loopLength`

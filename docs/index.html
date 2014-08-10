@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bumpkit</title>
+  <meta name="author" content="Jxnblk">
+  <meta name="description" content="Web Audio Framework">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/bumpkit/">
+  <link rel="stylesheet" href="docs/css/basscss.min.css">
+</head>
+<body>
+
+  <header class="p2">
+    <h1>Bumpkit</h1>
+  </header>
+
+  <section class="p2">
+    <p>
+      <button id="play-pause-button">Play / Pause</button>
+    </p>
+    <p>
+      <button id="toggle-track-0-button">Mute Track 0</button>
+      <button id="toggle-track-1-button">Mute Track 1</button>
+    </p>
+  </section>
+
+  <script src="dist/bumpkit.js"></script>
+
+  <script>
+    var bump = new Bumpkit();
+    console.log(bump);
+
+    var mixer = bump.createMixer().addTrack().addTrack();
+
+    bump.loopLength = 16;
+
+    var shaper = bump.createWaveShaper();
+    shaper.curve = new Float32Array([-1,0,.5]);
+    mixer.tracks[0].addEffect(shaper);
+
+    var comp = bump.createDynamicsCompressor();
+    comp.ratio.value = 20;
+    mixer.master.addEffect(comp);
+
+
+    mixer.tracks[0].volume.gain.value = .25;
+    var beep = bump.createBeep().connect(mixer.tracks[0]).play(0);
+
+    bump.createBeep().frequency(224).connect(mixer.master).play(.5);
+
+    var sampler = bump.createSampler({ duration: .2 }).connect(mixer.tracks[1]);
+    bump.loadBuffer('docs/audio/pad.mp3', function(buffer) {
+      sampler.buffer(buffer);
+    });
+
+    var beep2 = bump.createBeep().connect(mixer.tracks[0]).frequency(384).play(.375);
+
+    var c1 = bump.createClip();
+    c1.connect(beep);
+    c1.pattern = [1,0,0,0, 1,0,0,0, 1,0,0,0, 1,0,0,0];
+
+    var c2 = bump.createClip();
+    c2.connect(sampler);
+    c2.pattern = [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,1];
+
+    var c3 = bump.createClip({ connect: beep2 });
+    c3.pattern = [0,0,1,0, 0,0,0,1, 0,1,0,0, 0,0,1,0];
+
+
+    var amp = bump.createAmplitudeAnalyser();
+    mixer.master.volume.connect(amp);
+
+    function watchAmp() {
+      requestAnimationFrame(watchAmp);
+      var n = Math.floor( (amp.amp() - 128) / 2 );
+      var n = Math.abs(n);
+      var string = Array(n).join('-') + '\n';
+      //console.log(string);
+    };
+    //watchAmp();
+
+    document.getElementById('play-pause-button').addEventListener('click', function() {
+      bump.playPause();
+    });
+    document.getElementById('toggle-track-0-button').addEventListener('click', function() {
+      mixer.tracks[0].toggleMute();
+    });
+    document.getElementById('toggle-track-1-button').addEventListener('click', function() {
+      mixer.tracks[1].toggleMute();
+    });
+  </script>
+
+
+</body>
+</html>

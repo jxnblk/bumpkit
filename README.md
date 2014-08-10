@@ -3,7 +3,9 @@ A DAW-inpsired library for the Web Audio API
 
 *Work in Progress*
 
+
 ---
+
 
 # Getting Started
 
@@ -16,6 +18,9 @@ var bumpkit = new Bumpkit();
 ```
 
 This will create a new Audio Context instance with custom methods and properties.
+
+
+---
 
 
 # Basics
@@ -36,7 +41,7 @@ bumpkit.loadBuffer('/audio/clap.mp3', function(buffer) {
 });
 ```
 
-===
+---
 
 
 # API Documentation
@@ -78,6 +83,10 @@ Toggles playing of the step sequencer. The current step always begins at 0 when 
 #### `.trigger(source, options)`
 *(Chainable)*
 Calls the `.start` method on the source. Options is an object with properties `when`, `offset`, and `duration`. The source should be connected to its destination before calling `.trigger()`.
+
+
+---
+
 
 ## Mixer Object
 Use the `.createMixer()` method to create a new mixer instance.
@@ -135,6 +144,9 @@ Toggles the track's `.mute` node between 1 and 0.
 Disconnects and reconnects effects in the `.effects` array. This is used by the `.addEffect()` and `.removeEffect()` methods, but should also be called after manually reordering the effects array.
 
 
+---
+
+
 ## Clip Object
 Clips listen to Bumpkit's sequencer `step` event and triggers playback of instruments based on patterns.
 Usage: `var clip = bumpkit.createClip()`
@@ -163,6 +175,9 @@ Toggles the `.active` attribute for the clip.
 Used within the object to trigger playback from the event listener. This can be used manually, but it's prefered to manually call `.play()` directly on instruments if not using a clip.
 
 
+---
+
+
 ## Beep Object
 A simple sine-wave oscillator instrument.
 Usage `var beep = bumpkit.createBeep()`
@@ -187,6 +202,7 @@ Connects the Beep to a destination node.
 #### `.play(when)`
 *(Chainable)*
 Plays the instrument at the given `when` argument. If no argument is passed, the Beep will play immediately.
+
 
 ---
 

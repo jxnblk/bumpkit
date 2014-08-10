@@ -152,9 +152,10 @@ module.exports = initClock;
 },{}],4:[function(_dereq_,module,exports){
 var clock = _dereq_('./clock');
 var mixer = _dereq_('./mixer');
+var clip = _dereq_('./clip');
+
 var beep = _dereq_('./beep');
 var sampler = _dereq_('./sampler');
-var clip = _dereq_('./clip');
 
 var Bumpkit = function() {
 
@@ -232,21 +233,48 @@ var createMixer = function() {
   var self = this;
   var mixer = {};
 
+
   var Track = function() {
+
     var track = self.createGain();
+    track.effectsNode = self.createGain();
     track.mute = self.createGain();
     track.volume = self.createGain();
     track.effects = [];
-    track.connect(track.mute);
+    track.connect(track.effectsNode);
+    track.effectsNode.connect(track.mute);
     track.mute.connect(track.volume);
+
+    track.updateConnections = function() {
+      track.effectsNode.disconnect(0);
+      track.effectsNode.connect(track.effects[0]);
+      for (var i = 0; i < track.effects.length - 1; i++) {
+        console.log('multiple effects', i);
+        var next = track.effects[i+1];
+        track.effects[i].disconnect(0);
+        track.effects[i].connect(next);
+      };
+      track.effects[track.effects.length - 1].connect(track.mute);
+    };
+
+    track.addEffect = function(node, index) {
+      var i = index || track.effects.length;
+      track.effects.splice(i, 0, node);
+      track.updateConnections();
+    };
+
     track.connect = function(node) {
       track.volume.connect(node);
     };
     track.toggleMute = function() {
       track.mute.gain.value = 1 - track.mute.gain.value;
     };
+
     return track;
+
   };
+
+
   mixer.master = new Track();
   mixer.master.connect(self.destination);
 
@@ -264,8 +292,8 @@ var createMixer = function() {
     self.tracks.splice(index, 1);
   };
 
-  mixer.addEffect = function(track, node) {
-  };
+  //mixer.addEffect = function(track, node) {
+  //};
 
   return mixer;
 

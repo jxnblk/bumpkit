@@ -12,14 +12,21 @@ gulp.task('compile', function() {
 });
 
 gulp.task('minify', function() {
-  return gulp.src('src/bumpkit.js')
-    .pipe(browserify({ standalone: 'Bumpkit' }))
+  return gulp.src('dist/bumpkit.js')
     .pipe(uglify())
     .pipe(rename('bumpkit.min.js'))
     .pipe(gulp.dest('dist'));
+  //return gulp.src('src/bumpkit.js')
+  //  .pipe(browserify({ standalone: 'Bumpkit' }))
+  //  .pipe(uglify())
+  //  .pipe(rename('bumpkit.min.js'))
+  //  .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default', function() {
-  gulp.watch('src/*', ['minify']);
+gulp.task('default', ['compile', 'minify'], function() {
+});
+
+gulp.task('watch', function() {
+  gulp.watch('src/*', ['compile', 'minify']);
 });
 

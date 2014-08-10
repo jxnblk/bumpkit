@@ -1,47 +1,41 @@
 # Bumpkit
 
-## Classes, properties and methods
-### Bumpkit
-Provides audio context, speaker, trigger method, and get method
-- context
-- speaker
-- trigger(source, when, output, options)
-- get(url)
+# API
 
-#### Clock
-- tempo
-- stepDuration()
-- nextStepTime
-- currentStep
-- isPlaying
-- loopLength
-- timerID
-- scheduleStep()
-- scheduler()
-- stop()
-- playPause()
+## Bumpkit Class
+Extends the AudioContext with additional properties and methods
 
-### Bumpkit.Mixer(output)
-- master object with input, mute, and volume
-- tracks array with input, mute, and volume 
-- addTrack()
-- removeTrack(index)
+### Custom Properties
+- `.buffers`
+- `.isPlaying`
+- `.loopLength`
+- `.stepResolution`
+- `.tempo`
+- `.timeSignature`
 
-### Bumpkit.Beep(output)
-- duration
-- frequency
-- pattern
-- output
-- play(when)
+### Custom Methods
+- `.getArrayBuffer()`
+- `.loadBuffer()`
+- `.playPause()`
+- `.trigger()`
 
-### Bumpkit.Sampler(output)
-- output
-- context
-- offset
-- duration
-- buffer
-- loadBuffer(file)
-- loadSample(url)
-- play(when)
-- pattern []
+## createMixer Method
+Returns an new Mixer instance.
 
+### Properties
+### Methods
+
+## createClip Method
+Returns a new Clip instance.
+
+## createBeep Method
+Returns a new Beep instance.
+
+### Properties
+### Methods
+
+### createSampler Method
+Returns a new Sampler instance.
+
+### Properties
+### Methods

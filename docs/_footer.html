@@ -1,3 +1,21 @@
+<footer>
+  <div class="nav nav-table">
+    <a href="//github.com/jxnblk/bumpkit">Github</a>
+    <span class="nav-item">
+      <p>
+        Made with love by
+        <a href="//jxnblk.com">Jxnblk</a>
+      </p>
+    </span>
+  </div>
+</footer>
 <script src="dist/bumpkit.min.js"></script>
+<script>
+  var bumpkit = new Bumpkit();
+  bumpkit.createBeep().frequency(512).play();
+  console.log('B U M P K I T');
+  console.log('Try running:');
+  console.log('bumpkit.createBeep().frequency(512).play()');
+</script>
 </body>
 </html>

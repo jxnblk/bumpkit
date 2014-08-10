@@ -11,7 +11,15 @@
   <link rel="stylesheet" href="docs/css/basscss.min.css">
   <link rel="stylesheet" href="docs/css/github-pygments.css">
 </head>
-<body class="p2 container">
+<body class="p2 container-col-8">
+  <header class="py1 mb4">
+    <nav class="nav nav-table">
+      <a href="//github.com/jxnblk/bumpkit">View on Github</a>
+      <span class="nav-item h5 mid-gray">
+        Check out the console
+      </span>
+    </nav>
+  </header>
 
 <h1 id="bumpkit">Bumpkit</h1>
 <p>A DAW-inpsired library for the Web Audio API</p>
@@ -191,6 +199,24 @@ Usage: <code>var waveform = bumpkit.analysePeaks(AudioBuffer)</code></p>
 <h2 id="edge-fader">Edge Fader</h2>
 <h3 id="-createedgefader-options-"><code>.createEdgeFader(options)</code></h3>
 <p>Used internally to return a Web Audio gain node with edges faded according to the options argument.</p>
+<footer>
+  <div class="nav nav-table">
+    <a href="//github.com/jxnblk/bumpkit">Github</a>
+    <span class="nav-item">
+      <p>
+        Made with love by
+        <a href="//jxnblk.com">Jxnblk</a>
+      </p>
+    </span>
+  </div>
+</footer>
 <script src="dist/bumpkit.min.js"></script>
+<script>
+  var bumpkit = new Bumpkit();
+  bumpkit.createBeep().frequency(512).play();
+  console.log('B U M P K I T');
+  console.log('Try running:');
+  console.log('bumpkit.createBeep().frequency(512).play()');
+</script>
 </body>
 </html>

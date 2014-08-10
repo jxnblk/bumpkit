@@ -1,7 +1,6 @@
 // Clip
 //
-// Used for storing patterns, listening to the clock,
-// and triggering instruments
+// Used for storing patterns, listening to the clock, and triggering instruments
 
 var createClip = function(options) {
 
@@ -17,6 +16,10 @@ var createClip = function(options) {
 
   clip.play = function(when) {
     clip.output.play(when);
+  };
+
+  clip.toggle = function() {
+    clip.active = !clip.active;
   };
 
   window.addEventListener('step', function(e) {

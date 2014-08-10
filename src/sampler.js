@@ -18,7 +18,8 @@ var createSampler = function(options) {
     this.play = function(when) {
       var source = self.createBufferSource();
       source.buffer = this.buffer;
-      self.trigger(source, { when: when, output: this.output, duration: this.duration });
+      source.connect(this.output);
+      self.trigger(source, { when: when, duration: this.duration });
     };
 
   };

@@ -28,6 +28,7 @@ var createBeep = function(options) {
     };
 
     this.play = function(when) {
+      var when = when || 0;
       var osc = self.createOscillator();
       var env = self.createEdgeFader({ when: when, duration: this.duration });
       osc.type = 0;

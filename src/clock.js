@@ -2,7 +2,7 @@
 
 //define(function() {
 
-  var initClock = function() {
+  var initClock = function(options) {
 
     var self = this;
 
@@ -59,6 +59,7 @@
       } else {
         stop();
       }
+      return this;
     };
 
     return this;

@@ -31,24 +31,29 @@ var createMixer = function() {
       } else {
         track.effectsNode.connect(track.mute);
       }
+      return track;
     };
 
     track.addEffect = function(node, index) {
       var i = index || track.effects.length;
       track.effects.splice(i, 0, node);
       track.updateConnections();
+      return track;
     };
 
     track.removeEffect = function(index) {
       track.effects.splice(index, 1);
       track.updateConnections();
+      return track;
     };
 
     track.connect = function(node) {
       track.volume.connect(node);
+      return track;
     };
     track.toggleMute = function() {
       track.mute.gain.value = 1 - track.mute.gain.value;
+      return track;
     };
 
     return track;
@@ -65,11 +70,12 @@ var createMixer = function() {
     var track = new Track();
     track.connect(mixer.master);
     mixer.tracks.push(track);
-    return this;
+    return mixer;
   };
 
   mixer.removeTrack = function(index) {
-    self.tracks.splice(index, 1);
+    mixer.tracks.splice(index, 1);
+    return mixer;
   };
 
   return mixer;

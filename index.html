@@ -45,20 +45,19 @@
     mixer.master.addEffect(comp);
 
 
-    var beep = bump.createBeep({ output: mixer.tracks[0] });
+    var beep = bump.createBeep({ connect: mixer.tracks[0] });
     mixer.tracks[0].volume.gain.value = .25;
     beep.play(0);
 
     bump.createBeep().frequency(224).connect(mixer.master).play(.5);
 
-    var sampler = bump.createSampler({ output: mixer.tracks[1] });
+    var sampler = bump.createSampler({ connect: mixer.tracks[1] });
     sampler.duration = .2;
     bump.loadBuffer('docs/audio/pad.mp3', function(buffer) {
-      sampler.buffer = buffer;
-      //console.log(bump.analyzePeaks(buffer));
+      sampler.buffer(buffer);
     });
 
-    var beep2 = bump.createBeep({ output: mixer.tracks[0], frequency: 384 });
+    var beep2 = bump.createBeep({ connect: mixer.tracks[0], frequency: 384 });
     beep2.play(.375);
 
     c1 = bump.createClip();
@@ -69,7 +68,7 @@
     c2.connect(sampler);
     c2.pattern = [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,1];
 
-    c3 = bump.createClip({ output: beep2 });
+    c3 = bump.createClip({ connect: beep2 });
     c3.pattern = [0,0,1,0, 0,0,0,1, 0,1,0,0, 0,0,1,0];
 
 

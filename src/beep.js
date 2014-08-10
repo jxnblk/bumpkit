@@ -1,6 +1,7 @@
 // Beep Subclass
 // Simple sine oscillator for metronome
 
+
 var createBeep = function(options) {
   var self = this;
   var options = options || {};
@@ -9,14 +10,13 @@ var createBeep = function(options) {
 
     this.duration = options.duration || .0625;
     //this.frequency = options.frequency || 256;
-    this.output = options.output || self.destination;
+    this.output = options.connect || self.destination;
     this.envelope = function() {
       var gain = self.createGain();
     };
 
     var freq = options.frequency || 256;
     this.frequency = function(newFreq) {
-      freq = freq
       if (!newFreq) return freq;
       freq = newFreq;
       return this;
@@ -29,9 +29,11 @@ var createBeep = function(options) {
 
     this.play = function(when) {
       var osc = self.createOscillator();
+      var env = self.createEdgeFader({ when: when, duration: this.duration });
       osc.type = 0;
       osc.frequency.value = this.frequency();
-      osc.connect(this.output);
+      osc.connect(env);
+      env.connect(this.output);
       self.trigger(osc, { when: when, duration: this.duration });
       return this;
     };

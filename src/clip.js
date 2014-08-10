@@ -6,7 +6,7 @@ var createClip = function(options) {
 
   var options = options || {};
   var clip = {};
-  clip.output = options.output || 0;
+  clip.output = options.connect || 0;
   clip.active = options.active || true;
   clip.pattern = options.pattern || [];
 

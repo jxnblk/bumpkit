@@ -2,6 +2,7 @@ var clock = require('./clock');
 var mixer = require('./mixer');
 var clip = require('./clip');
 
+var edgeFader = require('./edge-fader');
 var beep = require('./beep');
 var sampler = require('./sampler');
 
@@ -64,6 +65,7 @@ var Bumpkit = function() {
 
   bumpkit.createMixer = mixer.createMixer;
 
+  bumpkit.createEdgeFader = edgeFader.createEdgeFader;
   bumpkit.createBeep = beep.createBeep;
   bumpkit.createSampler = sampler.createSampler;
   bumpkit.createClip = clip.createClip;

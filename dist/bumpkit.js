@@ -31,6 +31,7 @@ module.exports = {
 // Beep Subclass
 // Simple sine oscillator for metronome
 
+
 var createBeep = function(options) {
   var self = this;
   var options = options || {};
@@ -39,14 +40,13 @@ var createBeep = function(options) {
 
     this.duration = options.duration || .0625;
     //this.frequency = options.frequency || 256;
-    this.output = options.output || self.destination;
+    this.output = options.connect || self.destination;
     this.envelope = function() {
       var gain = self.createGain();
     };
 
     var freq = options.frequency || 256;
     this.frequency = function(newFreq) {
-      freq = freq
       if (!newFreq) return freq;
       freq = newFreq;
       return this;
@@ -59,9 +59,11 @@ var createBeep = function(options) {
 
     this.play = function(when) {
       var osc = self.createOscillator();
+      var env = self.createEdgeFader({ when: when, duration: this.duration });
       osc.type = 0;
       osc.frequency.value = this.frequency();
-      osc.connect(this.output);
+      osc.connect(env);
+      env.connect(this.output);
       self.trigger(osc, { when: when, duration: this.duration });
       return this;
     };
@@ -86,7 +88,7 @@ var createClip = function(options) {
 
   var options = options || {};
   var clip = {};
-  clip.output = options.output || 0;
+  clip.output = options.connect || 0;
   clip.active = options.active || true;
   clip.pattern = options.pattern || [];
 
@@ -124,7 +126,7 @@ module.exports = {
 
 //define(function() {
 
-  var initClock = function() {
+  var initClock = function(options) {
 
     var self = this;
 
@@ -181,6 +183,7 @@ module.exports = {
       } else {
         stop();
       }
+      return this;
     };
 
     return this;
@@ -195,10 +198,36 @@ module.exports = {
 module.exports = initClock;
 
 },{}],5:[function(_dereq_,module,exports){
+// Edge Fader envelope
+// For fading non-zero crossing popping sounds
+
+var createEdgeFader = function(options) {
+
+  var options = options || {};
+  var when = options.when || 0;
+  var duration = options.duration || 0;
+  var fadeDuration = options.fadeDuration || 0.005;
+
+  var env = this.createGain();
+
+  env.gain.linearRampToValueAtTime(0, this.currentTime + when);
+  env.gain.linearRampToValueAtTime(1, this.currentTime + when + fadeDuration);
+  env.gain.linearRampToValueAtTime(1, this.currentTime + when + duration - fadeDuration);
+  env.gain.linearRampToValueAtTime(0, this.currentTime + when + duration);
+
+  return env;
+
+};
+
+module.exports = { createEdgeFader: createEdgeFader };
+
+
+},{}],6:[function(_dereq_,module,exports){
 var clock = _dereq_('./clock');
 var mixer = _dereq_('./mixer');
 var clip = _dereq_('./clip');
 
+var edgeFader = _dereq_('./edge-fader');
 var beep = _dereq_('./beep');
 var sampler = _dereq_('./sampler');
 
@@ -261,6 +290,7 @@ var Bumpkit = function() {
 
   bumpkit.createMixer = mixer.createMixer;
 
+  bumpkit.createEdgeFader = edgeFader.createEdgeFader;
   bumpkit.createBeep = beep.createBeep;
   bumpkit.createSampler = sampler.createSampler;
   bumpkit.createClip = clip.createClip;
@@ -276,7 +306,7 @@ var Bumpkit = function() {
 module.exports = Bumpkit;
 
 
-},{"./analyser":1,"./beep":2,"./clip":3,"./clock":4,"./mixer":6,"./peak-analyser":7,"./sampler":8}],6:[function(_dereq_,module,exports){
+},{"./analyser":1,"./beep":2,"./clip":3,"./clock":4,"./edge-fader":5,"./mixer":7,"./peak-analyser":8,"./sampler":9}],7:[function(_dereq_,module,exports){
 // Bumpkit Mixer
 
 var createMixer = function() {
@@ -310,24 +340,29 @@ var createMixer = function() {
       } else {
         track.effectsNode.connect(track.mute);
       }
+      return track;
     };
 
     track.addEffect = function(node, index) {
       var i = index || track.effects.length;
       track.effects.splice(i, 0, node);
       track.updateConnections();
+      return track;
     };
 
     track.removeEffect = function(index) {
       track.effects.splice(index, 1);
       track.updateConnections();
+      return track;
     };
 
     track.connect = function(node) {
       track.volume.connect(node);
+      return track;
     };
     track.toggleMute = function() {
       track.mute.gain.value = 1 - track.mute.gain.value;
+      return track;
     };
 
     return track;
@@ -344,11 +379,12 @@ var createMixer = function() {
     var track = new Track();
     track.connect(mixer.master);
     mixer.tracks.push(track);
-    return this;
+    return mixer;
   };
 
   mixer.removeTrack = function(index) {
-    self.tracks.splice(index, 1);
+    mixer.tracks.splice(index, 1);
+    return mixer;
   };
 
   return mixer;
@@ -358,7 +394,7 @@ var createMixer = function() {
 module.exports = { createMixer: createMixer };
 
 
-},{}],7:[function(_dereq_,module,exports){
+},{}],8:[function(_dereq_,module,exports){
 // Peak Analyser
 
 var analysePeaks = function(buffer) {
@@ -397,7 +433,7 @@ var analysePeaks = function(buffer) {
 module.exports = { analysePeaks: analysePeaks };
 
 
-},{}],8:[function(_dereq_,module,exports){
+},{}],9:[function(_dereq_,module,exports){
 // Bumpkit Sampler
 
 var createSampler = function(options) {
@@ -406,20 +442,31 @@ var createSampler = function(options) {
   var options = options || {};
 
   var Sampler = function() {
-    this.output = options.output || self.destination;
+    this.output = options.connect || self.destination;
     this.offset = options.offset || 0;
     this.duration = options.duration || 0.6;
-    this.buffer = options.buffer || 0;
+
+    var buffer = options.buffer || 0;
+    this.buffer = function(b) {
+      if (!b) return buffer;
+      buffer = b;
+      return this;
+    };
+
 
     this.connect = function(node) {
       this.output = node;
+      return this;
     };
 
     this.play = function(when) {
       var source = self.createBufferSource();
-      source.buffer = this.buffer;
-      source.connect(this.output);
+      var env = self.createEdgeFader({ when: when, duration: this.duration });
+      source.buffer = this.buffer();
+      source.connect(env);
+      env.connect(this.output);
       self.trigger(source, { when: when, duration: this.duration });
+      return this;
     };
 
   };
@@ -438,6 +485,6 @@ module.exports = {
 // - Pitch
 
 
-},{}]},{},[5])
-(5)
+},{}]},{},[6])
+(6)
 });

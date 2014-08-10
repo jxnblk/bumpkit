@@ -98,13 +98,16 @@ In the future, patterns will support more complex object arrays to account for v
 Boolean for whether or not the clip should trigger playback.
 
 ### Clip Methods
-#### `.connect(node)` *(chainable)*
+#### `.connect(node)`
+*(Chainable)*
 Connects the clip to an instrument. The instrument must have a `.play(when)` method that accepts a when argument.
 
-#### `.toggle()` *(chainable)*
+#### `.toggle()`
+*(Chainable)*
 Toggles the `.active` attribute for the clip.
 
-#### `.play(when)` *(Chainable)*
+#### `.play(when)`
+*(Chainable)*
 Used within the object to trigger playback from the event listener. This can be used manually, but it's prefered to manually call `.play()` directly on instruments if not using a clip.
 
 

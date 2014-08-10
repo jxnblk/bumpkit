@@ -58,6 +58,7 @@ var createBeep = function(options) {
     };
 
     this.play = function(when) {
+      var when = when || 0;
       var osc = self.createOscillator();
       var env = self.createEdgeFader({ when: when, duration: this.duration });
       osc.type = 0;
@@ -87,6 +88,9 @@ module.exports = {
 var createClip = function(options) {
 
   var options = options || {};
+
+  // Change this to a class to support chaining on creation
+
   var clip = {};
   clip.output = options.connect || 0;
   clip.active = options.active || true;
@@ -94,14 +98,17 @@ var createClip = function(options) {
 
   clip.connect = function(node) {
     clip.output = node;
+    return clip;
   };
 
   clip.play = function(when) {
     clip.output.play(when);
+    return clip;
   };
 
   clip.toggle = function() {
     clip.active = !clip.active;
+    return clip;
   };
 
   window.addEventListener('step', function(e) {
@@ -254,6 +261,7 @@ var Bumpkit = function() {
     if (options.duration) {
       source.stop(options.when + options.duration);
     }
+    return this;
   };
 
 
@@ -283,6 +291,7 @@ var Bumpkit = function() {
     getArrayBuffer(url, function(response) {
       decode(response);
     });
+    return this;
   };
 
   bumpkit.initClock = clock;
@@ -336,6 +345,7 @@ var createMixer = function() {
           track.effects[i].disconnect(0);
           track.effects[i].connect(next);
         };
+        track.effects[track.effects.length - 1].disconnect(0);
         track.effects[track.effects.length - 1].connect(track.mute);
       } else {
         track.effectsNode.connect(track.mute);
@@ -357,6 +367,7 @@ var createMixer = function() {
     };
 
     track.connect = function(node) {
+      track.volume.disconnect(0);
       track.volume.connect(node);
       return track;
     };
@@ -452,7 +463,6 @@ var createSampler = function(options) {
       buffer = b;
       return this;
     };
-
 
     this.connect = function(node) {
       this.output = node;

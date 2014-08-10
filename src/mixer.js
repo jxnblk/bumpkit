@@ -27,6 +27,7 @@ var createMixer = function() {
           track.effects[i].disconnect(0);
           track.effects[i].connect(next);
         };
+        track.effects[track.effects.length - 1].disconnect(0);
         track.effects[track.effects.length - 1].connect(track.mute);
       } else {
         track.effectsNode.connect(track.mute);
@@ -48,6 +49,7 @@ var createMixer = function() {
     };
 
     track.connect = function(node) {
+      track.volume.disconnect(0);
       track.volume.connect(node);
       return track;
     };

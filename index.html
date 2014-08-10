@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Bumpkit by jxnblk</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Bumpkit</h1>
+        <h2></h2>
+        <a href="https://github.com/jxnblk/bumpkit" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="bumpkit" class="anchor" href="#bumpkit"><span class="octicon octicon-link"></span></a>Bumpkit</h1>
+
+<p>A DAW-inpsired library for the Web Audio API</p>
+
+<p><em>Work in Progress</em></p>
+
+<hr><h1>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h1>
+
+<p>Include the <code>dist/bumpkit.min.js</code> file in your project.</p>
+
+<p>In your application, create a new instance of the Bumpkit class:</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">bumpkit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bumpkit</span><span class="p">();</span>
+</pre></div>
+
+<p>This will create a new Audio Context instance with custom methods and properties.</p>
+
+<hr><h1>
+<a name="basics" class="anchor" href="#basics"><span class="octicon octicon-link"></span></a>Basics</h1>
+
+<h2>
+<a name="create-a-mixer-with-two-tracks" class="anchor" href="#create-a-mixer-with-two-tracks"><span class="octicon octicon-link"></span></a>Create a mixer with two tracks</h2>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">mixer</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createMixer</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">();</span>
+</pre></div>
+
+<h2>
+<a name="create-a-new-sampler-instrument-and-load-an-audio-buffer" class="anchor" href="#create-a-new-sampler-instrument-and-load-an-audio-buffer"><span class="octicon octicon-link"></span></a>Create a new Sampler instrument and load an audio buffer</h2>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createSampler</span><span class="p">().</span><span class="nx">connect</span><span class="p">(</span><span class="nx">mixer</span><span class="p">.</span><span class="nx">tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="nx">bumpkit</span><span class="p">.</span><span class="nx">loadBuffer</span><span class="p">(</span><span class="s1">'/audio/clap.mp3'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">sampler</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<hr><h1>
+<a name="api-documentation" class="anchor" href="#api-documentation"><span class="octicon octicon-link"></span></a>API Documentation</h1>
+
+<h2>
+<a name="bumpkit-class" class="anchor" href="#bumpkit-class"><span class="octicon octicon-link"></span></a>Bumpkit Class</h2>
+
+<p>Extends the AudioContext with additional properties and methods. Create a new instance: <code>var bumpkit = new Bumpkit()</code></p>
+
+<h3>
+<a name="custom-properties" class="anchor" href="#custom-properties"><span class="octicon octicon-link"></span></a>Custom Properties</h3>
+
+<h4>
+<a name="buffers" class="anchor" href="#buffers"><span class="octicon octicon-link"></span></a><code>.buffers</code>
+</h4>
+
+<p>An object for storing arrayBuffers. Keys are based on url. E.g. <code>{ /audio/sound.mp3: AudioBuffer }</code></p>
+
+<h4>
+<a name="isplaying" class="anchor" href="#isplaying"><span class="octicon octicon-link"></span></a><code>.isPlaying</code>
+</h4>
+
+<p>Boolean value for if the step sequencer is running.</p>
+
+<h4>
+<a name="looplength" class="anchor" href="#looplength"><span class="octicon octicon-link"></span></a><code>.loopLength</code>
+</h4>
+
+<p>Integer representing the number of steps in a loop. Defaults to <code>null</code>.</p>
+
+<h4>
+<a name="stepresolution" class="anchor" href="#stepresolution"><span class="octicon octicon-link"></span></a><code>.stepResolution</code>
+</h4>
+
+<p><em>Placeholder</em>
+Integer representing the number of steps in a bar. Currently hard-coded to <code>16</code>.</p>
+
+<h4>
+<a name="tempo" class="anchor" href="#tempo"><span class="octicon octicon-link"></span></a><code>.tempo</code>
+</h4>
+
+<p>Integer representing the tempo of the step sequencer. Defaults to <code>120</code>.</p>
+
+<h4>
+<a name="timesignature" class="anchor" href="#timesignature"><span class="octicon octicon-link"></span></a><code>.timeSignature</code>
+</h4>
+
+<p><em>Placeholder</em>
+Array of two integers representing the time signature. 4/4 is represented as <code>[4,4]</code>. Currently hard-coded to 4/4.</p>
+
+<h3>
+<a name="custom-methods" class="anchor" href="#custom-methods"><span class="octicon octicon-link"></span></a>Custom Methods</h3>
+
+<h4>
+<a name="loadbufferurl-callback" class="anchor" href="#loadbufferurl-callback"><span class="octicon octicon-link"></span></a><code>.loadBuffer(url, callback)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Makes an arraybuffer XHR request, decodes the file, stores the buffer in the <code>.buffers</code> object, and returns a Web Audio buffer.
+If called a second time for the same url, it will return the stored buffer.</p>
+
+<h4>
+<a name="playpause" class="anchor" href="#playpause"><span class="octicon octicon-link"></span></a><code>.playPause()</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Toggles playing of the step sequencer. The current step always begins at 0 when playing.</p>
+
+<h4>
+<a name="triggersource-options" class="anchor" href="#triggersource-options"><span class="octicon octicon-link"></span></a><code>.trigger(source, options)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Calls the <code>.start</code> method on the source. Options is an object with properties <code>when</code>, <code>offset</code>, and <code>duration</code>. The source should be connected to its destination before calling <code>.trigger()</code>.</p>
+
+<hr><h2>
+<a name="mixer-object" class="anchor" href="#mixer-object"><span class="octicon octicon-link"></span></a>Mixer Object</h2>
+
+<p>Use the <code>.createMixer()</code> method to create a new mixer instance.
+E.g. <code>var mixer = bumpkit.createMixer()</code>
+The mixer is an object of tracks.
+By default it includes a <code>.master</code> track object that is connected to the Bumpkit instances <code>.destination</code>.</p>
+
+<h3>
+<a name="mixer-methods" class="anchor" href="#mixer-methods"><span class="octicon octicon-link"></span></a>Mixer Methods</h3>
+
+<h4>
+<a name="addtrack" class="anchor" href="#addtrack"><span class="octicon octicon-link"></span></a><code>.addTrack()</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Creates a new track instance, adds it to the mixer tracks array, and connects it to the master track.</p>
+
+<h4>
+<a name="removetrackindex" class="anchor" href="#removetrackindex"><span class="octicon octicon-link"></span></a><code>.removeTrack(index)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Removes a track from the mixer tracks array at <code>index</code>.</p>
+
+<h3>
+<a name="mixer-track-properties" class="anchor" href="#mixer-track-properties"><span class="octicon octicon-link"></span></a>Mixer Track Properties</h3>
+
+<p>Each mixer track is a Web Audio gain node and can be directly connected to.
+Tracks also include additional gain nodes for routing.</p>
+
+<h4>
+<a name="mute" class="anchor" href="#mute"><span class="octicon octicon-link"></span></a><code>.mute</code>
+</h4>
+
+<p>Use this gain node to read whether or not a track is muted. The track's volume state is maintained in the <code>.volume</code> gain node.</p>
+
+<h4>
+<a name="volume" class="anchor" href="#volume"><span class="octicon octicon-link"></span></a><code>.volume</code>
+</h4>
+
+<p>Get or set the volume for the track using this node. The volume node is also used to connect to other destinations.
+Get the volume: <code>var level = track.volume,gain</code>
+Set the volume: <code>track.volume.gain.value = .5</code>
+<em>NOTE: This might change to a getter/setter method</em></p>
+
+<h4>
+<a name="effectsnode" class="anchor" href="#effectsnode"><span class="octicon octicon-link"></span></a><code>.effectsNode</code>
+</h4>
+
+<p>A dummy gain node for connecting audio effects.</p>
+
+<h4>
+<a name="effects" class="anchor" href="#effects"><span class="octicon octicon-link"></span></a><code>.effects</code>
+</h4>
+
+<p>An array of other Web Audio nodes that can be placed between the root track node and the <code>.mute</code> node.</p>
+
+<h3>
+<a name="mixer-track-methods" class="anchor" href="#mixer-track-methods"><span class="octicon octicon-link"></span></a>Mixer Track Methods</h3>
+
+<h4>
+<a name="addeffectnode-index" class="anchor" href="#addeffectnode-index"><span class="octicon octicon-link"></span></a><code>.addEffect(node, index)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Adds a node to the track effects array, and handles connections. By default, each effect is added to the end of the array. Use the <code>index</code> argument to adjust the insertion point.</p>
+
+<h4>
+<a name="removeeffectindex" class="anchor" href="#removeeffectindex"><span class="octicon octicon-link"></span></a><code>.removeEffect(index)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Removes <code>.effects[index]</code> from the array and reconnects the nodes.</p>
+
+<h4>
+<a name="connectnode" class="anchor" href="#connectnode"><span class="octicon octicon-link"></span></a><code>.connect(node)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Connects the <code>.volume</code> node to a destination. This handles the web audio <code>.disconnect(0)</code> call as well.</p>
+
+<h4>
+<a name="togglemute" class="anchor" href="#togglemute"><span class="octicon octicon-link"></span></a><code>.toggleMute()</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Toggles the track's <code>.mute</code> node between 1 and 0.</p>
+
+<h4>
+<a name="updateconnections" class="anchor" href="#updateconnections"><span class="octicon octicon-link"></span></a><code>.updateConnections()</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Disconnects and reconnects effects in the <code>.effects</code> array. This is used by the <code>.addEffect()</code> and <code>.removeEffect()</code> methods, but should also be called after manually reordering the effects array.</p>
+
+<hr><h2>
+<a name="clip-object" class="anchor" href="#clip-object"><span class="octicon octicon-link"></span></a>Clip Object</h2>
+
+<p>Clips listen to Bumpkit's sequencer <code>step</code> event and triggers playback of instruments based on patterns.
+Usage: <code>var clip = bumpkit.createClip()</code></p>
+
+<h3>
+<a name="clip-properties" class="anchor" href="#clip-properties"><span class="octicon octicon-link"></span></a>Clip Properties</h3>
+
+<h4>
+<a name="pattern" class="anchor" href="#pattern"><span class="octicon octicon-link"></span></a><code>.pattern</code>
+</h4>
+
+<p>An binary integer array to trigger playback of the connected instrument according to a rhythmic pattern.
+The clip listens to the <code>step</code> event emitted by the Bumpkit clock sequencer.
+E.g. <code>clip.pattern = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]</code> will play on each quarter note.
+In the future, patterns will support more complex object arrays to account for velocity, duration, offset, envelopes, etc.</p>
+
+<h4>
+<a name="active" class="anchor" href="#active"><span class="octicon octicon-link"></span></a><code>.active</code>
+</h4>
+
+<p>Boolean for whether or not the clip should trigger playback.</p>
+
+<h3>
+<a name="clip-methods" class="anchor" href="#clip-methods"><span class="octicon octicon-link"></span></a>Clip Methods</h3>
+
+<h4>
+<a name="connectnode-1" class="anchor" href="#connectnode-1"><span class="octicon octicon-link"></span></a><code>.connect(node)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Connects the clip to an instrument. The instrument must have a <code>.play(when)</code> method that accepts a when argument.</p>
+
+<h4>
+<a name="toggle" class="anchor" href="#toggle"><span class="octicon octicon-link"></span></a><code>.toggle()</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Toggles the <code>.active</code> attribute for the clip.</p>
+
+<h4>
+<a name="playwhen" class="anchor" href="#playwhen"><span class="octicon octicon-link"></span></a><code>.play(when)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Used within the object to trigger playback from the event listener. This can be used manually, but it's prefered to manually call <code>.play()</code> directly on instruments if not using a clip.</p>
+
+<hr><h2>
+<a name="beep-object" class="anchor" href="#beep-object"><span class="octicon octicon-link"></span></a>Beep Object</h2>
+
+<p>A simple sine-wave oscillator instrument.
+Usage <code>var beep = bumpkit.createBeep()</code></p>
+
+<h3>
+<a name="createbeepoptions" class="anchor" href="#createbeepoptions"><span class="octicon octicon-link"></span></a><code>.createBeep(options)</code>
+</h3>
+
+<p>Returns a new Beep instance. Pass an optional argument to set property defaults.
+E.g. <code>var customBeep = bumpkit.createBeep({ duration: .5, frequency: 512, connect: mixer.master })</code></p>
+
+<h3>
+<a name="beep-properties" class="anchor" href="#beep-properties"><span class="octicon octicon-link"></span></a>Beep Properties</h3>
+
+<h4>
+<a name="duration" class="anchor" href="#duration"><span class="octicon octicon-link"></span></a><code>.duration</code>
+</h4>
+
+<p>An integer of the length in seconds that the Beep will sound.</p>
+
+<h3>
+<a name="beep-methods" class="anchor" href="#beep-methods"><span class="octicon octicon-link"></span></a>Beep Methods</h3>
+
+<h4>
+<a name="frequencyfrequency" class="anchor" href="#frequencyfrequency"><span class="octicon octicon-link"></span></a><code>.frequency(frequency)</code>
+</h4>
+
+<p><em>Getter/Setter (Chainable Setter)</em>
+Changes the frequency of the instrument. E.g. Set the frequency: <code>beep.frequency(512)</code> or get the frequency: <code>var f = beep.frequency()</code></p>
+
+<h4>
+<a name="connectnode-2" class="anchor" href="#connectnode-2"><span class="octicon octicon-link"></span></a><code>.connect(node)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Connects the Beep to a destination node.</p>
+
+<h4>
+<a name="playwhen-1" class="anchor" href="#playwhen-1"><span class="octicon octicon-link"></span></a><code>.play(when)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Plays the instrument at the given <code>when</code> argument. If no argument is passed, the Beep will play immediately.</p>
+
+<hr><h2>
+<a name="sampler-object" class="anchor" href="#sampler-object"><span class="octicon octicon-link"></span></a>Sampler Object</h2>
+
+<p>A simple sampler instrument for playing audio buffers.
+Usage <code>var sampler = bumpkit.createSampler()</code></p>
+
+<h3>
+<a name="createsampleroptions" class="anchor" href="#createsampleroptions"><span class="octicon octicon-link"></span></a><code>.createSampler(options)</code>
+</h3>
+
+<p>Returns a new Sampler instance. Pass an optional argument to set property defaults.
+E.g. <code>var customSampler = bumpkit.createSampler({ buffer: AudioBuffer, duration: .5, offset: .1, connect: mixer.master })</code></p>
+
+<h3>
+<a name="sampler-properties" class="anchor" href="#sampler-properties"><span class="octicon octicon-link"></span></a>Sampler Properties</h3>
+
+<h4>
+<a name="offset" class="anchor" href="#offset"><span class="octicon octicon-link"></span></a><code>.offset</code>
+</h4>
+
+<p>A number representing the offset in seconds to start playback of the sample. Defaults to 0.</p>
+
+<h4>
+<a name="duration-1" class="anchor" href="#duration-1"><span class="octicon octicon-link"></span></a><code>.duration</code>
+</h4>
+
+<p>A number representing the duration to play the sample. Defaults to 0.6.</p>
+
+<h3>
+<a name="sampler-methods" class="anchor" href="#sampler-methods"><span class="octicon octicon-link"></span></a>Sampler Methods</h3>
+
+<h4>
+<a name="bufferbuffer" class="anchor" href="#bufferbuffer"><span class="octicon octicon-link"></span></a><code>.buffer(buffer)</code>
+</h4>
+
+<p><em>Getter/Setter (Chainable Setter)</em>
+Gets or sets the audio buffer used for the sampler. E.g. set the buffer: <code>sampler.buffer(AudioBuffer)</code> or get the buffer: <code>var b = sampler.buffer()</code></p>
+
+<h4>
+<a name="connectnode-3" class="anchor" href="#connectnode-3"><span class="octicon octicon-link"></span></a><code>.connect(node)</code>
+</h4>
+
+<p><em>(Chainable)</em>
+Connects the sampler to a destination node.</p>
+
+<h4>
+<a name="playwhen-2" class="anchor" href="#playwhen-2"><span class="octicon octicon-link"></span></a><code>.play(when)</code>
+</h4>
+
+<p><em>(Chainable)</em></p>
+
+<hr><h2>
+<a name="analysers" class="anchor" href="#analysers"><span class="octicon octicon-link"></span></a>Analysers</h2>
+
+<h3>
+<a name="createamplitudeanalyser" class="anchor" href="#createamplitudeanalyser"><span class="octicon octicon-link"></span></a><code>.createAmplitudeAnalyser</code>
+</h3>
+
+<p><em>Work in Progress</em>
+Creates a Web Audio analyser node with a custom method for reading the amplitude of a signal.</p>
+
+<hr><h2>
+<a name="peak-analyser" class="anchor" href="#peak-analyser"><span class="octicon octicon-link"></span></a>Peak Analyser</h2>
+
+<h3>
+<a name="analysepeaksbuffer" class="anchor" href="#analysepeaksbuffer"><span class="octicon octicon-link"></span></a><code>.analysePeaks(buffer)</code>
+</h3>
+
+<p>Returns a Float32Array representing waveform data for the buffer.
+Usage: <code>var waveform = bumpkit.analysePeaks(AudioBuffer)</code></p>
+
+<hr><h2>
+<a name="edge-fader" class="anchor" href="#edge-fader"><span class="octicon octicon-link"></span></a>Edge Fader</h2>
+
+<h3>
+<a name="createedgefaderoptions" class="anchor" href="#createedgefaderoptions"><span class="octicon octicon-link"></span></a><code>.createEdgeFader(options)</code>
+</h3>
+
+<p>Used internally to return a Web Audio gain node with edges faded according to the options argument.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/jxnblk/bumpkit/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/jxnblk/bumpkit/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/jxnblk/bumpkit"></a> is maintained by <a href="https://github.com/jxnblk">jxnblk</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

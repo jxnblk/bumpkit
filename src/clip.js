@@ -12,14 +12,17 @@ var createClip = function(options) {
 
   clip.connect = function(node) {
     clip.output = node;
+    return clip;
   };
 
   clip.play = function(when) {
     clip.output.play(when);
+    return clip;
   };
 
   clip.toggle = function() {
     clip.active = !clip.active;
+    return clip;
   };
 
   window.addEventListener('step', function(e) {

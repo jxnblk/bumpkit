@@ -87,12 +87,38 @@ Disconnects and reconnects effects in the `.effects` array. This is used by the 
 Clips listen to Bumpkit's sequencer `step` event and triggers playback of instruments based on patterns.
 Usage: `var clip = bumpkit.createClip()`
 
+### Clip Properties
+#### `.pattern`
+An binary integer array to trigger playback of the connected instrument according to a rhythmic pattern.
+The clip listens to the `step` event emitted by the Bumpkit clock sequencer.
+E.g. `clip.pattern = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]` will play on each quarter note.
+In the future, patterns will support more complex object arrays to account for velocity, duration, offset, envelopes, etc.
+
+#### `.active`
+Boolean for whether or not the clip should trigger playback.
+
+### Clip Methods
+#### `.connect(node)` *(chainable)*
+Connects the clip to an instrument. The instrument must have a `.play(when)` method that accepts a when argument.
+
+#### `.toggle()` *(chainable)*
+Toggles the `.active` attribute for the clip.
+
+#### `.play(when)` *(Chainable)*
+Used within the object to trigger playback from the event listener. This can be used manually, but it's prefered to manually call `.play()` directly on instruments if not using a clip.
+
+
 ## Beep Object
 A simple sine-wave oscillator instrument.
 Usage `var beep = bumpkit.createBeep()`
 
-### Sampler Object
+## Sampler Object
 A simple sampler instrument for playing audio buffers.
 Usage `var sampler = bumpkit.createSampler()`
 
+## Analysers
+
+## Peak Analyser
+
+## Edge Fader
 

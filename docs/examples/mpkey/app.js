@@ -20,14 +20,17 @@ var app = angular.module('app', ['ngTouch']);
     'docs/examples/mpkey/audio/hat.mp3'
   ];
 
+  //var reverb = bumpkit.createConvolver();
+  //bumpkit.mixer.tracks[0].addEffect(reverb);
+
 
   for (var i = 0; i < 8; i++) {
     var index = i;
     (function(index) {
       var sampler = bumpkit.createSampler();
       bumpkit.loadBuffer(bumpkit.samplePaths[index], function(buffer) {
-        sampler.buffer(buffer);
-        sampler.play((index + 1)*.25);
+        sampler.buffer(buffer).connect(bumpkit.mixer.tracks[index]);
+        sampler.play((index + 1)*.125);
         bumpkit.samplers[index] = sampler;
       });
     })(i);

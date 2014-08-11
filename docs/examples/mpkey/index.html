@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Examples | Bumpkit</title>
+  <meta name="author" content="Jxnblk">
+  <meta name="description" content="Web Audio Framework">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+  <base href="/bumpkit">
+  -->
+  <link rel="stylesheet" href="/docs/css/basscss.min.css">
+  <style>
+    .sq { width: 100%; height: 0; padding-top: 40%; padding-bottom: 40%; }
+    .pad { cursor: pointer; -webkit-user-select: none; user-select: none; }
+    .pad:hover { background-color: #e3e3e3; box-shadow: 0 0 0 1px #0cf; }
+    .pad:active { background-color: #ddd; }
+  </style>
+</head>
+<body class="container-col-8" ng-app="app" ng-controller="MainCtrl" ng-keydown="keydown($event)">
+
+  <header class="p2">
+    <h1><a href="/" class="dark-gray">Bumpkit</a></h1>
+    <h2><a href="/docs/examples" class="dark-gray">Examples</a> / MPKey</h2>
+  </header>
+
+  <section id="player" class="p2">
+    <div class="bold center mobile-table">
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(4)" class="sq pad mobile-table bg-light-gray border rounded">Q</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(5)" class="sq pad mobile-table bg-light-gray border rounded">W</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(6)" class="sq pad mobile-table bg-light-gray border rounded">E</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(7)" class="sq pad mobile-table bg-light-gray border rounded">R</div>
+      </div>
+    </div>
+    <div class="bold center mobile-table">
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(0)" class="sq pad mobile-table bg-light-gray border rounded">A</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(1)" class="sq pad mobile-table bg-light-gray border rounded">S</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(2)" class="sq pad mobile-table bg-light-gray border rounded">D</div>
+      </div>
+      <div class="p1 mobile-col-3 mobile-table-cell ">
+        <div ng-click="play(3)" class="sq pad mobile-table bg-light-gray border rounded">F</div>
+      </div>
+    </div>
+  </section>
+
+  <script src="/dist/bumpkit.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>

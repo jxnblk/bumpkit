@@ -6,8 +6,10 @@
   <meta name="author" content="Jxnblk">
   <meta name="description" content="Web Audio Framework">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
   <base href="/bumpkit/">
-  <link rel="stylesheet" href="docs/css/basscss.min.css">
+  -->
+  <link rel="stylesheet" href="css/basscss.min.css">
 </head>
 <body>
 
@@ -23,9 +25,12 @@
       <button id="toggle-track-0-button">Mute Track 0</button>
       <button id="toggle-track-1-button">Mute Track 1</button>
     </p>
+    <p>
+      <button onclick="beep.play(bump.currentTime)">Beep</button>
+    </p>
   </section>
 
-  <script src="dist/bumpkit.js"></script>
+  <script src="../dist/bumpkit.js"></script>
 
   <script>
     var bump = new Bumpkit();
@@ -49,9 +54,11 @@
 
     bump.createBeep().frequency(224).connect(mixer.master).play(.5);
 
-    var sampler = bump.createSampler({ duration: .2 }).connect(mixer.tracks[1]);
-    bump.loadBuffer('docs/audio/pad.mp3', function(buffer) {
+    //var sampler = bump.createSampler({ duration: .2 }).connect(mixer.tracks[1]);
+    var sampler = bump.createSampler();
+    bump.loadBuffer('audio/pad.mp3', function(buffer) {
       sampler.buffer(buffer);
+      sampler.play(0);
     });
 
     var beep2 = bump.createBeep().connect(mixer.tracks[0]).frequency(384).play(.375);

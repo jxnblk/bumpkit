@@ -1,0 +1,82 @@
+// MPKey Bumpkit Demo
+
+var app = angular.module('app', []);
+
+  var bumpkit = new Bumpkit();
+  bumpkit.createBeep().frequency(384);
+  bumpkit.mixer = bumpkit.createMixer()
+    .addTrack().addTrack().addTrack().addTrack()
+    .addTrack().addTrack().addTrack().addTrack();
+
+  bumpkit.samplers = [];
+  bumpkit.samplePaths = [
+    'audio/kick.mp3',
+    'audio/rim.mp3',
+    'audio/snare.mp3',
+    'audio/clap.mp3',
+    'audio/tom-low.mp3',
+    'audio/tom-mid.mp3',
+    'audio/tom-hi.mp3',
+    'audio/hat.mp3'
+  ];
+
+
+  for (var i = 0; i < 8; i++) {
+    var index = i;
+    (function(index) {
+      var sampler = bumpkit.createSampler();
+      bumpkit.loadBuffer(bumpkit.samplePaths[index], function(buffer) {
+        sampler.buffer(buffer);
+        sampler.play((index + 1)*.25);
+        bumpkit.samplers[index] = sampler;
+      });
+    })(i);
+  };
+
+  bumpkit.beep = bumpkit.createBeep().frequency(512);
+
+
+app.controller('MainCtrl', ['$scope', function($scope) {
+
+  $scope.bumpkit = bumpkit;
+
+  $scope.play = function(i) {
+    var sampler = bumpkit.samplers[i];
+    sampler.play();
+  };
+
+  $scope.beep = function() {
+    bumpkit.beep.play(bumpkit.currentTime);
+  };
+
+  $scope.keydown = function(e) {
+    //console.log(e.which);
+    if (e.which == 81) {
+      // Q
+      bumpkit.samplers[4].play();
+    } else if (e.which == 87) {
+      // W
+      bumpkit.samplers[5].play();
+    } else if (e.which == 69) {
+      // E
+      bumpkit.samplers[6].play();
+    } else if (e.which == 82) {
+      // R
+      bumpkit.samplers[7].play();
+    } else if (e.which == 65) {
+      // A
+      bumpkit.samplers[0].play();
+    } else if (e.which == 83) {
+      // S
+      bumpkit.samplers[1].play();
+    } else if (e.which == 68) {
+      // D
+      bumpkit.samplers[2].play();
+    } else if (e.which == 70) {
+      // R
+      bumpkit.samplers[3].play();
+    }
+  };
+
+}]);
+

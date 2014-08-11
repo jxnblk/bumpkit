@@ -23,6 +23,7 @@ var createSampler = function(options) {
     };
 
     this.play = function(when) {
+      var when = when || self.currentTime;
       var source = self.createBufferSource();
       var env = self.createEdgeFader({ when: when, duration: this.duration });
       source.buffer = this.buffer();

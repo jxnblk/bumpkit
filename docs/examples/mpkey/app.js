@@ -1,6 +1,6 @@
 // MPKey Bumpkit Demo
 
-var app = angular.module('app', []);
+var app = angular.module('app', ['ngTouch']);
 
   var bumpkit = new Bumpkit();
   bumpkit.createBeep().frequency(384);

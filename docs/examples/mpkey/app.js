@@ -10,8 +10,8 @@ var app = angular.module('app', []);
 
   bumpkit.samplers = [];
   bumpkit.samplePaths = [
-    './audio/kick.mp3',
-    './audio/rim.mp3',
+    'docs/examples/mpkey/audio/kick.mp3',
+    'docs/examples/mpkey/audio/rim.mp3',
     'docs/examples/mpkey/audio/snare.mp3',
     'docs/examples/mpkey/audio/clap.mp3',
     'docs/examples/mpkey/audio/tom-low.mp3',

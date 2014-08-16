@@ -6,10 +6,10 @@
   <meta name="author" content="Jxnblk">
   <meta name="description" content="Web Audio Framework">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <base href="/bumpkit/">
   <!--
-  <base href="/">
+  <base href="/bumpkit/">
   -->
+  <base href="/">
   <link rel="stylesheet" href="docs/css/basscss.min.css">
   <style>
     .sq { width: 100%; height: 0; padding-top: 40%; padding-bottom: 40%; }
@@ -21,7 +21,7 @@
 <body class="container-col-8" ng-app="app" ng-controller="MainCtrl" ng-keydown="keydown($event)">
 
   <header class="p2">
-    <h1><a href="/" class="dark-gray">Bumpkit</a></h1>
+    <h1><a href="." class="dark-gray">Bumpkit</a></h1>
     <h2><a href="docs/examples" class="dark-gray">Examples</a> / MPKey</h2>
   </header>
 
@@ -53,6 +53,14 @@
       <div class="p1 mobile-col-3 mobile-table-cell ">
         <div ng-click="play(3)" class="sq pad mobile-table bg-light-gray border rounded">F</div>
       </div>
+    </div>
+  </section>
+
+  <section id="kit-selector" class="p2 mb4">
+    <h3>Load Kit from Bipkit</h3>
+    <a href ng-click="loadDefaultKit()" class="bold">Default</a>
+    <div ng-repeat="kit in kits" class="bold">
+      <a href ng-click="loadKit($index)">{{ kit.name }}</a>
     </div>
   </section>
 

@@ -39,7 +39,7 @@ var app = angular.module('app', ['ngTouch']);
   bumpkit.beep = bumpkit.createBeep().frequency(512);
 
 
-app.controller('MainCtrl', ['$scope', function($scope) {
+app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
   $scope.bumpkit = bumpkit;
 
@@ -79,6 +79,39 @@ app.controller('MainCtrl', ['$scope', function($scope) {
       // R
       bumpkit.samplers[3].play();
     }
+  };
+
+  $http.get('https://bipkit.herokuapp.com/api/kits.json').success(function(response) {
+    $scope.kits = response;
+  });
+
+  $scope.loadKit = function(i) {
+    var kit = $scope.kits[i];
+    for (var j = 0; j < kit.samples.length; j++) {
+      if (j > 7) return false;
+      var index = j;
+      var sample = kit.samples[j];
+      (function(index) {
+        var sampler = bumpkit.samplers[index];
+        bumpkit.loadBuffer(sample.sound, function(buffer) {
+          sampler.buffer(buffer);
+          sampler.play(bumpkit.currentTime + (index + 1)*.125);
+        });
+      })(j);
+    };
+  };
+
+  $scope.loadDefaultKit = function() {
+    for (var i = 0; i < 8; i++) {
+      var index = i;
+      (function(index) {
+        var sampler = bumpkit.samplers[index];
+        bumpkit.loadBuffer(bumpkit.samplePaths[index], function(buffer) {
+          sampler.buffer(buffer);
+          sampler.play((index + 1)*.125);
+        });
+      })(i);
+    };
   };
 
 }]);

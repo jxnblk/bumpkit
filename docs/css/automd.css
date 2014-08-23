@@ -3,13 +3,13 @@
  */
 
 body {
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-family: 'Avenir Next', 'Helvetica Neue', Helvetica, sans-serif;
   font-size: 100%;
   line-height: 1.6;
   word-wrap: break-word;
   max-width: 48rem;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   color: #405660;
   background-color: #fff;
 }
@@ -51,36 +51,39 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
   margin-top: 1em;
   margin-bottom: 1rem;
   font-weight: bold;
+  /*
   line-height: 1.4
+  */
 }
 
 
 h1 {
-  padding-bottom: 0.3em;
-  font-size: 2.25em;
-  line-height: 1.2;
+  padding-bottom: 0.25em;
+  font-size: 2rem;
+  line-height: 1.125;
 }
 
 h2 {
-  padding-bottom: 0.3em;
-  font-size: 1.75em;
-  line-height: 1.225;
+  padding-bottom: 0.25em;
+  font-size: 1.5rem;
+  line-height: 1.25;
 }
 
-h3 {
-  font-size: 1.5em;
-  line-height: 1.43
+h3 { font-size: 1.25em; line-height: 1.375; }
+h4 { font-size: 1rem; line-height: 1.375; }
+h5 { font-size: .875rem; line-height: 1.375; }
+h6 { font-size: .75rem; line-height: 1.375; }
+
+@media (min-width: 48em) {
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2rem; }
 }
 
-h4 { font-size: 1.25em }
-h5 { font-size: 1em }
-h6 {
-  font-size: 1em;
-  color: #777
-}
+p { font-size: 1.125rem; }
 
 p,
 blockquote,
@@ -227,7 +230,11 @@ pre > code {
   padding: 1rem;
   overflow: auto;
   line-height: 1.45;
+  /*
+  background-color: rgba(0,150,204,.05);
+  */
   background-color: #eee;
+  background-image: linear-gradient(to bottom left, rgba(255,102,0,0.05), rgba(0,150,204,0.05));
   border-radius: 2px;
   margin-bottom: 0;
   word-break: normal

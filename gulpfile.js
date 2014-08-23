@@ -12,6 +12,7 @@ var toc = require('marked-toc');
 var minifyCss = require('gulp-minify-css');
 var pygmentize = require('pygmentize-bundled');
 var rename = require('gulp-rename');
+var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var uncss = require('gulp-uncss');
 
@@ -49,25 +50,31 @@ gulp.task('md', function() {
 });
 
 
-gulp.task('dev', ['compile', 'minify', 'md'], function() {
-  gulp.watch(['./**/*.md', './**/*.html', './**/*.js', '!./node_modules/**/*', '!./dist/**/*'], ['compile', 'minify', 'md']);
+gulp.task('dev', ['compile-js', 'minify-js', 'sass', 'md'], function() {
+  gulp.watch(['./**/*.md', './**/*.html', './docs/css/*.scss', './**/*.js', '!./node_modules/**/*', '!./dist/**/*'], ['compile-js', 'minify-js', 'sass', 'md']);
   connect.server();
 });
 
-gulp.task('default', ['compile', 'minify', 'md'], function() {
+gulp.task('default', ['compile-js', 'minify-js', 'sass', 'md'], function() {
 });
 
-gulp.task('compile', function() {
+gulp.task('compile-js', function() {
   gulp.src('src/bumpkit.js')
     .pipe(browserify({ standalone: 'Bumpkit' }))
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('minify', function() {
+gulp.task('minify-js', function() {
   gulp.src('dist/bumpkit.js')
     .pipe(uglify())
     .pipe(rename('bumpkit.min.js'))
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('sass', function() {
+  gulp.src('./docs/css/*.scss')
+    .pipe(sass({ options: { outputStyle: 'compressed' } }))
+    .pipe(gulp.dest('./docs/css'));
 });
 
 gulp.task('uncss', function() {

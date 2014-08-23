@@ -1,0 +1,468 @@
+
+
+/*   A U T O B A S S   */
+
+
+// Variables
+$dark-gray: #405660;
+$mid-gray: rgba($dark-gray,.25);
+$light-gray: #f3f9f9;
+$blue: #00bbee;
+
+
+// Base
+body {
+  font-family: 'Avenir Next', 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 100%;
+  line-height: 1.5;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: $dark-gray;
+  background-color: white;
+}
+
+a {
+  word-wrap: break-word;
+  text-decoration: none;
+  color: $blue;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:focus {
+    outline: 0;
+    background-color: rgba($blue,.0625);
+    box-shadow: 0 0 1px 2px rgba($blue,.5);
+    border-radius: 2px;
+  }
+}
+
+pre, code, samp, .monospace {
+  font-family: 'Source Code Pro', Consolas, monospace;
+  font-size: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  margin-top: 1em;
+  margin-bottom: .5rem;
+  font-weight: bold;
+  a {
+    color: $dark-gray;
+    text-decoration: none;
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}
+
+h1 { font-size: 2rem;    line-height: 1.125; }
+h2 { font-size: 1.5rem;  line-height: 1.25;  }
+h3 { font-size: 1.25em;  line-height: 1.375; }
+h4 { font-size: 1rem;    line-height: 1.375; }
+h5 { font-size: .875rem; line-height: 1.375; }
+h6 { font-size: .75rem;  line-height: 1.375; }
+
+@media (min-width: 48em) {
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2rem; }
+}
+
+p { font-size: 1.125rem; }
+
+p, dl, ol, ul, blockquote, table {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+hr {
+  height: 1px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid $mid-gray;
+  border-left: 0;
+}
+
+ul, ol {
+  padding-left: 2rem;
+  ul, ol {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+li > p { margin-top: 1rem; }
+
+dl {
+  padding: 0;
+  dt {
+    padding: 0;
+    margin-top: 1rem;
+    font-size: 1em;
+    font-style: italic;
+    font-weight: bold
+  }
+  dd {
+    padding-right: 1rem;
+    padding-left: 1rem;
+    margin-bottom: 16px
+  }
+}
+
+
+blockquote {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  border-left: 4px solid #405660;
+}
+
+
+// Tables
+// Pull in table reset from BASSCSS
+table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+table th {
+  font-weight: bold
+}
+
+table th,
+table td {
+  padding: .5rem 1rem;
+  border: 1px solid $mid-gray;
+}
+
+table tr {
+  background-color: #fff;
+  border-top: 1px solid $mid-gray;
+}
+
+table tr:nth-child(2n) {
+  background-color: $light-gray;
+}
+
+img { max-width: 100%; }
+
+
+code {
+  padding-right: .5em;
+  padding-left: .5em;
+  background-color: $light-gray;
+  border-radius: 2px;
+  word-wrap: break-word;
+}
+
+
+// Pygments
+
+.highlight {
+  margin-bottom: 1rem;
+}
+
+.highlight {
+  line-height: 1.25;
+  word-break: normal;
+  padding: 0 1rem;
+  overflow: auto;
+  background-color: $light-gray;
+  border-radius: 2px;
+}
+
+//pre {
+//  word-wrap: normal
+//}
+
+pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0
+}
+
+pre code:before,
+pre code:after {
+  content: normal
+}
+
+.highlight .c {
+  color: #999988;
+  font-style: italic
+}
+
+.highlight .err {
+  color: #a61717;
+  background-color: #e3d2d2
+}
+
+.highlight .k {
+  font-weight: bold
+}
+
+.highlight .o {
+  font-weight: bold
+}
+
+.highlight .cm {
+  color: #999988;
+  font-style: italic
+}
+
+.highlight .cp {
+  color: #999999;
+  font-weight: bold
+}
+
+.highlight .c1 {
+  color: #999988;
+  font-style: italic
+}
+
+.highlight .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic
+}
+
+.highlight .gd {
+  color: #000000;
+  background-color: #ffdddd
+}
+
+.highlight .gd .x {
+  color: #000000;
+  background-color: #ffaaaa
+}
+
+.highlight .ge {
+  font-style: italic
+}
+
+.highlight .gr {
+  color: #aa0000
+}
+
+.highlight .gh {
+  color: #999999
+}
+
+.highlight .gi {
+  color: #000000;
+  background-color: #ddffdd
+}
+
+.highlight .gi .x {
+  color: #000000;
+  background-color: #aaffaa
+}
+
+.highlight .go {
+  color: #888888
+}
+
+.highlight .gp {
+  color: #555555
+}
+
+.highlight .gs {
+  font-weight: bold
+}
+
+.highlight .gu {
+  color: #800080;
+  font-weight: bold
+}
+
+.highlight .gt {
+  color: #aa0000
+}
+
+.highlight .kc {
+  font-weight: bold
+}
+
+.highlight .kd {
+  font-weight: bold
+}
+
+.highlight .kn {
+  font-weight: bold
+}
+
+.highlight .kp {
+  font-weight: bold
+}
+
+.highlight .kr {
+  font-weight: bold
+}
+
+.highlight .kt {
+  color: #445588;
+  font-weight: bold
+}
+
+.highlight .m {
+  color: #009999
+}
+
+.highlight .s {
+  color: #dd1144
+}
+
+.highlight .n {
+  color: #333333
+}
+
+.highlight .na {
+  color: teal
+}
+
+.highlight .nb {
+  color: #0086b3
+}
+
+.highlight .nc {
+  color: #445588;
+  font-weight: bold
+}
+
+.highlight .no {
+  color: teal
+}
+
+.highlight .ni {
+  color: purple
+}
+
+.highlight .ne {
+  color: #990000;
+  font-weight: bold
+}
+
+.highlight .nf {
+  color: #990000;
+  font-weight: bold
+}
+
+.highlight .nn {
+  color: #555555
+}
+
+.highlight .nt {
+  color: navy
+}
+
+.highlight .nv {
+  color: teal
+}
+
+.highlight .ow {
+  font-weight: bold
+}
+
+.highlight .w {
+  color: #bbbbbb
+}
+
+.highlight .mf {
+  color: #009999
+}
+
+.highlight .mh {
+  color: #009999
+}
+
+.highlight .mi {
+  color: #009999
+}
+
+.highlight .mo {
+  color: #009999
+}
+
+.highlight .sb {
+  color: #dd1144
+}
+
+.highlight .sc {
+  color: #dd1144
+}
+
+.highlight .sd {
+  color: #dd1144
+}
+
+.highlight .s2 {
+  color: #dd1144
+}
+
+.highlight .se {
+  color: #dd1144
+}
+
+.highlight .sh {
+  color: #dd1144
+}
+
+.highlight .si {
+  color: #dd1144
+}
+
+.highlight .sx {
+  color: #dd1144
+}
+
+.highlight .sr {
+  color: #009926
+}
+
+.highlight .s1 {
+  color: #dd1144
+}
+
+.highlight .ss {
+  color: #990073
+}
+
+.highlight .bp {
+  color: #999999
+}
+
+.highlight .vc {
+  color: teal
+}
+
+.highlight .vg {
+  color: teal
+}
+
+.highlight .vi {
+  color: teal
+}
+
+.highlight .il {
+  color: #009999
+}
+
+.highlight .gc {
+  color: #999;
+  background-color: #EAF2F5
+}
+
+
+// Whitespace
+.py1 { padding-top: 1rem; padding-bottom: 1rem; }
+.mb4 { margin-bottom: 4rem; }
+

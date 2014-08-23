@@ -8,6 +8,7 @@ var fs = require('fs');
 var header = require('gulp-header');
 var markdown = require('gulp-markdown');
 var marked = require('marked');
+var toc = require('marked-toc');
 var minifyCss = require('gulp-minify-css');
 var pygmentize = require('pygmentize-bundled');
 var rename = require('gulp-rename');
@@ -22,6 +23,11 @@ gulp.task('md', function() {
 
   renderer.code = function(code, lang) {
     return code;
+  };
+
+  renderer.heading = function (text, level) {
+    var escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+    return '<h' + level + ' id="' + escapedText + '"><a href="#' + escapedText + '">' + text + '</a></h' + level + '>';
   };
 
   var mdoptions = {

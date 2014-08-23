@@ -261,3 +261,4 @@ Usage: `var waveform = bumpkit.analysePeaks(AudioBuffer)`
 Used internally to return a Web Audio gain node with edges faded according to the options argument.
 
 
+

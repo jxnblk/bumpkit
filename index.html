@@ -10,208 +10,147 @@
   <base href="/bumpkit/">
   -->
   <link rel="icon" href="favicon.png">
+  <!--
   <link rel="stylesheet" href="docs/css/basscss.min.css">
   <link rel="stylesheet" href="docs/css/github-pygments.css">
+  -->
+  <link rel="stylesheet" href="docs/css/automd.css">
+  <link rel="stylesheet" href="docs/css/whiespace.css">
   <style>
     /*
       hr { margin-top: 2rem; margin-bottom: 2rem; border: none; background-color: #ddd; height: 1px; }
       code:not(.lang-js) { background-color: #eee; padding: 0 2px; border-radius: 2px; }
       pre { background-color: #ddd; padding: 8px; border-radius: 2px; } */
   </style>
+  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
 </head>
-<body class="p2 container-col-8">
-  <header class="bold right-align py1 mb4">
-    <div class="inline-block">
-      <nav class="nav mobile-nav-table nav-flush">
-        <a href="//github.com/jxnblk/bumpkit">View on Github</a>
-        <span class="nav-item nav-item-px h5 mid-gray">
-          Check out the console
-        </span>
-      </nav>
-    </div>
+<body>
+
+  <header class="py1 mb4">
+    <p>
+      <a href="//github.com/jxnblk/bumpkit">View on Github</a>
+      <small>(Check out the console)</small>
+    </p>
   </header>
 
-<h1 id="bumpkit">Bumpkit</h1>
-<p>A DAW-inpsired library for the Web Audio API</p>
+<h1 id="bumpkit"><a href="#bumpkit">Bumpkit</a></h1><p>A DAW-inpsired library for the Web Audio API</p>
 <p><em>Work in Progress</em></p>
 <hr>
-<h1 id="getting-started">Getting Started</h1>
-<p>Include the <code>dist/bumpkit.min.js</code> file in your project.</p>
+<h1 id="getting-started"><a href="#getting-started">Getting Started</a></h1><p>Include the <code>dist/bumpkit.min.js</code> file in your project.</p>
 <p>In your application, create a new instance of the Bumpkit class:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">bumpkit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bumpkit</span><span class="p">();</span>
 </pre></div>
 <p>This will create a new Audio Context instance with custom methods and properties.</p>
 <hr>
-<h1 id="basics">Basics</h1>
-<h2 id="create-a-mixer-with-two-tracks">Create a mixer with two tracks</h2>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mixer</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createMixer</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">();</span>
+<h1 id="basics"><a href="#basics">Basics</a></h1><h2 id="create-a-mixer-with-two-tracks"><a href="#create-a-mixer-with-two-tracks">Create a mixer with two tracks</a></h2><div class="highlight"><pre><span class="kd">var</span> <span class="nx">mixer</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createMixer</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">();</span>
 </pre></div>
-<h2 id="create-a-new-sampler-instrument-and-load-an-audio-buffer">Create a new Sampler instrument and load an audio buffer</h2>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createSampler</span><span class="p">().</span><span class="nx">connect</span><span class="p">(</span><span class="nx">mixer</span><span class="p">.</span><span class="nx">tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<h2 id="create-a-new-sampler-instrument-and-load-an-audio-buffer"><a href="#create-a-new-sampler-instrument-and-load-an-audio-buffer">Create a new Sampler instrument and load an audio buffer</a></h2><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createSampler</span><span class="p">().</span><span class="nx">connect</span><span class="p">(</span><span class="nx">mixer</span><span class="p">.</span><span class="nx">tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 
 <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">loadBuffer</span><span class="p">(</span><span class="s1">&#39;/audio/clap.mp3&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">sampler</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
 <hr>
-<h1 id="api-documentation">API Documentation</h1>
-<h2 id="bumpkit-class">Bumpkit Class</h2>
-<p>Extends the AudioContext with additional properties and methods. Create a new instance: <code>var bumpkit = new Bumpkit()</code></p>
-<h3 id="custom-properties">Custom Properties</h3>
-<h4 id="-buffers">.buffers</h4>
-<p>An object for storing arrayBuffers. Keys are based on url. E.g. <code>{ /audio/sound.mp3: AudioBuffer }</code></p>
-<h4 id="-isplaying">.isPlaying</h4>
-<p>Boolean value for if the step sequencer is running.</p>
-<h4 id="-looplength">.loopLength</h4>
-<p>Integer representing the number of steps in a loop. Defaults to <code>null</code>.</p>
-<h4 id="-stepresolution">.stepResolution</h4>
-<p><em>Placeholder</em>
+<h1 id="api-documentation"><a href="#api-documentation">API Documentation</a></h1><h2 id="bumpkit-class"><a href="#bumpkit-class">Bumpkit Class</a></h2><p>Extends the AudioContext with additional properties and methods. Create a new instance: <code>var bumpkit = new Bumpkit()</code></p>
+<h3 id="custom-properties"><a href="#custom-properties">Custom Properties</a></h3><h4 id="-buffers"><a href="#-buffers">.buffers</a></h4><p>An object for storing arrayBuffers. Keys are based on url. E.g. <code>{ /audio/sound.mp3: AudioBuffer }</code></p>
+<h4 id="-isplaying"><a href="#-isplaying">.isPlaying</a></h4><p>Boolean value for if the step sequencer is running.</p>
+<h4 id="-looplength"><a href="#-looplength">.loopLength</a></h4><p>Integer representing the number of steps in a loop. Defaults to <code>null</code>.</p>
+<h4 id="-stepresolution"><a href="#-stepresolution">.stepResolution</a></h4><p><em>Placeholder</em>
 Integer representing the number of steps in a bar. Currently hard-coded to <code>16</code>.</p>
-<h4 id="-tempo">.tempo</h4>
-<p>Integer representing the tempo of the step sequencer. Defaults to <code>120</code>.</p>
-<h4 id="-timesignature">.timeSignature</h4>
-<p><em>Placeholder</em>
+<h4 id="-tempo"><a href="#-tempo">.tempo</a></h4><p>Integer representing the tempo of the step sequencer. Defaults to <code>120</code>.</p>
+<h4 id="-timesignature"><a href="#-timesignature">.timeSignature</a></h4><p><em>Placeholder</em>
 Array of two integers representing the time signature. 4/4 is represented as <code>[4,4]</code>. Currently hard-coded to 4/4.</p>
-<h3 id="custom-methods">Custom Methods</h3>
-<h4 id="-loadbuffer-url-callback-">.loadBuffer(url, callback)</h4>
-<p><em>(Chainable)</em>
+<h3 id="custom-methods"><a href="#custom-methods">Custom Methods</a></h3><h4 id="-loadbuffer-url-callback-"><a href="#-loadbuffer-url-callback-">.loadBuffer(url, callback)</a></h4><p><em>(Chainable)</em>
 Makes an arraybuffer XHR request, decodes the file, stores the buffer in the <code>.buffers</code> object, and returns a Web Audio buffer.
 If called a second time for the same url, it will return the stored buffer.</p>
-<h4 id="-playpause-">.playPause()</h4>
-<p><em>(Chainable)</em>
+<h4 id="-playpause-"><a href="#-playpause-">.playPause()</a></h4><p><em>(Chainable)</em>
 Toggles playing of the step sequencer. The current step always begins at 0 when playing.</p>
-<h4 id="-trigger-source-options-">.trigger(source, options)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-trigger-source-options-"><a href="#-trigger-source-options-">.trigger(source, options)</a></h4><p><em>(Chainable)</em>
 Calls the <code>.start</code> method on the source. Options is an object with properties <code>when</code>, <code>offset</code>, and <code>duration</code>. The source should be connected to its destination before calling <code>.trigger()</code>.</p>
 <hr>
-<h2 id="mixer-object">Mixer Object</h2>
-<p>Use the <code>.createMixer()</code> method to create a new mixer instance.
+<h2 id="mixer-object"><a href="#mixer-object">Mixer Object</a></h2><p>Use the <code>.createMixer()</code> method to create a new mixer instance.
 E.g. <code>var mixer = bumpkit.createMixer()</code>
 The mixer is an object of tracks.
 By default it includes a <code>.master</code> track object that is connected to the Bumpkit instances <code>.destination</code>.</p>
-<h3 id="mixer-methods">Mixer Methods</h3>
-<h4 id="-addtrack-">.addTrack()</h4>
-<p><em>(Chainable)</em>
+<h3 id="mixer-methods"><a href="#mixer-methods">Mixer Methods</a></h3><h4 id="-addtrack-"><a href="#-addtrack-">.addTrack()</a></h4><p><em>(Chainable)</em>
 Creates a new track instance, adds it to the mixer tracks array, and connects it to the master track.</p>
-<h4 id="-removetrack-index-">.removeTrack(index)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-removetrack-index-"><a href="#-removetrack-index-">.removeTrack(index)</a></h4><p><em>(Chainable)</em>
 Removes a track from the mixer tracks array at <code>index</code>.</p>
-<h3 id="mixer-track-properties">Mixer Track Properties</h3>
-<p>Each mixer track is a Web Audio gain node and can be directly connected to.
+<h3 id="mixer-track-properties"><a href="#mixer-track-properties">Mixer Track Properties</a></h3><p>Each mixer track is a Web Audio gain node and can be directly connected to.
 Tracks also include additional gain nodes for routing.</p>
-<h4 id="-mute">.mute</h4>
-<p>Use this gain node to read whether or not a track is muted. The track&#39;s volume state is maintained in the <code>.volume</code> gain node.</p>
-<h4 id="-volume">.volume</h4>
-<p>Get or set the volume for the track using this node. The volume node is also used to connect to other destinations.
+<h4 id="-mute"><a href="#-mute">.mute</a></h4><p>Use this gain node to read whether or not a track is muted. The track&#39;s volume state is maintained in the <code>.volume</code> gain node.</p>
+<h4 id="-volume"><a href="#-volume">.volume</a></h4><p>Get or set the volume for the track using this node. The volume node is also used to connect to other destinations.
 Get the volume: <code>var level = track.volume,gain</code>
 Set the volume: <code>track.volume.gain.value = .5</code>
 <em>NOTE: This might change to a getter/setter method</em></p>
-<h4 id="-effectsnode">.effectsNode</h4>
-<p>A dummy gain node for connecting audio effects.</p>
-<h4 id="-effects">.effects</h4>
-<p>An array of other Web Audio nodes that can be placed between the root track node and the <code>.mute</code> node.</p>
-<h3 id="mixer-track-methods">Mixer Track Methods</h3>
-<h4 id="-addeffect-node-index-">.addEffect(node, index)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-effectsnode"><a href="#-effectsnode">.effectsNode</a></h4><p>A dummy gain node for connecting audio effects.</p>
+<h4 id="-effects"><a href="#-effects">.effects</a></h4><p>An array of other Web Audio nodes that can be placed between the root track node and the <code>.mute</code> node.</p>
+<h3 id="mixer-track-methods"><a href="#mixer-track-methods">Mixer Track Methods</a></h3><h4 id="-addeffect-node-index-"><a href="#-addeffect-node-index-">.addEffect(node, index)</a></h4><p><em>(Chainable)</em>
 Adds a node to the track effects array, and handles connections. By default, each effect is added to the end of the array. Use the <code>index</code> argument to adjust the insertion point.</p>
-<h4 id="-removeeffect-index-">.removeEffect(index)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-removeeffect-index-"><a href="#-removeeffect-index-">.removeEffect(index)</a></h4><p><em>(Chainable)</em>
 Removes <code>.effects[index]</code> from the array and reconnects the nodes.</p>
-<h4 id="-connect-node-">.connect(node)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-connect-node-"><a href="#-connect-node-">.connect(node)</a></h4><p><em>(Chainable)</em>
 Connects the <code>.volume</code> node to a destination. This handles the web audio <code>.disconnect(0)</code> call as well.</p>
-<h4 id="-togglemute-">.toggleMute()</h4>
-<p><em>(Chainable)</em>
+<h4 id="-togglemute-"><a href="#-togglemute-">.toggleMute()</a></h4><p><em>(Chainable)</em>
 Toggles the track&#39;s <code>.mute</code> node between 1 and 0.</p>
-<h4 id="-updateconnections-">.updateConnections()</h4>
-<p><em>(Chainable)</em>
+<h4 id="-updateconnections-"><a href="#-updateconnections-">.updateConnections()</a></h4><p><em>(Chainable)</em>
 Disconnects and reconnects effects in the <code>.effects</code> array. This is used by the <code>.addEffect()</code> and <code>.removeEffect()</code> methods, but should also be called after manually reordering the effects array.</p>
 <hr>
-<h2 id="clip-object">Clip Object</h2>
-<p>Clips listen to Bumpkit&#39;s sequencer <code>step</code> event and triggers playback of instruments based on patterns.
+<h2 id="clip-object"><a href="#clip-object">Clip Object</a></h2><p>Clips listen to Bumpkit&#39;s sequencer <code>step</code> event and triggers playback of instruments based on patterns.
 Usage: <code>var clip = bumpkit.createClip()</code></p>
-<h3 id="clip-properties">Clip Properties</h3>
-<h4 id="-pattern">.pattern</h4>
-<p>An binary integer array to trigger playback of the connected instrument according to a rhythmic pattern.
+<h3 id="clip-properties"><a href="#clip-properties">Clip Properties</a></h3><h4 id="-pattern"><a href="#-pattern">.pattern</a></h4><p>An binary integer array to trigger playback of the connected instrument according to a rhythmic pattern.
 The clip listens to the <code>step</code> event emitted by the Bumpkit clock sequencer.
 E.g. <code>clip.pattern = [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0]</code> will play on each quarter note.
 In the future, patterns will support more complex object arrays to account for velocity, duration, offset, envelopes, etc.</p>
-<h4 id="-active">.active</h4>
-<p>Boolean for whether or not the clip should trigger playback.</p>
-<h3 id="clip-methods">Clip Methods</h3>
-<h4 id="-connect-node-">.connect(node)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-active"><a href="#-active">.active</a></h4><p>Boolean for whether or not the clip should trigger playback.</p>
+<h3 id="clip-methods"><a href="#clip-methods">Clip Methods</a></h3><h4 id="-connect-node-"><a href="#-connect-node-">.connect(node)</a></h4><p><em>(Chainable)</em>
 Connects the clip to an instrument. The instrument must have a <code>.play(when)</code> method that accepts a when argument.</p>
-<h4 id="-toggle-">.toggle()</h4>
-<p><em>(Chainable)</em>
+<h4 id="-toggle-"><a href="#-toggle-">.toggle()</a></h4><p><em>(Chainable)</em>
 Toggles the <code>.active</code> attribute for the clip.</p>
-<h4 id="-play-when-">.play(when)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-play-when-"><a href="#-play-when-">.play(when)</a></h4><p><em>(Chainable)</em>
 Used within the object to trigger playback from the event listener. This can be used manually, but it&#39;s prefered to manually call <code>.play()</code> directly on instruments if not using a clip.</p>
 <hr>
-<h2 id="beep-object">Beep Object</h2>
-<p>A simple sine-wave oscillator instrument.
+<h2 id="beep-object"><a href="#beep-object">Beep Object</a></h2><p>A simple sine-wave oscillator instrument.
 Usage <code>var beep = bumpkit.createBeep()</code></p>
-<h3 id="-createbeep-options-">.createBeep(options)</h3>
-<p>Returns a new Beep instance. Pass an optional argument to set property defaults.
+<h3 id="-createbeep-options-"><a href="#-createbeep-options-">.createBeep(options)</a></h3><p>Returns a new Beep instance. Pass an optional argument to set property defaults.
 E.g. <code>var customBeep = bumpkit.createBeep({ duration: .5, frequency: 512, connect: mixer.master })</code></p>
-<h3 id="beep-properties">Beep Properties</h3>
-<h4 id="-duration">.duration</h4>
-<p>An integer of the length in seconds that the Beep will sound.</p>
-<h3 id="beep-methods">Beep Methods</h3>
-<h4 id="-frequency-frequency-">.frequency(frequency)</h4>
-<p><em>Getter/Setter (Chainable Setter)</em>
+<h3 id="beep-properties"><a href="#beep-properties">Beep Properties</a></h3><h4 id="-duration"><a href="#-duration">.duration</a></h4><p>An integer of the length in seconds that the Beep will sound.</p>
+<h3 id="beep-methods"><a href="#beep-methods">Beep Methods</a></h3><h4 id="-frequency-frequency-"><a href="#-frequency-frequency-">.frequency(frequency)</a></h4><p><em>Getter/Setter (Chainable Setter)</em>
 Changes the frequency of the instrument. E.g. Set the frequency: <code>beep.frequency(512)</code> or get the frequency: <code>var f = beep.frequency()</code></p>
-<h4 id="-connect-node-">.connect(node)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-connect-node-"><a href="#-connect-node-">.connect(node)</a></h4><p><em>(Chainable)</em>
 Connects the Beep to a destination node.</p>
-<h4 id="-play-when-">.play(when)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-play-when-"><a href="#-play-when-">.play(when)</a></h4><p><em>(Chainable)</em>
 Plays the instrument at the given <code>when</code> argument. If no argument is passed, the Beep will play immediately.</p>
 <hr>
-<h2 id="sampler-object">Sampler Object</h2>
-<p>A simple sampler instrument for playing audio buffers.
+<h2 id="sampler-object"><a href="#sampler-object">Sampler Object</a></h2><p>A simple sampler instrument for playing audio buffers.
 Usage <code>var sampler = bumpkit.createSampler()</code></p>
-<h3 id="-createsampler-options-">.createSampler(options)</h3>
-<p>Returns a new Sampler instance. Pass an optional argument to set property defaults.
+<h3 id="-createsampler-options-"><a href="#-createsampler-options-">.createSampler(options)</a></h3><p>Returns a new Sampler instance. Pass an optional argument to set property defaults.
 E.g. <code>var customSampler = bumpkit.createSampler({ buffer: AudioBuffer, duration: .5, offset: .1, connect: mixer.master })</code></p>
-<h3 id="sampler-properties">Sampler Properties</h3>
-<h4 id="-offset">.offset</h4>
-<p>A number representing the offset in seconds to start playback of the sample. Defaults to 0.</p>
-<h4 id="-duration">.duration</h4>
-<p>A number representing the duration to play the sample. Defaults to 0.6.</p>
-<h3 id="sampler-methods">Sampler Methods</h3>
-<h4 id="-buffer-buffer-">.buffer(buffer)</h4>
-<p><em>Getter/Setter (Chainable Setter)</em>
+<h3 id="sampler-properties"><a href="#sampler-properties">Sampler Properties</a></h3><h4 id="-offset"><a href="#-offset">.offset</a></h4><p>A number representing the offset in seconds to start playback of the sample. Defaults to 0.</p>
+<h4 id="-duration"><a href="#-duration">.duration</a></h4><p>A number representing the duration to play the sample. Defaults to 0.6.</p>
+<h3 id="sampler-methods"><a href="#sampler-methods">Sampler Methods</a></h3><h4 id="-buffer-buffer-"><a href="#-buffer-buffer-">.buffer(buffer)</a></h4><p><em>Getter/Setter (Chainable Setter)</em>
 Gets or sets the audio buffer used for the sampler. E.g. set the buffer: <code>sampler.buffer(AudioBuffer)</code> or get the buffer: <code>var b = sampler.buffer()</code></p>
-<h4 id="-connect-node-">.connect(node)</h4>
-<p><em>(Chainable)</em>
+<h4 id="-connect-node-"><a href="#-connect-node-">.connect(node)</a></h4><p><em>(Chainable)</em>
 Connects the sampler to a destination node.</p>
-<h4 id="-play-when-">.play(when)</h4>
-<p><em>(Chainable)</em></p>
+<h4 id="-play-when-"><a href="#-play-when-">.play(when)</a></h4><p><em>(Chainable)</em></p>
 <hr>
-<h2 id="analysers">Analysers</h2>
-<h3 id="-createamplitudeanalyser">.createAmplitudeAnalyser</h3>
-<p><em>Work in Progress</em>
+<h2 id="analysers"><a href="#analysers">Analysers</a></h2><h3 id="-createamplitudeanalyser"><a href="#-createamplitudeanalyser">.createAmplitudeAnalyser</a></h3><p><em>Work in Progress</em>
 Creates a Web Audio analyser node with a custom method for reading the amplitude of a signal.</p>
 <hr>
-<h2 id="peak-analyser">Peak Analyser</h2>
-<h3 id="-analysepeaks-buffer-">.analysePeaks(buffer)</h3>
-<p>Returns a Float32Array representing waveform data for the buffer.
+<h2 id="peak-analyser"><a href="#peak-analyser">Peak Analyser</a></h2><h3 id="-analysepeaks-buffer-"><a href="#-analysepeaks-buffer-">.analysePeaks(buffer)</a></h3><p>Returns a Float32Array representing waveform data for the buffer.
 Usage: <code>var waveform = bumpkit.analysePeaks(AudioBuffer)</code></p>
 <hr>
-<h2 id="edge-fader">Edge Fader</h2>
-<h3 id="-createedgefader-options-">.createEdgeFader(options)</h3>
-<p>Used internally to return a Web Audio gain node with edges faded according to the options argument.</p>
-<footer class="bold py2">
-  <div class="nav nav-table nav-flush">
-    <a href="//github.com/jxnblk/bumpkit">Github</a>
-    <span class="nav-item nav-item-px">
-      Made with love by <a href="//jxnblk.com">Jxnblk</a>
-    </span>
-  </div>
+<h2 id="edge-fader"><a href="#edge-fader">Edge Fader</a></h2><h3 id="-createedgefader-options-"><a href="#-createedgefader-options-">.createEdgeFader(options)</a></h3><p>Used internally to return a Web Audio gain node with edges faded according to the options argument.</p>
+<footer class="py2">
+  <p>
+    <b><a href="//github.com/jxnblk/bumpkit">Github</a></b>
+    Made with love by <a href="//jxnblk.com">Jxnblk</a>
+  </p>
 </footer>
+
+
 <script src="dist/bumpkit.min.js"></script>
+
 <script>
   var bumpkit = new Bumpkit();
   bumpkit.createBeep().frequency(512).play();
@@ -219,5 +158,7 @@ Usage: <code>var waveform = bumpkit.analysePeaks(AudioBuffer)</code></p>
   console.log('Try running:');
   console.log('bumpkit.createBeep().frequency(512).play()');
 </script>
+
+
 </body>
 </html>

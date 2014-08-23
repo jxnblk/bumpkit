@@ -13,9 +13,10 @@
   <link rel="stylesheet" href="docs/css/basscss.min.css">
   <link rel="stylesheet" href="docs/css/github-pygments.css">
   <style>
-    hr { margin-top: 2rem; margin-bottom: 2rem; border: none; background-color: #ddd; height: 1px; }
-    code:not(.lang-js) { background-color: #eee; padding: 0 2px; border-radius: 2px; }
-    /* pre { background-color: #ddd; padding: 8px; border-radius: 2px; } */
+    /*
+      hr { margin-top: 2rem; margin-bottom: 2rem; border: none; background-color: #ddd; height: 1px; }
+      code:not(.lang-js) { background-color: #eee; padding: 0 2px; border-radius: 2px; }
+      pre { background-color: #ddd; padding: 8px; border-radius: 2px; } */
   </style>
 </head>
 <body class="p2 container-col-8">
@@ -37,27 +38,21 @@
 <h1 id="getting-started">Getting Started</h1>
 <p>Include the <code>dist/bumpkit.min.js</code> file in your project.</p>
 <p>In your application, create a new instance of the Bumpkit class:</p>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">bumpkit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bumpkit</span><span class="p">();</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">bumpkit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Bumpkit</span><span class="p">();</span>
 </pre></div>
-
-</code></pre>
 <p>This will create a new Audio Context instance with custom methods and properties.</p>
 <hr>
 <h1 id="basics">Basics</h1>
 <h2 id="create-a-mixer-with-two-tracks">Create a mixer with two tracks</h2>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">mixer</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createMixer</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">();</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">mixer</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createMixer</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">().</span><span class="nx">addTrack</span><span class="p">();</span>
 </pre></div>
-
-</code></pre>
 <h2 id="create-a-new-sampler-instrument-and-load-an-audio-buffer">Create a new Sampler instrument and load an audio buffer</h2>
-<pre><code class="lang-js"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createSampler</span><span class="p">().</span><span class="nx">connect</span><span class="p">(</span><span class="nx">mixer</span><span class="p">.</span><span class="nx">tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">sampler</span> <span class="o">=</span> <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">createSampler</span><span class="p">().</span><span class="nx">connect</span><span class="p">(</span><span class="nx">mixer</span><span class="p">.</span><span class="nx">tracks</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 
 <span class="nx">bumpkit</span><span class="p">.</span><span class="nx">loadBuffer</span><span class="p">(</span><span class="s1">&#39;/audio/clap.mp3&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">buffer</span><span class="p">)</span> <span class="p">{</span>
   <span class="nx">sampler</span><span class="p">.</span><span class="nx">buffer</span><span class="p">(</span><span class="nx">buffer</span><span class="p">);</span>
 <span class="p">});</span>
 </pre></div>
-
-</code></pre>
 <hr>
 <h1 id="api-documentation">API Documentation</h1>
 <h2 id="bumpkit-class">Bumpkit Class</h2>

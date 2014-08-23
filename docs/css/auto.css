@@ -12,18 +12,21 @@ body {
 a {
   word-wrap: break-word;
   text-decoration: none;
-  color: #00bbee; }
+  color: #009fcc; }
   a:hover {
     text-decoration: underline; }
   a:focus {
     outline: 0;
-    background-color: rgba(0, 187, 238, 0.0625);
-    box-shadow: 0 0 1px 2px rgba(0, 187, 238, 0.5);
+    background-color: rgba(0, 159, 204, 0.0625);
+    box-shadow: 0 0 1px 2px rgba(0, 159, 204, 0.5);
     border-radius: 2px; }
 
 pre, code, samp, .monospace {
   font-family: 'Source Code Pro', Consolas, monospace;
   font-size: inherit; }
+
+b, strong, .bold {
+  font-weight: 600; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
@@ -68,6 +71,9 @@ h6 {
 
 p {
   font-size: 1.125rem; }
+
+p code {
+  font-size: 1rem; }
 
 p, dl, ol, ul, blockquote, table {
   margin-top: 0;

@@ -7,7 +7,8 @@
 $dark-gray: #405660;
 $mid-gray: rgba($dark-gray,.25);
 $light-gray: #f3f9f9;
-$blue: #00bbee;
+//$blue: #00bbee;
+$blue: #009fcc;
 
 
 // Base
@@ -42,6 +43,8 @@ pre, code, samp, .monospace {
   font-size: inherit;
 }
 
+b, strong, .bold { font-weight: 600; }
+
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Helvetica Neue', Helvetica, sans-serif;
   margin-top: 1em;
@@ -69,6 +72,8 @@ h6 { font-size: .75rem;  line-height: 1.375; }
 }
 
 p { font-size: 1.125rem; }
+
+p code { font-size: 1rem; }
 
 p, dl, ol, ul, blockquote, table {
   margin-top: 0;

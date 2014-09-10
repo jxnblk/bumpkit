@@ -1,12 +1,10 @@
 {
   "name": "bumpkit",
   "version": "0.0.1",
-  "description": "",
-  "main": "gulpfile.js",
-  "dependencies": {
-    "gulp": "~3.8.7"
-  },
+  "description": "A DAW-inspired library for the Web Audio API",
+  "main": "dist/bumpkit.min.js",
   "devDependencies": {
+    "gulp": "~3.8.7",
     "gulp-concat": "^2.3.4",
     "browserify": "^5.9.1",
     "gulp-browserify": "^0.5.0",
@@ -24,15 +22,12 @@
     "marked-toc": "^0.2.6",
     "gulp-sass": "^0.7.3"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jxnblk/bumpkit.git"
   },
   "author": "Brent Jackson",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jxnblk/bumpkit/issues"
   },

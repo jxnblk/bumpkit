@@ -3,9 +3,9 @@ A DAW-inpsired library for the Web Audio API
 
 *Work in Progress*
 
-
 ---
 
+<div data-include="docs/nav.html"></div>
 
 # Getting Started
 
@@ -261,4 +261,7 @@ Usage: `var waveform = bumpkit.analysePeaks(AudioBuffer)`
 Used internally to return a Web Audio gain node with edges faded according to the options argument.
 
 
+MIT License
+
+<div data-include="docs/footer.html"></div>
 

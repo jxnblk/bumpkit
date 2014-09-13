@@ -20,7 +20,8 @@
     "gulp-connect": "^2.0.6",
     "marked": "^0.3.2",
     "marked-toc": "^0.2.6",
-    "gulp-sass": "^0.7.3"
+    "gulp-sass": "^0.7.3",
+    "doctor-mark": "latest"
   },
   "repository": {
     "type": "git",

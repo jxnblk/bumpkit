@@ -265,3 +265,10 @@ MIT License
 
 <div data-include="docs/footer.html"></div>
 
+<style>
+body {
+  max-width: 48rem;
+  padding: 1.5rem;
+  margin: 0 auto;
+}
+</style>

@@ -62,7 +62,9 @@ gulp.task('uncss', function() {
 
 gulp.task('md', function() {
   gulp.src('./README.md')
-    .pipe(doctorMark())
+    .pipe(doctorMark({
+      stylesheet: 'http://d2v52k3cl9vedd.cloudfront.net/basscss/4.0.0/bassdock.min.css'
+    }))
     .pipe(rename('index.html'))
     .pipe(gulp.dest('.'));
 });

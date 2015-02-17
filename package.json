@@ -1,6 +1,6 @@
 {
   "name": "bumpkit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A DAW-inspired library for the Web Audio API",
   "main": "dist/bumpkit.min.js",
   "devDependencies": {

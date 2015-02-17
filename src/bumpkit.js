@@ -13,7 +13,7 @@ var Bumpkit = function() {
 
   //try {
     //var window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    var bumpkit = new (window.AudioContext || window.webkitAudioContext)(); 
+    var bumpkit = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)(); 
   //}
   //catch {
   //  console.error('Web Audio API not supported in this browser');

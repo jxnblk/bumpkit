@@ -2,9 +2,11 @@
 import expect from 'expect'
 import Bumpkit from '../src/Bumpkit'
 import Store from '../src/Store'
+import Beep from '../src/Beep'
 
 describe('Bumpkit', () => {
   let bump
+  let step
   const AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext
 
   it('should create a new instance', () => {
@@ -44,9 +46,81 @@ describe('Bumpkit', () => {
   })
 
   describe('play()', () => {
+    let beep
+    const beeper = ({ when, step }) => {
+      if (step % 4 === 0) {
+        // beep.play(when)
+      }
+    }
+
     it('should play', () => {
       expect(() => {
-        // bump.play()
+        bump.play()
+      }).toNotThrow()
+    })
+
+    it('should change playing state', () => {
+      expect(bump.state.playing).toEqual(true)
+    })
+
+    it('should start the timer', (done) => {
+      setTimeout(() => {
+        step = bump.clock.state.step
+        expect(bump.clock.timer).toExist()
+        expect(step).toBeGreaterThan(0)
+        done()
+      }, 200)
+    })
+
+    it('should beep four times (listen)', (done) => {
+      beep = new Beep(bump.context)
+      bump.clock.sync(beeper)
+      setTimeout(() => {
+        done()
+      }, 500)
+    })
+
+  })
+
+  describe('pause()', () => {
+    it('should pause', () => {
+      expect(() => {
+        bump.pause()
+        step = bump.clock.state.step
+      }).toNotThrow()
+    })
+
+    it('should change playing state', () => {
+      expect(bump.state.playing).toEqual(false)
+    })
+
+    it('should stop the clock scheduler', () => {
+      expect(bump.clock.state.step).toEqual(step)
+    })
+  })
+
+  describe('playPause()', () => {
+    it('should start playing', () => {
+      bump.playPause()
+      expect(bump.state.playing).toEqual(true)
+    })
+
+    it('should stop playing', () => {
+      bump.playPause()
+      expect(bump.state.playing).toEqual(false)
+    })
+  })
+
+  describe('kill()', () => {
+    it('should remove the audio context', () => {
+      bump.kill()
+      expect(bump.context).toNotExist()
+    })
+
+    it('should not enable playback', () => {
+      expect(() => {
+        // WIP
+        bump.play()
       }).toNotThrow()
     })
   })

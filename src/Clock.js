@@ -52,7 +52,7 @@ class Clock extends Store {
       if (loop && step === loop) {
         this.setState({ step: 0 })
       }
-      this.timer = setTimeout(scheduler, this.lookahead)
+      this.timer = setTimeout(this.scheduler, this.lookahead)
     }
   }
 

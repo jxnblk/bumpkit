@@ -33,7 +33,7 @@ class Bumpkit extends Store {
   }
 
   step ({ step, when }) {
-    console.log('Bumpkit', step, when)
+    // console.log('Bumpkit', step, when)
   }
 
   play () {

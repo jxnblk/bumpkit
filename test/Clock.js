@@ -7,8 +7,10 @@ const AudioContext = window.AudioContext || window.webkitAudioContext || window.
 describe('Clock', () => {
   let clock
   let index = 0
+  let w
   const inc = ({ step, when }) => {
     index = step
+    w = when
   }
 
   it('should create a clock instance', () => {
@@ -49,6 +51,8 @@ describe('Clock', () => {
     it('should call the sync callback', () => {
       clock.tick({ step: 1, when: 200 })
       expect(index).toEqual(1)
+      expect(w).toEqual(200)
+      clock.tick({ step: 0, when: 0 })
     })
   })
 
@@ -66,11 +70,46 @@ describe('Clock', () => {
       }, 100)
     })
 
-    it('should call the sync listener', (done) => {
+    it('should not have a timer', () => {
+      expect(clock.timer).toNotExist()
+    })
+
+    it('should not start counting steps', () => {
+      expect(clock.state.step).toEqual(0)
+    })
+
+    it('should not call the sync listener', (done) => {
       setTimeout(() => {
-        expect(index).toBeGreaterThan(0)
+        expect(index).toEqual(0)
         done()
       }, 100)
+    })
+  })
+
+  context('when playing', () => {
+    beforeEach(() => {
+      clock.setState({ playing: true })
+      clock.scheduler()
+    })
+
+    it('should have a timer', () => {
+      expect(clock.timer).toExist()
+    })
+
+    it('should call the sync listener', () => {
+      expect(index).toBeGreaterThan(0)
+      expect(w).toBeGreaterThan(0)
+    })
+
+    it('should start counting steps', () => {
+      expect(clock.state.step).toBeGreaterThan(0)
+    })
+  })
+
+  describe('unsync()', () => {
+    it('should remove the sync listener', () => {
+      clock.unsync(inc)
+      expect(clock.callbacks).toEqual([])
     })
   })
 

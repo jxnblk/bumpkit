@@ -54,6 +54,7 @@ describe('Bumpkit', () => {
     it('should play', () => {
       expect(() => {
         bump.play()
+        bump.stop()
       }).toNotThrow()
     })
 
@@ -74,6 +75,7 @@ describe('Bumpkit', () => {
       beep = new Beep(bump.context)
       bump.clock.sync(beeper)
       setTimeout(() => {
+        bump.stop()
         done()
       }, 500)
     })
@@ -130,12 +132,12 @@ describe('Bumpkit', () => {
 
     it('should play the clip', (done) => {
       expect(() => {
-        bump.play()
-      }).toNotThrow()
-      setTimeout(() => {
+        // bump.play()
         bump.stop()
-        done()
-      }, 500)
+        setTimeout(() => {
+          done()
+        }, 100)
+      }).toNotThrow()
     })
 
   })

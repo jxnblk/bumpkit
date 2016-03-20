@@ -47,7 +47,7 @@ class Bumpkit extends Store {
 
   play () {
     this.setState({ playing: true })
-    this.clock.scheduler()
+    this.clock.start()
   }
 
   pause () {

@@ -3,6 +3,15 @@
   "version": "0.2.0-beta.1",
   "description": "A DAW-inspired library for the Web Audio API",
   "main": "dist/bumpkit.js",
+  "scripts": {
+    "prepublish": "mkdir -p dist && babel src --out-dir dist",
+    "test:watch": "karma start --no-single-run --auto-watch",
+    "test": "karma start"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "object-assign": "^4.0.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-loader": "^6.2.4",
@@ -11,6 +20,7 @@
     "karma": "^0.13.22",
     "karma-firefox-launcher": "^0.1.7",
     "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^2.0.0",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
     "webpack": "^1.12.14"

@@ -1,6 +1,7 @@
 
 import Store from './Store'
 import Clock from './Clock'
+import Clip from './Clip'
 
 /** Bumpkit
 */
@@ -16,6 +17,7 @@ class Bumpkit extends Store {
     super()
     this.context = new AudioContext()
     this.timer = null
+    this.clips = []
     this.setState({
       playing: false,
       tempo,
@@ -24,16 +26,23 @@ class Bumpkit extends Store {
     })
     this.clock = new Clock(this.state, this.context)
     this.subscribe(this.clock.setState)
-    this.clock.sync(this.step)
+    this.clock.sync(this.tick.bind(this))
+
+    this.tick = this.tick.bind(this)
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
     this.playPause = this.playPause.bind(this)
     this.stop = this.stop.bind(this)
     this.kill = this.kill.bind(this)
+    this.createClip = this.createClip.bind(this)
   }
 
-  step ({ step, when }) {
+  tick ({ step, when }) {
     // console.log('Bumpkit', step, when)
+    // console.log(this.clips)
+    this.clips.forEach((clip) => {
+      clip.play({ step, when })
+    })
   }
 
   play () {
@@ -61,6 +70,13 @@ class Bumpkit extends Store {
 
   kill () {
     delete this.context
+  }
+
+  createClip (pattern = []) {
+    const clip = new Clip()
+    clip.pattern = pattern
+    this.clips.push(clip)
+    return clip
   }
 }
 

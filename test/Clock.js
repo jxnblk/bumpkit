@@ -67,7 +67,7 @@ describe('Clock', () => {
       setTimeout(() => {
         expect(clock.currentTime).toBeGreaterThan(0)
         done()
-      }, 100)
+      }, 400)
     })
 
     it('should not have a timer', () => {
@@ -82,7 +82,7 @@ describe('Clock', () => {
       setTimeout(() => {
         expect(index).toEqual(0)
         done()
-      }, 100)
+      }, 200)
     })
   })
 

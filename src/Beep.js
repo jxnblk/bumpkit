@@ -15,7 +15,7 @@ class Beep {
 
   play (when) {
     const osc = this.context.createOscillator()
-    osc.type = 0
+    osc.type = 'sine'
     osc.frequency.value = this.frequency
     osc.connect(this.output)
     osc.start(when)

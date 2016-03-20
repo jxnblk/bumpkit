@@ -42,7 +42,6 @@ class Clock extends Store {
     const { playing, step, loop } = this.state
 
     if (!playing) {
-      console.log('scheduler not playing')
       const { timer } = this
       window.clearTimeout(timer)
       return false
@@ -52,7 +51,7 @@ class Clock extends Store {
       this.tick({ step, when: this.nextTime })
       this.nextTime += this.stepDuration
       this.setState({ step: step + 1 })
-      if (loop && step >= loop) {
+      if (loop && step >= loop - 1) {
         this.setState({ step: 0 })
       }
     }
@@ -65,7 +64,6 @@ class Clock extends Store {
   }
 
   tick ({ step, when }) {
-    console.log('tick', step)
     this.callbacks.forEach((callback) => {
       callback({ step, when })
     })

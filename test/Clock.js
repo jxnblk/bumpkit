@@ -89,7 +89,7 @@ describe('Clock', () => {
   context('when playing', () => {
     beforeEach(() => {
       clock.setState({ playing: true })
-      clock.scheduler()
+      clock.start()
     })
 
     it('should have a timer', () => {

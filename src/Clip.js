@@ -1,8 +1,8 @@
 
 class Clip {
-  constructor () {
+  constructor (pattern = []) {
     this.output = null
-    this.pattern = []
+    this.pattern = pattern
     this.active = true
     this.connect = this.connect.bind(this)
     this.play = this.play.bind(this)
@@ -15,7 +15,6 @@ class Clip {
 
   play ({ when, step }) {
     if (this.active && this.pattern[step]) {
-      console.log('Clip play', this.pattern, when, step, this.active)
       this.output.play(when)
     }
   }

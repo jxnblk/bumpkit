@@ -47,14 +47,13 @@ describe('Bumpkit', () => {
     let beep
     const beeper = ({ when, step }) => {
       if (step % 4 === 0) {
-        // beep.play(when)
+        beep.play(when)
       }
     }
 
     it('should play', () => {
       expect(() => {
         bump.play()
-        bump.stop()
       }).toNotThrow()
     })
 
@@ -77,9 +76,8 @@ describe('Bumpkit', () => {
       setTimeout(() => {
         bump.stop()
         done()
-      }, 500)
+      }, 200)
     })
-
   })
 
   describe('pause()', () => {
@@ -109,37 +107,6 @@ describe('Bumpkit', () => {
       bump.playPause()
       expect(bump.state.playing).toEqual(false)
     })
-  })
-
-  describe('createClip()', () => {
-    let clip, beep
-    it('should create a new clip', () => {
-      expect(() => {
-        bump.clock.setState({ loop: 8 })
-        clip = bump.createClip([0, 0, 1, 0, 0, 0, 1, 0])
-        beep = new Beep(bump.context)
-        clip.connect(beep)
-      }).toNotThrow()
-    })
-
-    it('should add it to the clips property', () => {
-      expect(bump.clips.length).toEqual(1)
-    })
-
-    it('should return a Clip instance', () => {
-      expect(clip).toBeA(Clip)
-    })
-
-    it('should play the clip', (done) => {
-      expect(() => {
-        // bump.play()
-        bump.stop()
-        setTimeout(() => {
-          done()
-        }, 100)
-      }).toNotThrow()
-    })
-
   })
 
   describe('kill()', () => {

@@ -2,24 +2,23 @@
 import Clip from './Clip'
 import Buffer from './Buffer'
 
-
-class Sampler extends Buffer {
+class Sampler extends Clip {
   constructor (context) {
-    super(context)
+    super()
+    this.context = context
     this.duration = .5
-    this.clip = new Clip()
     this.output = this.context.destination
-    this.clip.connect(this)
-    this.pattern = this.clip.pattern
-    this.toggle = this.clip.toggle
-    this.play = this.play.bind(this)
+
+    this.buffer = new Buffer(context)
+    this.sample = this.buffer.sample
+    this.decode = this.buffer.decode.bind(this)
+    this.load = this.buffer.load.bind(this)
   }
 
-  play (when) {
-    console.log('trigger', when, this.duration)
+  player ({ when }) {
     const source = this.context.createBufferSource()
     source.connect(this.output)
-    source.buffer = this.buffer
+    source.buffer = this.buffer.sample
     source.start(when)
     source.stop(when + this.context.currentTime + this.duration)
   }

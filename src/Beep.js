@@ -1,19 +1,18 @@
 
-class Beep {
+import Clip from './Clip'
+
+class Beep extends Clip {
   constructor (context = {}) {
+    super()
     this.context = context
     this.duration = .0625
     this.frequency = 256
     this.output = this.context.destination
-    this.connect = this.connect.bind(this)
-    this.play = this.play.bind(this)
+    this.player = this.player.bind(this)
   }
 
-  connect (node) {
-    this.output = node
-  }
 
-  play (when) {
+  player ({ when }) {
     const osc = this.context.createOscillator()
     osc.type = 'sine'
     osc.frequency.value = this.frequency

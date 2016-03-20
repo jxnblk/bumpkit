@@ -2,6 +2,8 @@
 import Store from './Store'
 import Clock from './Clock'
 import Clip from './Clip'
+import Beep from './Beep'
+import Sampler from './Sampler'
 
 /** Bumpkit
 */
@@ -20,7 +22,9 @@ class Bumpkit extends Store {
       playing: false,
       tempo,
       resolution,
-      signature
+      signature,
+      step: 0,
+      tracks: []
     })
     this.clock = new Clock(this.state, this.context)
     this.subscribe(this.clock.setState)
@@ -32,10 +36,17 @@ class Bumpkit extends Store {
     this.playPause = this.playPause.bind(this)
     this.stop = this.stop.bind(this)
     this.kill = this.kill.bind(this)
+
+    this.createBeep = this.createBeep.bind(this)
+    this.createSampler = this.createSampler.bind(this)
   }
 
   tick ({ step, when }) {
-    // tracks.play()
+    const { tracks } = this.state
+    this.setState({ step })
+    tracks.forEach((t) => {
+      t.play({ step, when })
+    })
   }
 
   play () {
@@ -63,6 +74,27 @@ class Bumpkit extends Store {
 
   kill () {
     delete this.context
+  }
+
+  createBeep () {
+    const { tracks } = this.state
+    const beep = new Beep(this.context)
+    this.clock.sync(beep.play)
+
+    tracks.push(beep)
+    this.setState({ tracks })
+    return beep
+  }
+
+  createSampler (url) {
+    const { tracks } = this.state
+    const sampler = new Sampler(this.context)
+    sampler.load(url)
+    this.clock.sync(sampler.play)
+
+    tracks.push(sampler)
+    this.setState({ tracks })
+    return sampler
   }
 
 }

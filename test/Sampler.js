@@ -37,6 +37,10 @@ describe('Sampler', () => {
     expect(sampler.load).toBeA('function')
   })
 
+  it('should have a decode method', () => {
+    expect(sampler.decode).toBeA('function')
+  })
+
   it('should load a sample', (done) => {
     expect(() => {
       sampler.load(sample)
@@ -46,8 +50,8 @@ describe('Sampler', () => {
     }).toNotThrow()
   })
 
-  it('should have a buffer', () => {
-    expect(sampler.buffer).toBeAn(AudioBuffer)
+  it('should have a sample', () => {
+    expect(sampler.buffer.sample).toBeAn(AudioBuffer)
   })
 })
 

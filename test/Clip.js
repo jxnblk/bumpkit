@@ -39,7 +39,7 @@ describe('Clip', () => {
       expect(() => {
         bump = new Bumpkit()
         beep = new Beep(bump.context)
-        clip.connect(beep)
+        clip.output = beep
       }).toNotThrow()
     })
 

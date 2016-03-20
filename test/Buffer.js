@@ -22,8 +22,8 @@ describe('Buffer', () => {
     }).toNotThrow()
   })
 
-  it('should have a buffer', () => {
-    expect(buffer.buffer).toBeAn(AudioBuffer)
+  it('should have a sample', () => {
+    expect(buffer.sample).toBeAn(AudioBuffer)
   })
 })
 

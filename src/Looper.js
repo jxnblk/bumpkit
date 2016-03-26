@@ -11,7 +11,7 @@ const defaultOptions = {
 }
 
 class Looper extends Sampler {
-  constructor ({ subscribe, context, clock, getState }, options = {}) {
+  constructor ({ subscribe, context, sync, getState }, options = {}) {
     super(context, { url: options.url })
     const {
       bpm,
@@ -20,7 +20,6 @@ class Looper extends Sampler {
       loop
     } = Object.assign({}, defaultOptions, options)
 
-    this.clock = clock
     this.getState = getState
     this.active = true
 
@@ -31,7 +30,7 @@ class Looper extends Sampler {
     this.loop = true //loop
     this.loopLength = loop
 
-    this.clock.sync(this.shouldPlay.bind(this))
+    sync(this.shouldPlay.bind(this))
 
     this._previousTempo = getState().tempo
 
@@ -40,7 +39,7 @@ class Looper extends Sampler {
       if (this.playing && this._previousTempo !== tempo) {
         console.log('change tempo: ', this._previousTempo, tempo)
 
-        const { currentTime } = this.clock
+        const { currentTime } = this.context
         const { duration } = this.buffer.audio
         const pitchDiff = tempo / this._previousTempo
         console.log('pitch diff', pitchDiff)

@@ -22,7 +22,6 @@ class Clock extends Store {
     this.tick = this.tick.bind(this)
     this.sync = this.sync.bind(this)
     this.unsync = this.unsync.bind(this)
-    this.nextTime = 0
   }
 
   get stepDuration () {

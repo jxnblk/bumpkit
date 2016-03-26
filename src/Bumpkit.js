@@ -1,6 +1,6 @@
 
 import Store from './Store'
-import Clock from './Clock'
+import Clock from './XClock'
 import Clip from './Clip'
 import Beep from './Beep'
 import Sampler from './Sampler'
@@ -18,19 +18,18 @@ class Bumpkit extends Store {
     super()
     console.log('init', tempo)
     this.context = new AudioContext()
+    this.followers = []
+    this.clock = new Clock(this)
+    this.clock.sync(this.tick.bind(this))
     this.setState({
       playing: false,
       tempo,
       resolution,
       signature,
-      step: 1,
-      tracks: []
+      step: 0
     })
-    this.clock = new Clock(this.state, this.context)
-    this.subscribe(this.clock.setState)
-    this.clock.sync(this.tick.bind(this))
 
-    this.tick = this.tick.bind(this)
+    this.sync = this.sync.bind(this)
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
     this.playPause = this.playPause.bind(this)
@@ -41,11 +40,13 @@ class Bumpkit extends Store {
   }
 
   tick ({ step, when }) {
-    const { tracks } = this.state
-    this.setState({ step })
-    tracks.forEach((t) => {
-      t.play({ step, when })
+    this.followers.forEach((follower) => {
+      follower({ step, when })
     })
+  }
+
+  sync (follower) {
+    this.followers.push(follower)
   }
 
   play () {
@@ -55,6 +56,7 @@ class Bumpkit extends Store {
 
   pause () {
     this.setState({ playing: false })
+    this.clock.stop()
   }
 
   playPause () {
@@ -67,6 +69,7 @@ class Bumpkit extends Store {
   }
 
   stop () {
+    this.clock.stop()
     this.setState({ playing: false })
     this.setState({ step: 1 })
   }
@@ -77,13 +80,11 @@ class Bumpkit extends Store {
   }
 
   createClip (Inst, opts = {}) {
-    const { tracks } = this.state
     const instrument = new Inst(this.context, opts)
     const clip = new Clip(instrument)
-    this.clock.sync(clip.play)
+    // this.clock.sync(clip.play)
+    this.sync(clip.play)
 
-    tracks.push(clip)
-    this.setState({ tracks })
     return clip
   }
 }

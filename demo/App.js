@@ -24,6 +24,10 @@ import {
   Looper
 } from '../src'
 
+// Test clock
+
+import XClock from '../src/XClock'
+
 class App extends React.Component {
   constructor () {
     super()
@@ -70,12 +74,12 @@ class App extends React.Component {
       tempo: 180
     })
 
-    const sampler = this.bump.createClip(Sampler, { url: kick })
+    const sampler = this.bump.createClip(Sampler, { url: drums })
     const beep = this.bump.createClip(Beep)
     const b2 = this.bump.createClip(Beep)
 
     const loop1 = new Looper(this.bump, {
-      url: v4,
+      url: drums,
       length: 16,
       bpm: 200,
       start: 1,
@@ -87,17 +91,17 @@ class App extends React.Component {
       url: drums,
       length: 64,
       bpm: 160,
-      start: 1,
+      start: 0,
       end: 64,
       loop: 64,
     })
     const loop3 = new Looper(this.bump, {
       url: '/demo/samples/chords-4.mp3',
-      length: 64,
+      length: 8,
       bpm: 160,
-      start: 1,
-      end: 64,
-      loop: 64,
+      start: 0,
+      end: 16,
+      loop: 12,
     })
 
     sampler.pattern = [
@@ -136,8 +140,8 @@ class App extends React.Component {
     beep.instrument.volume = 1/32
     b2.instrument.volume = 1/32
 
-    beep.active = true
-    b2.active = true
+    beep.active = false
+    b2.active = false
     loop1.active = false
     loop2.active = true
 
@@ -187,7 +191,7 @@ class App extends React.Component {
             </Flex>
           ))}
         </Block>
-        <Progress max={1} value={(step + 0) / 15} />
+        <Progress max={1} value={(step + 0) / 63} />
         <Pre children={`${Math.floor(step / 4) + 1}.${step % 4 + 1}`} />
         <Divider />
         <Pre children={JSON.stringify(this.state, null, 2)} />

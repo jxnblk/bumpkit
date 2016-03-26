@@ -16,7 +16,6 @@ class Gain {
   }
 
   connect (node) {
-    console.log('Gain connect', this.node, this.node.connect)
     this.node.connect(node)
   }
 }

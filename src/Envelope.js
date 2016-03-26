@@ -39,7 +39,6 @@ class Envelope extends Gain {
     const { when } = this.options
 
     points.forEach((p) => {
-      console.log('envelope', when + p.when, p.value)
       this.gain.linearRampToValueAtTime(p.value, when + p.when)
     })
     this._curve = points

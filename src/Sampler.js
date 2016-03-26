@@ -1,11 +1,9 @@
 
-import Clip from './Clip'
 import Buffer from './Buffer'
 import Envelope from './Envelope'
 
-class Sampler extends Clip {
+class Sampler {
   constructor (context, { url } = {}) {
-    super()
     this.context = context
     this.duration = .5
     this.output = this.context.destination
@@ -17,9 +15,11 @@ class Sampler extends Clip {
     if (url) {
       this.buffer.load(url)
     }
+
+    this.play = this.play.bind(this)
   }
 
-  player ({ when }) {
+  play ({ when }) {
     const { duration } = this
     const source = this.context.createBufferSource()
     const envelope = new Envelope(this.context, { when, duration })

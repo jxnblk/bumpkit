@@ -5,7 +5,10 @@ A DAW-inpsired library for the Web Audio API
 
 ---
 
+- [x] Store
 - [x] Bumpkit
+- [x] Clock
+  - check tempo change handling
 - [x] Beep
 - [x] Gain
 - [x] Envelope
@@ -20,7 +23,10 @@ A DAW-inpsired library for the Web Audio API
   - props
     - url
     - duration
+- [ ] Looper extends Sampler
 - [ ] Clip
+  - constructor(instrument, pattern)
+  - should always have an Instrument?
 - [ ] Track
   - Combines instrument and clip
   - Bumpkit createTrack method

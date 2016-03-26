@@ -8,11 +8,11 @@ class Store {
   constructor (state = {}) {
     this._state = state
     this.listeners = []
+
     this.setState = this.setState.bind(this)
     this.getState = this.getState.bind(this)
     this.subscribe = this.subscribe.bind(this)
     this.unsubscribe = this.unsubscribe.bind(this)
-
   }
 
   setState (state) {

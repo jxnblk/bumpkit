@@ -1,16 +1,20 @@
 
 class Clip {
-  constructor (pattern = []) {
-    this.output = null
+  constructor (instrument, pattern = []) {
+    this.instrument = instrument
     this.pattern = pattern
+
     this.active = true
+
     this.play = this.play.bind(this)
     this.toggle = this.toggle.bind(this)
   }
 
   play ({ when, step }) {
-    if (this.active && this.pattern[step]) {
-      this.player && this.player({ when, step })
+    const { instrument, active, pattern } = this
+
+    if (instrument && active && pattern[step]) {
+      instrument.play({ when })
     }
   }
 

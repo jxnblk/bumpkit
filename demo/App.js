@@ -10,6 +10,7 @@ import {
   Input,
   ButtonOutline,
   Progress,
+  Slider,
   Divider,
   Pre,
 } from 'rebass'
@@ -32,12 +33,17 @@ class App extends React.Component {
     this.bump = new Bumpkit()
     this.bump.subscribe(this.update.bind(this))
 
+    this.handleChange = this.handleChange.bind(this)
     this.toggleStep = this.toggleStep.bind(this)
   }
 
   update (state) {
-    // console.log('update', state)
     this.setState(state)
+  }
+
+  handleChange (e) {
+    const { name, value } = e.target
+    this.bump.setState({ [name]: value })
   }
 
   toggleStep (i, j) {
@@ -64,7 +70,7 @@ class App extends React.Component {
       1, 0, 0, 0, 1, 0, 0, 0,
       1, 0, 0, 0, 1, 0, 0, 0,
     ]
-    beep.frequency = 512
+    beep.instrument.frequency = 512
     beep.pattern = [
       0, 0, 1, 0, 0, 0, 1, 0,
       0, 0, 1, 0, 0, 0, 1, 0,
@@ -76,12 +82,19 @@ class App extends React.Component {
   }
 
   render () {
-    const { playing, step, tracks } = this.state
+    const { tempo, playing, step, tracks } = this.state
 
     return (
       <Container>
         <PageHeader
           heading='Bumpkit Demo' />
+        <Slider
+          label={`Tempo ${tempo} bpm`}
+          name='tempo'
+          min={32}
+          max={256}
+          value={tempo}
+          onChange={this.handleChange} />
         <Button
           onClick={this.bump.playPause}
           children={playing ? 'Pause' : 'Play'} />

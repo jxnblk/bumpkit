@@ -1,19 +1,17 @@
 
-import Clip from './Clip'
+// import Clip from './Clip'
 import Envelope from './Envelope'
 
-class Beep extends Clip {
+class Beep {
   constructor (context = {}) {
-    super()
     this.context = context
     this.duration = .0625
     this.frequency = 256
     this.output = this.context.destination
-    this.player = this.player.bind(this)
+    this.play = this.play.bind(this)
   }
 
-  player ({ when }) {
-    console.log('Beep when', when)
+  play ({ when }) {
     const { duration } = this
     const osc = this.context.createOscillator()
     const envelope = new Envelope(this.context, { when, duration })

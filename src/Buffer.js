@@ -21,6 +21,7 @@ class Buffer {
   }
 
   load (url) {
+    this.url = url
     return axios.get(url, {
         responseType: 'arraybuffer'
       })

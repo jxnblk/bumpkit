@@ -13,7 +13,8 @@ class Clip {
   play ({ when, step }) {
     const { instrument, active, pattern } = this
 
-    if (instrument && active && pattern[step]) {
+    if (instrument && active && pattern[step - 1]) {
+      console.log('play', step)
       instrument.play({ when })
     }
   }

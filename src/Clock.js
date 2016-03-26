@@ -9,13 +9,13 @@ class Clock extends Store {
     super(state)
     this.context = context
     this.callbacks = []
-    this.scheduleAhead = .1
     this.lookahead = 25
+    this.scheduleAhead = this.lookahead / 1000 * 4 // 0.1
     this.nextTime = 0
     this.timer = null
     this.setState(assign({
       tempo: 120,
-      step: 0
+      step: 1
     }, state))
     this.scheduler = this.scheduler.bind(this)
     this.start = this.start.bind(this)
@@ -42,17 +42,16 @@ class Clock extends Store {
     const { playing, step, loop } = this.state
 
     if (!playing) {
-      const { timer } = this
-      window.clearTimeout(timer)
+      clearTimeout(this.timer)
       return false
     }
 
     while (this.nextTime < this.currentTime + this.scheduleAhead) {
       this.tick({ step, when: this.nextTime })
-      this.nextTime += this.stepDuration
       this.setState({ step: step + 1 })
-      if (loop && step >= loop - 1) {
-        this.setState({ step: 0 })
+      this.nextTime += this.stepDuration
+      if (loop && step >= loop) {
+        this.setState({ step: 1 })
       }
     }
     this.timer = setTimeout(this.scheduler, this.lookahead)

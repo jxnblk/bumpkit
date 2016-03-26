@@ -11,6 +11,8 @@ import {
   ButtonOutline,
   Progress,
   Slider,
+  Toolbar,
+  Space,
   Divider,
   Pre,
 } from 'rebass'
@@ -63,17 +65,39 @@ class App extends React.Component {
     const v4 = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/vocal-4.mp3'
     const drums = '/demo/samples/drums-1.mp3'
 
+    this.bump.setState({
+      loop: 64,
+      tempo: 180
+    })
+
     const sampler = this.bump.createClip(Sampler, { url: kick })
     const beep = this.bump.createClip(Beep)
     const b2 = this.bump.createClip(Beep)
 
-    const looper = new Looper(this.bump, {
-      url: drums,
+    const loop1 = new Looper(this.bump, {
+      url: v4,
       length: 16,
+      bpm: 200,
+      start: 1,
+      end: 16,
+      loop: 6,
+    })
+
+    const loop2 = new Looper(this.bump, {
+      url: drums,
+      length: 64,
       bpm: 160,
-      start: 0,
-      end: 32,
-      loop: 32,
+      start: 1,
+      end: 64,
+      loop: 64,
+    })
+    const loop3 = new Looper(this.bump, {
+      url: '/demo/samples/chords-4.mp3',
+      length: 64,
+      bpm: 160,
+      start: 1,
+      end: 64,
+      loop: 64,
     })
 
     sampler.pattern = [
@@ -86,8 +110,11 @@ class App extends React.Component {
     sampler.instrument.duration = 0.5
 
     beep.instrument.frequency = 768
-    beep.instrument.volume = 0.125
     beep.pattern = [
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
       0, 0, 0, 0,  0, 0, 0, 0,
       1, 0, 0, 0,  0, 0, 0, 0,
       0, 0, 0, 0,  0, 0, 0, 0,
@@ -95,18 +122,25 @@ class App extends React.Component {
     ]
 
     b2.instrument.frequency = 256
-    b2.instrument.volume = .125
     b2.pattern = [
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
       1, 0, 0, 0,  0, 0, 0, 0,
       0, 0, 0, 0,  0, 0, 0, 0,
       1, 0, 0, 0,  0, 0, 0, 0,
       0, 0, 0, 0,  0, 0, 0, 0,
     ]
 
-    this.bump.setState({
-      loop: 32,
-      tempo: 140
-    })
+    beep.instrument.volume = 1/32
+    b2.instrument.volume = 1/32
+
+    beep.active = true
+    b2.active = true
+    loop1.active = false
+    loop2.active = true
+
   }
 
   render () {
@@ -123,13 +157,19 @@ class App extends React.Component {
           max={256}
           value={tempo}
           onChange={this.handleChange} />
-        <Button
-          onClick={this.bump.playPause}
-          children={playing ? 'Pause' : 'Play'} />
-        <Button
-          backgroundColor='red'
-          onClick={this.kill.bind(this)}
-          children='KILL' />
+        <Toolbar>
+          <Button
+            onClick={this.bump.playPause}
+            children={playing ? 'Pause' : 'Play'} />
+          <Button
+            onClick={this.bump.stop}
+            children='Stop' />
+          <Space auto />
+          <Button
+            backgroundColor='red'
+            onClick={this.kill.bind(this)}
+            children='KILL' />
+        </Toolbar>
         <Block py={2}>
           {tracks.map((track, i) => (
             <Flex key={i} justify='space-between'>
@@ -141,8 +181,8 @@ class App extends React.Component {
                   }}
                   rounded={false}
                   onClick={this.toggleStep(i, j)}
-                  backgroundColor={step === j ? 'red' : (s ? 'blue' : 'gray')}
-                  children={j} />
+                  backgroundColor={step === j + 1 ? 'red' : (s ? 'blue' : 'gray')}
+                  children={j + 1} />
               ))}
             </Flex>
           ))}

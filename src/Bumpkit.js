@@ -16,13 +16,14 @@ class Bumpkit extends Store {
     signature = 4/4
   } = {}) {
     super()
+    console.log('init', tempo)
     this.context = new AudioContext()
     this.setState({
       playing: false,
       tempo,
       resolution,
       signature,
-      step: 0,
+      step: 1,
       tracks: []
     })
     this.clock = new Clock(this.state, this.context)
@@ -67,7 +68,7 @@ class Bumpkit extends Store {
 
   stop () {
     this.setState({ playing: false })
-    this.clock.setState({ step: 0 })
+    this.setState({ step: 1 })
   }
 
   kill () {

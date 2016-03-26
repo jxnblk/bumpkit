@@ -25,7 +25,6 @@ class Beep {
     osc.connect(gain.node)
     gain.connect(envelope.node)
     envelope.connect(this.output)
-    console.log('volume', this.volume, gain.level)
 
     osc.start(when)
     osc.stop(when + this.duration)

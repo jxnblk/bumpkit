@@ -5,11 +5,10 @@ import Clip from './Clip'
 import Beep from './Beep'
 import Sampler from './Sampler'
 
-/** Bumpkit
-*/
 
 const AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext
 
+/** Bumpkit */
 class Bumpkit extends Store {
   constructor ({
     tempo = 120,
@@ -38,8 +37,6 @@ class Bumpkit extends Store {
     this.kill = this.kill.bind(this)
 
     this.createClip = this.createClip.bind(this)
-    this.createBeep = this.createBeep.bind(this)
-    this.createSampler = this.createSampler.bind(this)
   }
 
   tick ({ step, when }) {
@@ -88,21 +85,7 @@ class Bumpkit extends Store {
     this.setState({ tracks })
     return clip
   }
-
-  createBeep () {
-    return this.createClip(Beep)
-  }
-
-  createSampler (url) {
-    return this.createClip(Sampler, { url })
-  }
 }
 
 export default Bumpkit
-
-// ---- ---- ---- ----
-// - trigger ()
-// - buffers {}
-// - Buffers
-//   - loadBuffers
 

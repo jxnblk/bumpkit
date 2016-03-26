@@ -19,8 +19,7 @@ import {
   Bumpkit,
   Beep,
   Sampler,
-  Buffer,
-  Clip
+  Looper
 } from '../src'
 
 class App extends React.Component {
@@ -62,22 +61,51 @@ class App extends React.Component {
   componentDidMount () {
     const kick = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/kick.mp3'
     const v4 = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/vocal-4.mp3'
+    const drums = '/demo/samples/drums-1.mp3'
 
-    const sampler = this.bump.createSampler(kick)
-    const beep = this.bump.createBeep()
+    const sampler = this.bump.createClip(Sampler, { url: kick })
+    const beep = this.bump.createClip(Beep)
+    const b2 = this.bump.createClip(Beep)
+
+    const looper = new Looper(this.bump, {
+      url: drums,
+      length: 16,
+      bpm: 160,
+      start: 0,
+      end: 32,
+      loop: 32,
+    })
 
     sampler.pattern = [
-      1, 0, 0, 0, 1, 0, 0, 0,
-      1, 0, 0, 0, 1, 0, 0, 0,
+      // 1, 0, 0, 0, 0, 0, 0, 0,
+      // 1, 0, 0, 0, 0, 0, 0, 0,
+      // 1, 0, 0, 0, 0, 0, 0, 0,
+      // 1, 0, 0, 0, 0, 0, 0, 0,
     ]
-    beep.instrument.frequency = 512
+    sampler.instrument.pitch = 0.875
+    sampler.instrument.duration = 0.5
+
+    beep.instrument.frequency = 768
+    beep.instrument.volume = 0.125
     beep.pattern = [
-      0, 0, 1, 0, 0, 0, 1, 0,
-      0, 0, 1, 0, 0, 0, 1, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
     ]
+
+    b2.instrument.frequency = 256
+    b2.instrument.volume = .125
+    b2.pattern = [
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+      1, 0, 0, 0,  0, 0, 0, 0,
+      0, 0, 0, 0,  0, 0, 0, 0,
+    ]
+
     this.bump.setState({
-      loop: 16,
-      tempo: 96
+      loop: 32,
+      tempo: 140
     })
   }
 

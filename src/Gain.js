@@ -15,6 +15,14 @@ class Gain {
     return this.node.gain
   }
 
+  get level () {
+    return this.node.gain.value
+  }
+
+  set level (val) {
+    this.node.gain.value = val
+  }
+
   connect (node) {
     this.node.connect(node)
   }

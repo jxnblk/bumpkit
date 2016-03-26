@@ -37,6 +37,7 @@ class Bumpkit extends Store {
     this.stop = this.stop.bind(this)
     this.kill = this.kill.bind(this)
 
+    this.createTrack = this.createTrack.bind(this)
     this.createBeep = this.createBeep.bind(this)
     this.createSampler = this.createSampler.bind(this)
   }
@@ -73,30 +74,27 @@ class Bumpkit extends Store {
   }
 
   kill () {
+    this.context.close()
     delete this.context
   }
 
-  createBeep () {
+  createTrack (Inst, opts = {}) {
     const { tracks } = this.state
-    const beep = new Beep(this.context)
-    this.clock.sync(beep.play)
+    const inst = new Inst(this.context, opts)
+    this.clock.sync(inst.play)
 
-    tracks.push(beep)
+    tracks.push(inst)
     this.setState({ tracks })
-    return beep
+    return inst
+  }
+
+  createBeep () {
+    return this.createTrack(Beep)
   }
 
   createSampler (url) {
-    const { tracks } = this.state
-    const sampler = new Sampler(this.context)
-    sampler.load(url)
-    this.clock.sync(sampler.play)
-
-    tracks.push(sampler)
-    this.setState({ tracks })
-    return sampler
+    return this.createTrack(Sampler, { url })
   }
-
 }
 
 export default Bumpkit

@@ -48,6 +48,11 @@ class App extends React.Component {
     }
   }
 
+  kill () {
+    console.log('K I L L')
+    this.bump.kill()
+  }
+
   componentDidMount () {
     const kick = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/kick.mp3'
     const v4 = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/vocal-4.mp3'
@@ -80,6 +85,10 @@ class App extends React.Component {
         <Button
           onClick={this.bump.playPause}
           children={playing ? 'Pause' : 'Play'} />
+        <Button
+          backgroundColor='red'
+          onClick={this.kill.bind(this)}
+          children='KILL' />
         <Block py={2}>
           {tracks.map((track, i) => (
             <Flex key={i} justify='space-between'>

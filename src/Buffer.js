@@ -1,11 +1,10 @@
 
 import axios from 'axios'
-import Clip from './Clip'
 
 class Buffer {
   constructor (context) {
     this.context = context
-    this.sample = null
+    this.audio = null
     this.load = this.load.bind(this)
   }
 
@@ -13,7 +12,7 @@ class Buffer {
     const { context } = this
     return context.decodeAudioData(data)
       .then((buffer) => {
-        this.sample = buffer
+        this.audio = buffer
         return buffer
       })
       .catch((err) => {

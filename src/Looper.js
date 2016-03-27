@@ -13,6 +13,7 @@ class Looper extends Sampler {
     bpm = 120,
     start = 0,
     loop = 16,
+    active,
     url
   } = {}) {
     super(context, { url })
@@ -20,7 +21,7 @@ class Looper extends Sampler {
     log.info('Looper', { subscribe, context, sync, getState }, { bpm, start, loop, url })
 
     this.getState = getState
-    this.active = true
+    this.active = typeof active !== 'undefined' ? active : true
     this._previousTempo = getState().tempo
 
     // Sample properties
@@ -79,6 +80,10 @@ class Looper extends Sampler {
 
     if (active && should) {
       this.play({ when })
+    }
+    if (!active && should && this.playing) {
+      log.info('stop playing loop')
+      this.playing.stop(when)
     }
   }
 }

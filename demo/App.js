@@ -23,9 +23,9 @@ import {
 import Icon from 'react-geomicons'
 import log from 'loglevel'
 
-// log.setLevel('info')
-
-import Bumpkit from '../src'
+import bk from './bumpkit'
+import Transport from './Transport'
+import Tracks from './Tracks'
 
 
 class App extends React.Component {
@@ -33,15 +33,17 @@ class App extends React.Component {
     super()
     this.state = {
       log: 'info',
-      playing: null,
-      tracks: []
+      step: 0,
+      loop: 32
     }
-    this.bump = new Bumpkit({ tempo: 160 })
-    this.bump.subscribe(this.update.bind(this))
-
     this.handleBumpChange = this.handleBumpChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.toggleStep = this.toggleStep.bind(this)
+  }
+
+  componentDidMount () {
+    const state = bk.getState()
+    this.setState(state)
+    bk.subscribe(this.update.bind(this))
   }
 
   update (state) {
@@ -50,7 +52,7 @@ class App extends React.Component {
 
   handleBumpChange (e) {
     const { name, value } = e.target
-    this.bump.setState({ [name]: value })
+    bk.setState({ [name]: value })
   }
 
   handleChange (e) {
@@ -60,107 +62,17 @@ class App extends React.Component {
     })
   }
 
-  toggleStep (i, j) {
-    return (e) => {
-      const { tracks } = this.state
-      tracks[i].pattern[j] = 1 - tracks[i].pattern[j]
-      this.setState({ tracks })
-    }
-  }
-
-  kill () {
-    console.log('K I L L')
-    this.bump.kill()
-  }
-
-  componentDidMount () {
-    this.bump.setState({
-      loop: 64,
-      tempo: 96
-    })
-    // url: '/demo/samples/forever/last-forever-vocal.mp3',
-    // url: '/demo/samples/forever/last-forever-vocal-02.mp3',
-    // url: '/demo/samples/forever/last-forever-vocal-03.mp3',
-    // url: '/demo/samples/forever/last-forever-vocal-fill.mp3',
-
-    const loop1 = new Bumpkit.Looper(this.bump, {
-      url: '/demo/samples/forever/last-forever-bass-01.mp3',
-      bpm: 96,
-      loop: 32
-    })
-    const loop2 = new Bumpkit.Looper(this.bump, {
-      url: '/demo/samples/forever/last-forever-beat-01.mp3',
-      bpm: 96,
-      loop: 16
-    })
-    const loop3 = new Bumpkit.Looper(this.bump, {
-      url: '/demo/samples/forever/last-forever-vocal.mp3',
-      bpm: 96,
-      loop: 16
-    })
-
-    loop1.active = true
-    loop2.active = true
-    loop3.active = true
-  }
-
   render () {
-    const { tempo, playing, step, tracks } = this.state
-    const { position } = this.bump
+    const { tempo, playing, step, loop, tracks } = this.state
+    const { position } = bk
 
     return (
       <div>
-        <Toolbar backgroundColor='black'>
-          <Heading
-            level={1}
-            size={4}
-            children='Bumpkit' />
-          <Space />
-          <NavItem
-            title={playing ? 'Pause' : 'Play'}
-            onClick={this.bump.playPause}>
-            <Icon name={playing ? 'pause' : 'play'} />
-          </NavItem>
-          <Space />
-          <Text small
-            style={{
-              textAlign: 'right',
-              minWidth: 64
-            }}
-            children={position} />
-          <Text small
-            style={{
-              textAlign: 'right',
-              minWidth: 64
-            }}>
-            {tempo} bpm
-          </Text>
-          <Space />
-          <NavItem
-            title='Stop'
-            disabled={!playing}
-            onClick={this.bump.stop}>
-            <Icon name={playing ? 'speakerVolume' : 'speaker'} />
-          </NavItem>
-          <Space auto />
-          <NavItem
-            small
-            color='red'
-            onClick={this.kill.bind(this)}>
-            <Icon name='no' />
-            <Space />
-            KILL
-          </NavItem>
-        </Toolbar>
-        <Progress
-          style={{
-            height: 4,
-            margin: 0,
-            borderRadius: 0
-          }}
-          max={1}
-          value={(step + 0) / 63} />
+        <Transport {...this.state} />
         <Container>
+        <Tracks {...this.state} />
+          <Divider />
+          <Heading children='Debug' />
           <Slider
             fill
             color='blue'
@@ -170,7 +82,6 @@ class App extends React.Component {
             max={128}
             value={tempo}
             onChange={this.handleBumpChange} />
-          <Divider />
           <Select
             name='log'
             label='Log Level'
@@ -181,6 +92,7 @@ class App extends React.Component {
               { children: 'info' },
               { children: 'debug' }
             ]} />
+          <Pre children='App state' />
           <Pre children={JSON.stringify(this.state, null, 2)} />
         </Container>
       </div>

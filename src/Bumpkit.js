@@ -10,10 +10,10 @@ class Bumpkit extends Store {
   constructor ({
     tempo = 120,
     resolution = 16,
-    signature = 4/4
+    loop
   } = {}) {
     super()
-    log.info('Bumpkit', { tempo, resolution, signature })
+    log.info('Bumpkit', { tempo, resolution, loop })
 
     this.context = new AudioContext()
 
@@ -26,8 +26,8 @@ class Bumpkit extends Store {
       playing: false,
       step: 0,
       tempo,
-      resolution,
-      signature
+      loop,
+      resolution
     })
 
     // Bind methods

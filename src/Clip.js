@@ -1,6 +1,9 @@
 
+import log from 'loglevel'
+
 class Clip {
   constructor (instrument, pattern = []) {
+    log.info('Clip', instrument, pattern)
     this.instrument = instrument
     this.pattern = pattern
 
@@ -10,16 +13,18 @@ class Clip {
     this.toggle = this.toggle.bind(this)
   }
 
-  play ({ when, step }) {
+  play ({ step, when }) {
+    log.debug('Clip.play()', { step, when })
     const { instrument, active, pattern } = this
 
     if (instrument && active && pattern[step - 1]) {
-      console.log('play', step)
+      log.debug('Clip.play() should play', step)
       instrument.play({ when })
     }
   }
 
   toggle () {
+    log.info('Clip.toggle()')
     this.active = !this.active
   }
 }

@@ -6,7 +6,7 @@ import Clip from './Clip'
 import Looper from './Looper'
 import Sampler from './Sampler'
 
-log.setLevel('info')
+log.setLevel('silent')
 
 export {
   Bumpkit,

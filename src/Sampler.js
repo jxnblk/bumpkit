@@ -1,8 +1,10 @@
 
+import log from 'loglevel'
 import Buffer from './Buffer'
 
 class Sampler {
   constructor (context, { url, pitch, output } = {}) {
+    log.info('Sampler', context, { url, pitch, output })
     this.context = context
     this.duration = .5
     this.output = output || this.context.destination
@@ -16,8 +18,8 @@ class Sampler {
     if (url) {
       this.buffer.load(url)
         .then((audio) => {
+          log.info(`Buffer.load(${url}) response`, audio)
           this.duration = audio.duration
-          console.log('Buffer loaded', audio)
         })
     }
 
@@ -37,6 +39,7 @@ class Sampler {
   }
 
   play ({ when }) {
+    log.debug('Sampler.play()', { when })
     const { duration } = this
     const source = this.context.createBufferSource()
 

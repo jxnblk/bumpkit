@@ -1,9 +1,11 @@
 
+import log from 'loglevel'
 import Gain from './Gain'
 
 class Envelope extends Gain {
   constructor (context, options = {}) {
     super(context)
+    log.info('Envelope', context, options)
 
     this.options = Object.assign({
       when: 0,
@@ -22,20 +24,23 @@ class Envelope extends Gain {
   }
 
   get options () {
+    log.debug('Envelope get options')
     return this._options
   }
 
   set options (options = {}) {
+    log.debug('Envelope set options', options)
     const { currentTime } = this.context
     this._options = Object.assign({}, this._options, options)
-
   }
 
   get curve () {
+    log.debug('Envelope get curve')
     return this._curve
   }
 
   set curve (points = []) {
+    log.debug('Envelope set curve', points)
     const { when } = this.options
 
     points.forEach((p) => {

@@ -1,9 +1,11 @@
 
+import log from 'loglevel'
 import Envelope from './Envelope'
 import Gain from './Gain'
 
 class Beep {
   constructor (context = {}) {
+    log.info('Beep', context)
     this.context = context
     this.duration = .0625
     this.frequency = 256
@@ -13,6 +15,7 @@ class Beep {
   }
 
   play ({ when }) {
+    log.debug('Beep.play()', { when })
     const { duration } = this
     const osc = this.context.createOscillator()
     const envelope = new Envelope(this.context, { when, duration })

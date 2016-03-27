@@ -70,6 +70,16 @@ class Bumpkit extends Store {
     return this.context.currentTime
   }
 
+  // Human readable position - bar.beat.step
+  get position () {
+    const { step } = this.getState()
+    // To do: handle time signatures/resolutions
+    const bar = Math.floor(step / 16) + 1
+    const beat = Math.floor(step % 16 / 4) + 1
+    const s = step % 4 + 1
+    return `${bar}.${beat}.${s}`
+  }
+
   // Clock
   startClock () {
     this.nextTime = this.currentTime
@@ -101,7 +111,7 @@ class Bumpkit extends Store {
   }
 
   tick ({ step, when }) {
-    log.debug('Bumpkit.tick()', { step, when })
+    log.info('Bumpkit.tick()', { step, when })
     this.setState({ step, when })
     this.followers.forEach((follower) => {
       follower({ step, when })
@@ -128,7 +138,7 @@ class Bumpkit extends Store {
 
   playPause () {
     log.debug('Bumpkit.playPause()')
-    const { playing } = this.state
+    const { playing } = this.getState()
     if (playing) {
       this.pause()
     } else {

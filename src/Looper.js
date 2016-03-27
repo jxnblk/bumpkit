@@ -1,4 +1,5 @@
 
+import log from 'loglevel'
 import Sampler from './Sampler'
 import Envelope from './Envelope'
 
@@ -15,6 +16,7 @@ class Looper extends Sampler {
     url
   } = {}) {
     super(context, { url })
+    log.info('Looper', { subscribe, context, sync, getState }, { bpm, start, loop, url })
 
     this.getState = getState
     this.active = true
@@ -34,11 +36,14 @@ class Looper extends Sampler {
 
   handleTempoChange ({ tempo, playing }) {
     if (this.playing && this._previousTempo !== tempo) {
+      log.debug('Looper.handleTempoChange()', { tempo, playing })
       this.playing.playbackRate.value = this.pitch
       this._previousTempo = tempo
     }
 
+    // To do: Check if this is needed
     if (!playing && this.playing) {
+      log.debug('Looper.handleTempoChange() stop', playing, this.playing)
       this.playing.stop(0)
       this.playing = false
     }
@@ -67,6 +72,7 @@ class Looper extends Sampler {
   }
 
   shouldPlay ({ when, step }) {
+    log.debug('Looper.shouldPlay()', { when, step })
     const { active, start, loop } = this
     const should = start === step % loop
 
@@ -75,7 +81,6 @@ class Looper extends Sampler {
       this.play({ when })
     }
   }
-
 }
 
 export default Looper

@@ -16,6 +16,8 @@ import {
   Divider,
   Pre,
 } from 'rebass'
+import log from 'loglevel'
+log.setLevel('info')
 
 import Bumpkit from '../src'
 
@@ -62,7 +64,7 @@ class App extends React.Component {
     const drums = '/demo/samples/drums-1.mp3'
 
     this.bump.setState({
-      loop: 64,
+      // loop: 64,
       // tempo: 180
     })
 
@@ -141,6 +143,7 @@ class App extends React.Component {
 
   render () {
     const { tempo, playing, step, tracks } = this.state
+    const { position } = this.bump
 
     return (
       <Container>
@@ -186,7 +189,10 @@ class App extends React.Component {
           ))}
         </Block>
         <Progress max={1} value={(step + 0) / 63} />
+        {/*
         <Pre children={`${Math.floor(step / 4) + 1}.${step % 4 + 1}`} />
+        */}
+        <Pre children={position} />
         <Divider />
         <Pre children={JSON.stringify(this.state, null, 2)} />
       </Container>

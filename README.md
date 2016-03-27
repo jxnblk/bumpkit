@@ -25,4 +25,38 @@ A sampler sequencer library for the Web Audio API
 - [ ] Bumpkit convenience methods
 - [ ] Looper pause handling
 
+---
+
+Bumpkit (options) extends Store - state machine
+  - tick()
+  - sync()
+  - play()
+  - pause()
+  - playPause()
+  - stop()
+  - kill()
+  - createClip()
+Clock (bumpkit) - coupled with Bumpkit (tempo, step, loop)
+  - start()
+  - stop()
+  - scheduler()
+  - nextStep()
+  - tick() setState { step, when }
+  - sync(listener)
+Clip (instrument, pattern)
+  - play({ when, step })
+  - toggle()
+Buffer (context)
+Gain (context)
+  - connect()
+Envelope (context, options) extends Gain
+Looper (bumpkit, options)
+  - shouldPlay()
+Beep (context)
+  - play({ when })
+Sampler (context, options)
+  - play({ when })
+
+---
+
 MIT License

@@ -2,20 +2,19 @@
 import Sampler from './Sampler'
 import Envelope from './Envelope'
 
-const defaultOptions = {
-  bpm: 120,
-  start: 0,
-  loop: 16
-}
-
 class Looper extends Sampler {
-  constructor ({ subscribe, context, sync, getState }, options = {}) {
-    super(context, { url: options.url })
-    const {
-      bpm,
-      start,
-      loop
-    } = Object.assign({}, defaultOptions, options)
+  constructor ({
+    subscribe,
+    context,
+    sync,
+    getState
+  }, {
+    bpm = 120,
+    start = 0,
+    loop = 16,
+    url
+  } = {}) {
+    super(context, { url })
 
     this.getState = getState
     this.active = true
@@ -26,10 +25,7 @@ class Looper extends Sampler {
     this.start = start
     this.loop = loop
 
-
     sync(this.shouldPlay.bind(this))
-
-
     subscribe(this.handleTempoChange.bind(this))
 
     // Bind methods

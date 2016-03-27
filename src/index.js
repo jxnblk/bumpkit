@@ -1,9 +1,12 @@
 
+import log from 'loglevel'
 import Bumpkit from './Bumpkit'
 import Beep from './Beep'
 import Clip from './Clip'
 import Looper from './Looper'
 import Sampler from './Sampler'
+
+log.setLevel('info')
 
 export {
   Bumpkit,

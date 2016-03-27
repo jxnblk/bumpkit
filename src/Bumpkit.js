@@ -1,9 +1,7 @@
 
+import log from 'loglevel'
 import Store from './Store'
-import Clock from './Clock'
 import Clip from './Clip'
-import Beep from './Beep'
-import Sampler from './Sampler'
 
 const AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext
 
@@ -15,20 +13,32 @@ class Bumpkit extends Store {
     signature = 4/4
   } = {}) {
     super()
+    log.info('Bumpkit', { tempo, resolution, signature })
 
     this.context = new AudioContext()
+
+    // Clock
+    this.nextTime = 0
+    this.lookahead = 25
     this.followers = []
-    this.clock = new Clock(this)
-    this.clock.sync(this.tick.bind(this))
 
     this.setState({
       playing: false,
+      step: 0,
       tempo,
       resolution,
-      signature,
-      step: 0
+      signature
     })
 
+    // Bind methods
+    // Clock methods
+    this.startClock = this.startClock.bind(this)
+    this.stopClock = this.stopClock.bind(this)
+    this.scheduler = this.scheduler.bind(this)
+    this.nextStep = this.nextStep.bind(this)
+    this.tick = this.tick.bind(this)
+
+    // Transport methods
     this.sync = this.sync.bind(this)
     this.play = this.play.bind(this)
     this.pause = this.pause.bind(this)
@@ -36,30 +46,88 @@ class Bumpkit extends Store {
     this.stop = this.stop.bind(this)
     this.kill = this.kill.bind(this)
 
+    // Convenience methods
     this.createClip = this.createClip.bind(this)
+
+    // Start web audio clock
+    let dummy = this.context.createBufferSource()
+    dummy = null
+  }
+
+  get scheduleAheadTime () {
+    // milliseconds to seconds divided by 4 steps per beat
+    return this.lookahead / 250
+  }
+
+  get stepDuration () {
+    const { tempo } = this.getState()
+    const dur = 60 / tempo / 4
+    // To do: handle different resolutions and time signatures
+    return dur
+  }
+
+  get currentTime () {
+    return this.context.currentTime
+  }
+
+  // Clock
+  startClock () {
+    this.nextTime = this.currentTime
+    this.scheduler()
+  }
+
+  stopClock () {
+    clearTimeout(this.timer)
+  }
+
+  scheduler () {
+    while (this.nextTime < this.currentTime + this.scheduleAheadTime ) {
+      const { step } = this.getState()
+      const when = this.nextTime
+      this.tick({ step, when })
+      this.nextStep()
+    }
+    this.timer = setTimeout(this.scheduler, this.lookahead)
+  }
+
+  nextStep () {
+    let { step, loop } = this.getState()
+    this.nextTime += this.stepDuration
+    step++
+    if (loop && step >= loop) {
+      step = 0
+    }
+    this.setState({ step })
   }
 
   tick ({ step, when }) {
+    log.debug('Bumpkit.tick()', { step, when })
+    this.setState({ step, when })
     this.followers.forEach((follower) => {
       follower({ step, when })
     })
   }
 
   sync (follower) {
+    log.debug('Bumpkit.sync()', follower)
+    // Follow tick only
     this.followers.push(follower)
   }
 
   play () {
+    log.debug('Bumpkit.play()')
     this.setState({ playing: true })
-    this.clock.start()
+    this.startClock()
   }
 
   pause () {
+    log.debug('Bumpkit.pause()')
     this.setState({ playing: false })
-    this.clock.stop()
+    this.stop()
   }
 
   playPause () {
+    log.debug('Bumpkit.playPause()')
     const { playing } = this.state
     if (playing) {
       this.pause()
@@ -69,18 +137,21 @@ class Bumpkit extends Store {
   }
 
   stop () {
-    this.clock.stop()
+    log.debug('Bumpkit.stop()')
+    this.stopClock()
     this.setState({ playing: false })
     this.setState({ step: 0 })
   }
 
   kill () {
+    log.debug('Bumpkit.kill()')
     this.stop()
     this.context.close()
     delete this.context
   }
 
   createClip (Inst, opts = {}) {
+    log.debug('Bumpkit.createClip()', Inst, opts)
     const instrument = new Inst(this.context, opts)
     const clip = new Clip(instrument)
     this.sync(clip.play)

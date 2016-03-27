@@ -25,6 +25,7 @@
     "karma-mocha": "^0.2.2",
     "karma-mocha-reporter": "^2.0.0",
     "karma-webpack": "^1.7.0",
+    "loglevel": "^1.4.0",
     "mocha": "^2.4.5",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",

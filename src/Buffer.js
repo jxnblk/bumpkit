@@ -23,6 +23,7 @@ class Buffer {
         })
     } catch (e) {
       // Handle Safari non-promise based
+      console.log('non Promise buffer')
       if (e instanceof TypeError) {
         return new Promise((resolve, reject) => {
           this.context.decodeAudioData(data, (buffer) => {

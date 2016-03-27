@@ -47,7 +47,9 @@ describe('Bumpkit', () => {
   })
 
   describe('play()', () => {
-    bump.createClip(Beep)
+    before(() => {
+      bump.createClip(Beep)
+    })
 
     it('should play', () => {
       expect(() => {
@@ -62,15 +64,15 @@ describe('Bumpkit', () => {
     it('should start the timer', (done) => {
       setTimeout(() => {
         const { step } = bump.getState()
-        expect(bump.clock.timer).toExist()
+        expect(bump.timer).toExist()
         expect(step).toBeGreaterThan(0)
         done()
       }, 200)
     })
 
-    it('should beep four times (listen)', (done) => {
-      beep = new Beep(bump.context)
-      bump.clock.sync(beeper)
+    it('should beep (listen)', (done) => {
+      const beep = new Beep(bump.context)
+      bump.sync(beep.play)
       setTimeout(() => {
         bump.stop()
         done()

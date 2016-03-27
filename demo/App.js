@@ -8,6 +8,7 @@ import {
   Block,
   Button,
   Input,
+  Select,
   ButtonOutline,
   Progress,
   Slider,
@@ -17,7 +18,8 @@ import {
   Pre,
 } from 'rebass'
 import log from 'loglevel'
-log.setLevel('info')
+
+// log.setLevel('info')
 
 import Bumpkit from '../src'
 
@@ -26,12 +28,14 @@ class App extends React.Component {
   constructor () {
     super()
     this.state = {
+      log: 'info',
       playing: null,
       tracks: []
     }
     this.bump = new Bumpkit({ tempo: 160 })
     this.bump.subscribe(this.update.bind(this))
 
+    this.handleBumpChange = this.handleBumpChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.toggleStep = this.toggleStep.bind(this)
   }
@@ -40,9 +44,16 @@ class App extends React.Component {
     this.setState(state)
   }
 
-  handleChange (e) {
+  handleBumpChange (e) {
     const { name, value } = e.target
     this.bump.setState({ [name]: value })
+  }
+
+  handleChange (e) {
+    const { name, value } = e.target
+    this.setState({ [name]: value }, () => {
+      log.setLevel(this.state.log || 'silent')
+    })
   }
 
   toggleStep (i, j) {
@@ -59,86 +70,34 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    const kick = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/kick.mp3'
-    const v4 = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/vocal-4.mp3'
-    const drums = '/demo/samples/drums-1.mp3'
-
     this.bump.setState({
-      // loop: 64,
-      // tempo: 180
+      loop: 64,
+      tempo: 96
     })
-
-    const sampler = this.bump.createClip(Bumpkit.Sampler, { url: drums })
-    const beep = this.bump.createClip(Bumpkit.Beep)
-    const b2 = this.bump.createClip(Bumpkit.Beep)
+    // url: '/demo/samples/forever/last-forever-vocal.mp3',
+    // url: '/demo/samples/forever/last-forever-vocal-02.mp3',
+    // url: '/demo/samples/forever/last-forever-vocal-03.mp3',
+    // url: '/demo/samples/forever/last-forever-vocal-fill.mp3',
 
     const loop1 = new Bumpkit.Looper(this.bump, {
-      url: drums,
-      length: 16,
-      bpm: 200,
-      start: 1,
-      end: 16,
-      loop: 6,
+      url: '/demo/samples/forever/last-forever-bass-01.mp3',
+      bpm: 96,
+      loop: 32
     })
-
     const loop2 = new Bumpkit.Looper(this.bump, {
-      url: drums,
-      length: 64,
-      bpm: 160,
-      start: 0,
-      end: 64,
-      loop: 64,
+      url: '/demo/samples/forever/last-forever-beat-01.mp3',
+      bpm: 96,
+      loop: 16
     })
     const loop3 = new Bumpkit.Looper(this.bump, {
-      url: '/demo/samples/chords-4.mp3',
-      length: 8,
-      bpm: 160,
-      start: 0,
-      end: 16,
-      loop: 64,
+      url: '/demo/samples/forever/last-forever-vocal.mp3',
+      bpm: 96,
+      loop: 16
     })
 
-    sampler.pattern = [
-      // 1, 0, 0, 0, 0, 0, 0, 0,
-      // 1, 0, 0, 0, 0, 0, 0, 0,
-      // 1, 0, 0, 0, 0, 0, 0, 0,
-      // 1, 0, 0, 0, 0, 0, 0, 0,
-    ]
-    sampler.instrument.pitch = 0.875
-    sampler.instrument.duration = 0.5
-
-    beep.instrument.frequency = 768
-    beep.pattern = [
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-    ]
-
-    b2.instrument.frequency = 256
-    b2.pattern = [
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-      1, 0, 0, 0,  0, 0, 0, 0,
-      0, 0, 0, 0,  0, 0, 0, 0,
-    ]
-
-    beep.instrument.volume = 1/32
-    b2.instrument.volume = 1/32
-
-    beep.active = false
-    b2.active = false
-    loop1.active = false
+    loop1.active = true
     loop2.active = true
-
+    loop3.active = true
   }
 
   render () {
@@ -154,10 +113,10 @@ class App extends React.Component {
           color='blue'
           label={`Tempo ${tempo} bpm`}
           name='tempo'
-          min={32}
-          max={256}
+          min={64}
+          max={128}
           value={tempo}
-          onChange={this.handleChange} />
+          onChange={this.handleBumpChange} />
         <Toolbar>
           <Button
             onClick={this.bump.playPause}
@@ -189,11 +148,18 @@ class App extends React.Component {
           ))}
         </Block>
         <Progress max={1} value={(step + 0) / 63} />
-        {/*
-        <Pre children={`${Math.floor(step / 4) + 1}.${step % 4 + 1}`} />
-        */}
         <Pre children={position} />
         <Divider />
+        <Select
+          name='log'
+          label='Log Level'
+          onChange={this.handleChange}
+          options={[
+            { children: 'silent' },
+            { children: 'warn' },
+            { children: 'info' },
+            { children: 'debug' }
+          ]} />
         <Pre children={JSON.stringify(this.state, null, 2)} />
       </Container>
     )

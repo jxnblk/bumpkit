@@ -16,6 +16,7 @@ class Looper extends Sampler {
     url
   } = {}) {
     super(context, { url })
+    // To do: support for start/end offsets
     log.info('Looper', { subscribe, context, sync, getState }, { bpm, start, loop, url })
 
     this.getState = getState
@@ -77,7 +78,6 @@ class Looper extends Sampler {
     const should = start === step % loop
 
     if (active && should) {
-      this.playing ? this.playing.stop(0) : false
       this.play({ when })
     }
   }

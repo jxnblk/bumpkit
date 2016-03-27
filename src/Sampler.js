@@ -10,6 +10,7 @@ class Sampler {
     this.output = output || this.context.destination
     this.pitch = pitch || 1
     this.loop = false
+    this.playing = false
 
     this.buffer = new Buffer(context)
     this.decode = this.buffer.decode.bind(this)
@@ -52,6 +53,9 @@ class Sampler {
     if (!this.loop) {
       source.stop(when + this.duration)
     }
+
+    // Monophonic
+    this.playing && this.playing.stop(when)
     this.playing = source
   }
 }

@@ -3,10 +3,8 @@ import Sampler from './Sampler'
 import Envelope from './Envelope'
 
 const defaultOptions = {
-  // bpm: 120,
-  length: 16,
+  bpm: 120,
   start: 0,
-  end: 16,
   loop: 16
 }
 
@@ -15,61 +13,40 @@ class Looper extends Sampler {
     super(context, { url: options.url })
     const {
       bpm,
-      length,
       start,
       loop
     } = Object.assign({}, defaultOptions, options)
 
     this.getState = getState
     this.active = true
+    this._previousTempo = getState().tempo
 
     // Sample properties
     this.bpm = bpm
-    this.length = length
     this.start = start
-    this.loop = true //loop
-    this.loopLength = loop
+    this.loop = loop
+
 
     sync(this.shouldPlay.bind(this))
 
-    this._previousTempo = getState().tempo
 
-    subscribe (({ tempo, playing }) => {
-
-      if (this.playing && this._previousTempo !== tempo) {
-        console.log('change tempo: ', this._previousTempo, tempo)
-
-        const { currentTime } = this.context
-        const { duration } = this.buffer.audio
-        const pitchDiff = tempo / this._previousTempo
-        console.log('pitch diff', pitchDiff)
-
-        this.playing.playbackRate.value = this.pitch
-
-        this._previousTempo = tempo
-      }
-
-      if (!playing && this.playing) {
-        this.playing.stop(0)
-        this.playing = false
-      }
-    })
+    subscribe(this.handleTempoChange.bind(this))
 
     // Bind methods
     this.play = this.play.bind(this)
   }
 
-  // Not accurately being calculated
-  // get bpm () {
-  //   if (!this._bpm) {
-  //     // Need to factor in resolution + time signature
-  //     console.log(this.duration)
-  //     console.log(this.buffer.audio.duration, this.length / this.duration * 60 / 4)
-  //     this._bpm = this.length / this.buffer.audio.duration * 60 / 4
-  //   }
-  //   console.log(this._bpm)
-  //   return this._bpm
-  // }
+  handleTempoChange ({ tempo, playing }) {
+    if (this.playing && this._previousTempo !== tempo) {
+      this.playing.playbackRate.value = this.pitch
+      this._previousTempo = tempo
+    }
+
+    if (!playing && this.playing) {
+      this.playing.stop(0)
+      this.playing = false
+    }
+  }
 
   get tempo () {
     const { tempo } = this.getState()
@@ -82,6 +59,7 @@ class Looper extends Sampler {
   }
 
   set pitch (val) {
+    this._pitch = val
   }
 
   get duration () {
@@ -89,14 +67,14 @@ class Looper extends Sampler {
   }
 
   set duration (val) {
+    this._duration = val
   }
 
   shouldPlay ({ when, step }) {
-    const { active, start, end, loopLength } = this
-    const should = start === step % loopLength
+    const { active, start, loop } = this
+    const should = start === step % loop
 
     if (active && should) {
-      console.log('shouldPlay', step, when)
       this.playing ? this.playing.stop(0) : false
       this.play({ when })
     }

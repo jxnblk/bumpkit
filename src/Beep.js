@@ -1,5 +1,4 @@
 
-// import Clip from './Clip'
 import Envelope from './Envelope'
 import Gain from './Gain'
 

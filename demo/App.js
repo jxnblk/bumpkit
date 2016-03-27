@@ -24,10 +24,6 @@ import {
   Looper
 } from '../src'
 
-// Test clock
-
-import XClock from '../src/XClock'
-
 class App extends React.Component {
   constructor () {
     super()
@@ -101,7 +97,7 @@ class App extends React.Component {
       bpm: 160,
       start: 0,
       end: 16,
-      loop: 12,
+      loop: 64,
     })
 
     sampler.pattern = [

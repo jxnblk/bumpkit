@@ -1,59 +1,54 @@
 
-import assign from 'object-assign'
 import Store from './Store'
+import Bumpkit from './Bumpkit'
 
-const AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext
-
-class Clock extends Store {
-  constructor (state, context = new AudioContext) {
-    super(state)
-    this.context = context
-    this.callbacks = []
-    this.lookahead = 25
-    this.scheduleAhead = this.lookahead / 1000 * 4 // 0.1
-    this.nextTime = 0
-    this.timer = null
-    this.setState(assign({
-      tempo: 120,
-      step: 1
-    }, state))
-    this.scheduler = this.scheduler.bind(this)
-    this.start = this.start.bind(this)
-    this.tick = this.tick.bind(this)
-    this.sync = this.sync.bind(this)
-    this.unsync = this.unsync.bind(this)
-  }
-
-  get stepDuration () {
-    // To do: figure out signature and resolution math
-    return 60 / this.state.tempo / 4
-  }
-
-  get currentTime () {
-    if (!this.context.currentTime) {
-      // Start the clock
-      const dummy = this.context.createBufferSource()
-    }
-    return this.context.currentTime
-  }
-
-  scheduler () {
-    const { playing, step, loop } = this.state
-
-    if (!playing) {
-      clearTimeout(this.timer)
+class SubStore {
+  constructor(store = {}) {
+    if (!store instanceof Store) {
+      console.log('SubStore needs a Store')
       return false
     }
 
-    while (this.nextTime < this.currentTime + this.scheduleAhead) {
-      this.tick({ step, when: this.nextTime })
-      this.setState({ step: step + 1 })
-      this.nextTime += this.stepDuration
-      if (loop && step >= loop) {
-        this.setState({ step: 1 })
-      }
-    }
-    this.timer = setTimeout(this.scheduler, this.lookahead)
+    this.setState = store.setState
+    this.getState = store.getState
+  }
+}
+
+class Clock extends SubStore {
+  constructor (store) {
+    super(store)
+
+    this.lookahead = 25
+
+    this.context = store.context
+    this.nextTime = 0
+    this.lookahead = 25
+
+    // Bind methods
+    this.start = this.start.bind(this)
+    this.stop = this.stop.bind(this)
+    this.scheduler = this.scheduler.bind(this)
+    this.nextStep = this.nextStep.bind(this)
+    this.tick = this.tick.bind(this)
+    this.sync = this.sync.bind(this)
+
+    // Start web audio clock
+    let dummy = this.context.createBufferSource()
+    dummy = null
+  }
+
+  get scheduleAheadTime () {
+    // milliseconds to seconds divided by 4 steps per beat
+    return this.lookahead / 250
+  }
+  get stepDuration () {
+    const { tempo } = this.getState()
+    // To do: handle different resolutions and time signatures
+    return 60 / tempo / 4
+  }
+
+  get currentTime () {
+    return this.context.currentTime
   }
 
   start () {
@@ -61,24 +56,47 @@ class Clock extends Store {
     this.scheduler()
   }
 
+  stop () {
+    clearTimeout(this.timer)
+  }
+
+  scheduler () {
+    while (this.nextTime < this.currentTime + this.scheduleAheadTime ) {
+      const { step } = this.getState()
+      const when = this.nextTime
+      this.tick({ step, when })
+      this.nextStep()
+    }
+    this.timer = setTimeout(this.scheduler, this.lookahead)
+  }
+
+  nextStep () {
+    let { step, loop } = this.getState()
+    this.nextTime += this.stepDuration
+    step++
+    if (loop && step >= loop) {
+      step = 0
+    }
+    this.setState({ step })
+  }
+
   tick ({ step, when }) {
-    this.callbacks.forEach((callback) => {
-      callback({ step, when })
-    })
+    console.log('x tick', step, when)
+    this.setState({ step, when })
+    this.listener({ step, when })
+
+    // Debug check for dupes
+    if (this.lastStep === step) {
+      console.log('DUPE')
+    }
+    this.lastStep = step
   }
 
-  sync (callback) {
-    if (typeof callback !== 'function') {
-      return false
+  sync (listener) {
+    if (this.listener) {
+      console.log('Already listening to clock', this.listener)
     }
-    this.callbacks.push(callback)
-  }
-
-  unsync (callback) {
-    const i = this.callbacks.indexOf(callback)
-    if (i > -1) {
-      this.callbacks.splice(i, 1)
-    }
+    this.listener = listener
   }
 }
 

@@ -1,6 +1,5 @@
 
 import Buffer from './Buffer'
-import Envelope from './Envelope'
 
 class Sampler {
   constructor (context, { url, pitch, output } = {}) {
@@ -40,19 +39,15 @@ class Sampler {
   play ({ when }) {
     const { duration } = this
     const source = this.context.createBufferSource()
-    source.envelope = new Envelope(this.context, { when, duration })
 
     if (this.playing) {
       this.playing.stop(when)
     }
 
-    source.envelope.connect(this.output)
-    // source.connect(source.envelope.node)
     source.connect(this.output)
     source.buffer = this.buffer.audio
     source.playbackRate.value = this.pitch
-    source.loop = this.loop
-    // source.loopEnd = when + (this.buffer.audio.duration * this.pitch)
+    source.loop = !!this.loop
 
     source.start(when)
     if (!this.loop) {

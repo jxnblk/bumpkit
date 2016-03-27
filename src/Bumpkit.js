@@ -1,6 +1,6 @@
 
 import Store from './Store'
-import Clock from './XClock'
+import Clock from './Clock'
 import Clip from './Clip'
 import Beep from './Beep'
 import Sampler from './Sampler'

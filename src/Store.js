@@ -1,6 +1,4 @@
 
-import assign from 'object-assign'
-
 /** State store
 */
 
@@ -16,7 +14,7 @@ class Store {
   }
 
   setState (state) {
-    this._state = assign({}, this._state, state)
+    this._state = Object.assign({}, this._state, state)
     this.listeners.forEach((listener) => {
       listener(this._state)
     })

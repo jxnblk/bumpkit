@@ -1,25 +1,6 @@
 
-import Store from './Store'
-import Bumpkit from './Bumpkit'
-
-class SubStore {
-  constructor(store = {}) {
-    if (!store instanceof Store) {
-      console.log('SubStore needs a Store')
-      return false
-    }
-
-    this.setState = store.setState
-    this.getState = store.getState
-  }
-}
-
-class Clock extends SubStore {
+class Clock {
   constructor (store) {
-    super(store)
-
-    this.lookahead = 25
-
     this.context = store.context
     this.nextTime = 0
     this.lookahead = 25
@@ -31,6 +12,10 @@ class Clock extends SubStore {
     this.nextStep = this.nextStep.bind(this)
     this.tick = this.tick.bind(this)
     this.sync = this.sync.bind(this)
+
+    // Follow parent Store
+    this.setState = store.setState
+    this.getState = store.getState
 
     // Start web audio clock
     let dummy = this.context.createBufferSource()
@@ -81,7 +66,6 @@ class Clock extends SubStore {
   }
 
   tick ({ step, when }) {
-    console.log('x tick', step, when)
     this.setState({ step, when })
     this.listener({ step, when })
 

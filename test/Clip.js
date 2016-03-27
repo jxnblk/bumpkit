@@ -1,8 +1,10 @@
 
 import expect from 'expect'
-import Clip from '../src/Clip'
-import Bumpkit from '../src/Bumpkit'
-import Beep from '../src/Beep'
+import {
+  Bumpkit,
+  Clip,
+  Beep
+} from '../src'
 
 describe('Clip', () => {
   let clip

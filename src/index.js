@@ -1,11 +1,22 @@
 
-export { default as Beep } from './Beep'
-export { default as Buffer } from './Buffer'
-export { default as Clip } from './Clip'
-export { default as Clock } from './Clock'
-export { default as Sampler } from './Sampler'
-export { default as Looper } from './Looper'
-export { default as Store } from './Store'
-export { default as Bumpkit } from './Bumpkit'
-export { default } from './Bumpkit'
+import Bumpkit from './Bumpkit'
+import Beep from './Beep'
+import Clip from './Clip'
+import Looper from './Looper'
+import Sampler from './Sampler'
+
+export {
+  Bumpkit,
+  Beep,
+  Clip,
+  Looper,
+  Sampler
+}
+
+Bumpkit.Beep = Beep
+Bumpkit.Clip = Clip
+Bumpkit.Looper = Looper
+Bumpkit.Sampler = Sampler
+
+export default Bumpkit
 

@@ -40,10 +40,6 @@ class Sampler {
     const { duration } = this
     const source = this.context.createBufferSource()
 
-    if (this.playing) {
-      this.playing.stop(when)
-    }
-
     source.connect(this.output)
     source.buffer = this.buffer.audio
     source.playbackRate.value = this.pitch

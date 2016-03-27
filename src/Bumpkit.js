@@ -5,7 +5,6 @@ import Clip from './Clip'
 import Beep from './Beep'
 import Sampler from './Sampler'
 
-
 const AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext
 
 /** Bumpkit */
@@ -16,11 +15,12 @@ class Bumpkit extends Store {
     signature = 4/4
   } = {}) {
     super()
-    console.log('init', tempo)
+
     this.context = new AudioContext()
     this.followers = []
     this.clock = new Clock(this)
     this.clock.sync(this.tick.bind(this))
+
     this.setState({
       playing: false,
       tempo,
@@ -71,7 +71,7 @@ class Bumpkit extends Store {
   stop () {
     this.clock.stop()
     this.setState({ playing: false })
-    this.setState({ step: 1 })
+    this.setState({ step: 0 })
   }
 
   kill () {
@@ -82,7 +82,6 @@ class Bumpkit extends Store {
   createClip (Inst, opts = {}) {
     const instrument = new Inst(this.context, opts)
     const clip = new Clip(instrument)
-    // this.clock.sync(clip.play)
     this.sync(clip.play)
 
     return clip

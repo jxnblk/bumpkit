@@ -17,12 +17,8 @@ import {
   Pre,
 } from 'rebass'
 
-import {
-  Bumpkit,
-  Beep,
-  Sampler,
-  Looper
-} from '../src'
+import Bumpkit from '../src'
+
 
 class App extends React.Component {
   constructor () {
@@ -31,7 +27,7 @@ class App extends React.Component {
       playing: null,
       tracks: []
     }
-    this.bump = new Bumpkit()
+    this.bump = new Bumpkit({ tempo: 160 })
     this.bump.subscribe(this.update.bind(this))
 
     this.handleChange = this.handleChange.bind(this)
@@ -67,14 +63,14 @@ class App extends React.Component {
 
     this.bump.setState({
       loop: 64,
-      tempo: 180
+      // tempo: 180
     })
 
-    const sampler = this.bump.createClip(Sampler, { url: drums })
-    const beep = this.bump.createClip(Beep)
-    const b2 = this.bump.createClip(Beep)
+    const sampler = this.bump.createClip(Bumpkit.Sampler, { url: drums })
+    const beep = this.bump.createClip(Bumpkit.Beep)
+    const b2 = this.bump.createClip(Bumpkit.Beep)
 
-    const loop1 = new Looper(this.bump, {
+    const loop1 = new Bumpkit.Looper(this.bump, {
       url: drums,
       length: 16,
       bpm: 200,
@@ -83,7 +79,7 @@ class App extends React.Component {
       loop: 6,
     })
 
-    const loop2 = new Looper(this.bump, {
+    const loop2 = new Bumpkit.Looper(this.bump, {
       url: drums,
       length: 64,
       bpm: 160,
@@ -91,7 +87,7 @@ class App extends React.Component {
       end: 64,
       loop: 64,
     })
-    const loop3 = new Looper(this.bump, {
+    const loop3 = new Bumpkit.Looper(this.bump, {
       url: '/demo/samples/chords-4.mp3',
       length: 8,
       bpm: 160,
@@ -151,6 +147,8 @@ class App extends React.Component {
         <PageHeader
           heading='Bumpkit Demo' />
         <Slider
+          fill
+          color='blue'
           label={`Tempo ${tempo} bpm`}
           name='tempo'
           min={32}

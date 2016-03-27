@@ -1,6 +1,7 @@
 
 import expect from 'expect'
-import { Bumpkit, Store, Beep, Clip } from '../src'
+import { Bumpkit, Beep, Clip } from '../src'
+import Store from '../src/Store'
 
 describe('Bumpkit', () => {
   let bump

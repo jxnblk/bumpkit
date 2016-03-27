@@ -7,16 +7,20 @@ import {
   Heading,
   Block,
   Button,
+  ButtonCircle,
+  NavItem,
   Input,
   Select,
   ButtonOutline,
   Progress,
   Slider,
   Toolbar,
+  Text,
   Space,
   Divider,
   Pre,
 } from 'rebass'
+import Icon from 'react-geomicons'
 import log from 'loglevel'
 
 // log.setLevel('info')
@@ -105,63 +109,81 @@ class App extends React.Component {
     const { position } = this.bump
 
     return (
-      <Container>
-        <PageHeader
-          heading='Bumpkit Demo' />
-        <Slider
-          fill
-          color='blue'
-          label={`Tempo ${tempo} bpm`}
-          name='tempo'
-          min={64}
-          max={128}
-          value={tempo}
-          onChange={this.handleBumpChange} />
-        <Toolbar>
-          <Button
-            onClick={this.bump.playPause}
-            children={playing ? 'Pause' : 'Play'} />
-          <Button
-            onClick={this.bump.stop}
-            children='Stop' />
+      <div>
+        <Toolbar backgroundColor='black'>
+          <Heading
+            level={1}
+            size={4}
+            children='Bumpkit' />
+          <Space />
+          <NavItem
+            title={playing ? 'Pause' : 'Play'}
+            onClick={this.bump.playPause}>
+            <Icon name={playing ? 'pause' : 'play'} />
+          </NavItem>
+          <Space />
+          <Text small
+            style={{
+              textAlign: 'right',
+              minWidth: 64
+            }}
+            children={position} />
+          <Text small
+            style={{
+              textAlign: 'right',
+              minWidth: 64
+            }}>
+            {tempo} bpm
+          </Text>
+          <Space />
+          <NavItem
+            title='Stop'
+            disabled={!playing}
+            onClick={this.bump.stop}>
+            <Icon name={playing ? 'speakerVolume' : 'speaker'} />
+          </NavItem>
           <Space auto />
-          <Button
-            backgroundColor='red'
-            onClick={this.kill.bind(this)}
-            children='KILL' />
+          <NavItem
+            small
+            color='red'
+            onClick={this.kill.bind(this)}>
+            <Icon name='no' />
+            <Space />
+            KILL
+          </NavItem>
         </Toolbar>
-        <Block py={2}>
-          {tracks.map((track, i) => (
-            <Flex key={i} justify='space-between'>
-              {track && track.pattern.map((s, j) => (
-                <Button
-                  key={j}
-                  style={{
-                    flex: '1 1 auto'
-                  }}
-                  rounded={false}
-                  onClick={this.toggleStep(i, j)}
-                  backgroundColor={step === j + 1 ? 'red' : (s ? 'blue' : 'gray')}
-                  children={j + 1} />
-              ))}
-            </Flex>
-          ))}
-        </Block>
-        <Progress max={1} value={(step + 0) / 63} />
-        <Pre children={position} />
-        <Divider />
-        <Select
-          name='log'
-          label='Log Level'
-          onChange={this.handleChange}
-          options={[
-            { children: 'silent' },
-            { children: 'warn' },
-            { children: 'info' },
-            { children: 'debug' }
-          ]} />
-        <Pre children={JSON.stringify(this.state, null, 2)} />
-      </Container>
+        <Progress
+          style={{
+            height: 4,
+            margin: 0,
+            borderRadius: 0
+          }}
+          max={1}
+          value={(step + 0) / 63} />
+        <Container>
+          <Slider
+            fill
+            color='blue'
+            label={`Tempo ${tempo} bpm`}
+            name='tempo'
+            min={64}
+            max={128}
+            value={tempo}
+            onChange={this.handleBumpChange} />
+          <Divider />
+          <Select
+            name='log'
+            label='Log Level'
+            onChange={this.handleChange}
+            options={[
+              { children: 'silent' },
+              { children: 'warn' },
+              { children: 'info' },
+              { children: 'debug' }
+            ]} />
+          <Pre children={JSON.stringify(this.state, null, 2)} />
+        </Container>
+      </div>
     )
   }
 }

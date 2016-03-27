@@ -1,6 +1,7 @@
 
 import expect from 'expect'
-import { Bumpkit, Buffer } from '../src'
+import Bumpkit from '../src/Bumpkit'
+import Buffer from '../src/Buffer'
 
 const sample = 'http://jxnblk.s3.amazonaws.com/stepkit/dusty/kick.mp3'
 
@@ -23,7 +24,7 @@ describe('Buffer', () => {
   })
 
   it('should have a sample', () => {
-    expect(buffer.sample).toBeAn(AudioBuffer)
+    expect(buffer.audio).toBeAn(AudioBuffer)
   })
 })
 

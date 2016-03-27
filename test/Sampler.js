@@ -17,16 +17,8 @@ describe('Sampler', () => {
     expect(sampler).toBeA(Sampler)
   })
 
-  it('should have an empty pattern', () => {
-    expect(sampler.pattern).toEqual([])
-  })
-
   it('should have a play method', () => {
     expect(sampler.play).toBeA('function')
-  })
-
-  it('should have a toggle method', () => {
-    expect(sampler.toggle).toBeA('function')
   })
 
   it('should have a decode method', () => {
@@ -37,9 +29,6 @@ describe('Sampler', () => {
     expect(sampler.load).toBeA('function')
   })
 
-  it('should have a decode method', () => {
-    expect(sampler.decode).toBeA('function')
-  })
 
   it('should load a sample', (done) => {
     expect(() => {
@@ -51,7 +40,7 @@ describe('Sampler', () => {
   })
 
   it('should have a sample', () => {
-    expect(sampler.buffer.sample).toBeAn(AudioBuffer)
+    expect(sampler.buffer.audio).toBeAn(AudioBuffer)
   })
 })
 

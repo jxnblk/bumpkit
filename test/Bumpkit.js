@@ -1,6 +1,8 @@
 
 import expect from 'expect'
-import { Bumpkit, Beep, Clip } from '../src'
+import Bumpkit from '../src/Bumpkit'
+import Beep from '../src/Beep'
+import Clip from '../src/Clip'
 import Store from '../src/Store'
 
 describe('Bumpkit', () => {
@@ -45,12 +47,7 @@ describe('Bumpkit', () => {
   })
 
   describe('play()', () => {
-    let beep
-    const beeper = ({ when, step }) => {
-      if (step % 4 === 0) {
-        beep.play(when)
-      }
-    }
+    bump.createClip(Beep)
 
     it('should play', () => {
       expect(() => {
@@ -64,7 +61,7 @@ describe('Bumpkit', () => {
 
     it('should start the timer', (done) => {
       setTimeout(() => {
-        step = bump.clock.state.step
+        const { step } = bump.getState()
         expect(bump.clock.timer).toExist()
         expect(step).toBeGreaterThan(0)
         done()
@@ -85,7 +82,7 @@ describe('Bumpkit', () => {
     it('should pause', () => {
       expect(() => {
         bump.pause()
-        step = bump.clock.state.step
+        step = bump.getState().step
       }).toNotThrow()
     })
 
@@ -94,19 +91,19 @@ describe('Bumpkit', () => {
     })
 
     it('should stop the clock scheduler', () => {
-      expect(bump.clock.state.step).toEqual(step)
+      expect(bump.getState().step).toEqual(step)
     })
   })
 
   describe('playPause()', () => {
     it('should start playing', () => {
       bump.playPause()
-      expect(bump.state.playing).toEqual(true)
+      expect(bump.getState().playing).toEqual(true)
     })
 
     it('should stop playing', () => {
       bump.playPause()
-      expect(bump.state.playing).toEqual(false)
+      expect(bump.getState().playing).toEqual(false)
     })
   })
 
@@ -120,7 +117,7 @@ describe('Bumpkit', () => {
       expect(() => {
         // WIP
         bump.play()
-      }).toNotThrow()
+      }).toThrow()
     })
   })
 })

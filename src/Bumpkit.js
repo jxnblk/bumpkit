@@ -75,6 +75,7 @@ class Bumpkit extends Store {
   }
 
   kill () {
+    this.stop()
     this.context.close()
     delete this.context
   }

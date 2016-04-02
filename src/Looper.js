@@ -72,6 +72,14 @@ class Looper extends Sampler {
     this._duration = val
   }
 
+  get willStart () {
+    return this.active && !this.playing
+  }
+
+  get willStop () {
+    return !this.active && this.playing
+  }
+
   shouldPlay ({ when, step }) {
     log.debug('Looper.shouldPlay()', { when, step })
     const { active, start, loop } = this

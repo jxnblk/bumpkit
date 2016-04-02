@@ -71,31 +71,36 @@ class App extends React.Component {
       <div>
         <Transport {...this.state} />
         <Container>
-        <Tracks {...this.state} />
+          <Tracks {...this.state} />
           <Divider />
-          <Heading children='Debug' />
-          <Slider
-            fill
-            color='blue'
-            label={`Tempo ${tempo} bpm`}
-            name='tempo'
-            min={64}
-            max={128}
-            value={tempo}
-            onChange={this.handleBumpChange} />
-          <Select
-            name='log'
-            label='Log Level'
-            onChange={this.handleChange}
-            value={this.state.log}
-            options={[
-              { children: 'silent' },
-              { children: 'warn' },
-              { children: 'info' },
-              { children: 'debug' }
-            ]} />
-          <Pre children='App state' />
-          <Pre children={JSON.stringify(this.state, null, 2)} />
+          <Box py={3}>
+            <Heading children='Debug' />
+            <Flex gutter={2}>
+              <Box col={6} px={2}>
+                <Slider
+                  fill
+                  label={`Tempo ${tempo} bpm`}
+                  name='tempo'
+                  min={64}
+                  max={128}
+                  value={tempo}
+                  onChange={this.handleBumpChange} />
+              </Box>
+              <Box col={6} px={2}>
+                <Select
+                  name='log'
+                  label='Log Level'
+                  onChange={this.handleChange}
+                  value={this.state.log}
+                  options={[
+                    { children: 'silent' },
+                    { children: 'warn' },
+                    { children: 'info' },
+                    { children: 'debug' }
+                  ]} />
+              </Box>
+            </Flex>
+          </Box>
         </Container>
       </div>
     )

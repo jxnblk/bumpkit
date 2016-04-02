@@ -37,11 +37,20 @@ const Tracks = ({ step, tracks = [] }) => (
       <Box col={4} px={2} py={3} key={i}>
         <Heading level={3} mb={2} children={name} />
         {loops.map((loop, j) => {
-          const active = loop.looper.active !== false
+          const { active, playing, willStop, willStart } = loop.looper
+          const sx = {
+            block: {
+              opacity: willStop ? .5 : willStart ? (Math.floor(step / 2) % 2 ? .25 : .75) : 1,
+              transition: 'opacity .2s linear'
+            }
+          }
+
           return (
             <LinkBlock key={j}
+              mb={(j % 4 === 3) ? 4 : 0}
               onClick={toggleLooper(i, j)}>
               <Block
+                style={sx.block}
                 color={active ? 'white' : 'midgray'}
                 backgroundColor={active ? 'blue' : null}
                 borderLeft
@@ -50,14 +59,14 @@ const Tracks = ({ step, tracks = [] }) => (
                 <Heading level={4} children={loop.name} />
                 <Text small
                   style={{
-                    opacity: active ? 1 : 0
+                    opacity: playing ? 1 : 0
                   }}>
                   [ {step % loop.loop} : {loop.loop}]
                 </Text>
               </Block>
               <Progress
                 style={{
-                  opacity: active ? 1 : 0,
+                  opacity: playing ? 1 : 0,
                   height: 4,
                   borderRadius: 0
                 }}

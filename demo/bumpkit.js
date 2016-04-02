@@ -1,7 +1,7 @@
 
 import Bumpkit from '../src'
 
-const sampleDirectory = 'demo/samples/'
+const sampleDirectory = 'samples/'
 
 const bumpkit = new Bumpkit({
   tempo: 96,

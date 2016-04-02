@@ -58,10 +58,6 @@ var configuration = {
 
 }
 
-if (process.env.TRAVIS) {
-  config.autoWatch = false
-}
-
 module.exports = function (config) {
   config.set(configuration)
 }

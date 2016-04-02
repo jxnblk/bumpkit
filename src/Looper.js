@@ -43,10 +43,9 @@ class Looper extends Sampler {
       this._previousTempo = tempo
     }
 
-    // To do: Check if this is needed
     if (!playing && this.playing) {
       log.debug('Looper.handleTempoChange() stop', playing, this.playing)
-      this.playing.stop(0)
+      this.playing.stop && this.playing.stop()
       this.playing = false
     }
   }
@@ -79,11 +78,13 @@ class Looper extends Sampler {
     const should = start === step % loop
 
     if (active && should) {
+      log.info('Looper play', this.url)
       this.play({ when })
     }
     if (!active && should && this.playing) {
-      log.info('stop playing loop')
-      this.playing.stop(when)
+      log.info('Looper stop', this.url)
+      this.playing.stop && this.playing.stop(when)
+      this.playing = false
     }
   }
 }

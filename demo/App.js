@@ -32,7 +32,7 @@ class App extends React.Component {
   constructor () {
     super()
     this.state = {
-      log: 'info',
+      log: 'silent',
       step: 0,
       loop: 32
     }
@@ -44,6 +44,7 @@ class App extends React.Component {
     const state = bk.getState()
     this.setState(state)
     bk.subscribe(this.update.bind(this))
+    log.setLevel(this.state.log)
   }
 
   update (state) {
@@ -86,6 +87,7 @@ class App extends React.Component {
             name='log'
             label='Log Level'
             onChange={this.handleChange}
+            value={this.state.log}
             options={[
               { children: 'silent' },
               { children: 'warn' },

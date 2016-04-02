@@ -55,7 +55,9 @@ class Sampler {
     }
 
     // Monophonic
-    this.playing && this.playing.stop(when)
+    if (this.playing && this.playing.stop) {
+      this.playing && this.playing.stop && this.playing.stop(when)
+    }
     this.playing = source
   }
 }

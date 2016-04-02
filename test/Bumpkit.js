@@ -40,10 +40,6 @@ describe('Bumpkit', () => {
     it('should have default resolution', () => {
       expect(bump.state.resolution).toEqual(16)
     })
-
-    it('should have default time signature', () => {
-      expect(bump.state.signature).toEqual(1)
-    })
   })
 
   describe('play()', () => {
